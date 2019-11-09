@@ -14,7 +14,6 @@ public class MouseController : MonoBehaviour
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
         mouseSensitivity = playerBody.gameObject.GetComponent<PlayerController>().m_playerControl.mouseSensitivity;
     }
 
