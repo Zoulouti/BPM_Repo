@@ -26,9 +26,8 @@ public class BasicWalkerController : MonoBehaviour {
         public KeyCode back = KeyCode.S;
         public KeyCode left= KeyCode.D;
         public KeyCode right= KeyCode.Q;
-
     }
-
+    [Space]
     //Keycode used for jumping;
     public KeyCode jumpKey = KeyCode.Space;
 
@@ -115,7 +114,6 @@ public class BasicWalkerController : MonoBehaviour {
 	{
 		HandleJumpKeyInput();
         HandleSprintKeyInput();
-
     }
 
 	//Handle jump booleans for later use in FixedUpdate;
@@ -149,7 +147,7 @@ public class BasicWalkerController : MonoBehaviour {
     }
     bool checkForNoControlInput()
     {
-        if(!Input.GetKey(_controlKeyBinding.forward) && !Input.GetKey(_controlKeyBinding.back) && !Input.GetKey(_controlKeyBinding.left) && !Input.GetKey(_controlKeyBinding.right))
+        if(!Input.GetKey(_controlKeyBinding.forward)/* && !Input.GetKey(_controlKeyBinding.back) && !Input.GetKey(_controlKeyBinding.left) && !Input.GetKey(_controlKeyBinding.right)*/)
         {
             return true;
         }
@@ -174,13 +172,13 @@ public class BasicWalkerController : MonoBehaviour {
 		Vector3 _velocity = CalculateMovementVelocity();
 
         //Check if the player is still moving
-        if(_velocity.magnitude == 0)
+        /*if(_velocity.magnitude == 0)
+        {*/
+        if (checkForNoControlInput())
         {
-            if (checkForNoControlInput())
-            {
-                isSprinting = false;
-            }
+            isSprinting = false;
         }
+        //}
 
 		//Add current momentum to velocity;
 		_velocity += momentum;
@@ -266,7 +264,7 @@ public class BasicWalkerController : MonoBehaviour {
     //Returns 'true' if the player presses the sprint key;
     protected virtual bool IsSprintKeyPressed()
     {
-        return (Input.GetKey(sprintKey));
+        return (Input.GetKeyDown(sprintKey));
     }
 
     //Handle state transitions;
