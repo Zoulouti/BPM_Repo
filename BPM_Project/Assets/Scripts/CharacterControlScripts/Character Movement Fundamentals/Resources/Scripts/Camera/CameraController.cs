@@ -57,6 +57,8 @@ public class CameraController : MonoBehaviour {
 	protected Transform tr;
 	protected Camera cam;
 
+    //public GameObject objCam;
+
 	//Setup references.
 	void Awake () {
 		tr = transform;
@@ -166,11 +168,13 @@ public class CameraController : MonoBehaviour {
 		tr.localRotation = Quaternion.Euler(new Vector3(currentXAngle, currentYAngle, 0));
 	}
 
+    //[HideInInspector]
+    //public float camera_FOV;
+
 	//Set the camera's field-of-view (FOV);
 	public void SetFOV(float _fov)
 	{
-		if(cam)
-			cam.fieldOfView = _fov;	
+        GetComponentInChildren<Camera>().fieldOfView = _fov;	
 	}
 
 	//Set x and y angle directly;

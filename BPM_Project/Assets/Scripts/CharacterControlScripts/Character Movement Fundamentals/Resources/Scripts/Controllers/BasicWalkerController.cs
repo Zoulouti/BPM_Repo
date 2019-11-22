@@ -26,6 +26,8 @@ public class BasicWalkerController : MonoBehaviour {
         public KeyCode back = KeyCode.S;
         public KeyCode left= KeyCode.D;
         public KeyCode right= KeyCode.Q;
+        [Header("Crouch KeyBind")]
+        public KeyCode crouch = KeyCode.LeftControl;
     }
     [Space]
     //Keycode used for jumping;
@@ -39,17 +41,27 @@ public class BasicWalkerController : MonoBehaviour {
     //Keycode used for Sprinting;
     public KeyCode sprintKey = KeyCode.LeftShift;
 
+    //crouch key variables
+    bool isCrouching;
+
     //sprint key variables;
     bool sprintKeyWasPressed = false;
     bool sprintKeyWasLetGo = false;
     bool sprintKeyIsPressed = false;
     bool isSprinting;
-
+    [Space]
+    [Header("Movement speed variables")]
     //Movement speed;
     public float movementSpeed = 7f;
     float walkingSpeed;
     public float sprintingSpeed = 17f;
-
+    [Space]
+    [Header("Sprint variables")]
+    public float fovWhenWalking = 90f;
+    public float fovWhenSprinting = 110f;
+    float currentFOV;
+    [Space]
+    [Header("Jump variables")]
 	//'Aircontrol' determines to what degree the player is able to move while in the air;
 	[Range(0f, 1f)]
 	public float airControl = 0.4f;
@@ -77,7 +89,6 @@ public class BasicWalkerController : MonoBehaviour {
 
 	//Amount of downward gravitation;
 	public float gravity = 30f;
-    [HideInInspector]
 	//Amount of downward gravitation when sliding down a slope;
 	public float slideGravity = 30f;
 
@@ -114,6 +125,7 @@ public class BasicWalkerController : MonoBehaviour {
 	{
 		HandleJumpKeyInput();
         HandleSprintKeyInput();
+        HandleCrouchKeyInput();
     }
 
 	//Handle jump booleans for later use in FixedUpdate;
@@ -133,28 +145,51 @@ public class BasicWalkerController : MonoBehaviour {
     //Handle sprint booleans
     void HandleSprintKeyInput()
     {
-        bool _newSprintKeyPressedState = IsSprintKeyPressed();
-
-        if (_newSprintKeyPressedState || isSprinting)
+        bool _newSprintKeyPressedState = IsSprintActive();
+        bool _forwardKeyIsPressed = IsForwarding();
+        if (isSprinting && _forwardKeyIsPressed)
         {
             movementSpeed = sprintingSpeed;
-            isSprinting = true;
+
+            Camera.main.fieldOfView = Mathf.Lerp(currentFOV, fovWhenSprinting, Time.deltaTime * 4f);
+
+            currentFOV = Camera.main.fieldOfView;
+
+            if(currentFOV > fovWhenSprinting - 0.5f)
+            {
+                currentFOV = fovWhenSprinting;
+            }
+
         }
-        else if(walkingSpeed > 0)
+        else if(currentControllerState == ControllerState.Grounded)
         {
             movementSpeed = walkingSpeed;
+            Camera.main.fieldOfView = Mathf.Lerp(currentFOV, fovWhenWalking, Time.deltaTime * 4f);
+            currentFOV = Camera.main.fieldOfView;
+            if (currentFOV < fovWhenWalking + 0.5f)
+            {
+                currentFOV = fovWhenWalking;
+            }
+            isSprinting = false;
         }
     }
-    bool checkForNoControlInput()
+
+    //Handle crouch booleans
+    void HandleCrouchKeyInput()
     {
-        if(!Input.GetKey(_controlKeyBinding.forward)/* && !Input.GetKey(_controlKeyBinding.back) && !Input.GetKey(_controlKeyBinding.left) && !Input.GetKey(_controlKeyBinding.right)*/)
+        bool _crouchKeyIsPressed = IsCrouching();
+        if (_crouchKeyIsPressed && !isCrouching)
         {
-            return true;
+            isCrouching = true;
         }
-        return false;
+        else if (isCrouching)
+        {
+            isCrouching = false;
+        }
     }
-	//FixedUpdate;
-	void FixedUpdate()
+
+    //FixedUpdate;
+    void FixedUpdate()
 	{
 		//Check if mover is grounded;
 		mover.CheckForGround();
@@ -170,15 +205,6 @@ public class BasicWalkerController : MonoBehaviour {
 
 		//Calculate movement velocity;
 		Vector3 _velocity = CalculateMovementVelocity();
-
-        //Check if the player is still moving
-        /*if(_velocity.magnitude == 0)
-        {*/
-        if (checkForNoControlInput())
-        {
-            isSprinting = false;
-        }
-        //}
 
 		//Add current momentum to velocity;
 		_velocity += momentum;
@@ -258,13 +284,27 @@ public class BasicWalkerController : MonoBehaviour {
 	//Returns 'true' if the player presses the jump key;
 	protected virtual bool IsJumpKeyPressed()
 	{
-		 return (Input.GetKey(jumpKey));
+		 return (Input.GetKeyDown(jumpKey));
 	}
-
-    //Returns 'true' if the player presses the sprint key;
-    protected virtual bool IsSprintKeyPressed()
+    //Returns 'true' if the player presses the forward key;
+    protected virtual bool IsForwarding()
     {
-        return (Input.GetKeyDown(sprintKey));
+        return Input.GetKey(_controlKeyBinding.forward);
+    }
+    //Returns 'true' if the player had pressed the sprint key;
+    protected virtual bool IsSprintActive()
+    {
+        if(Input.GetKeyDown(sprintKey) || isSprinting)
+        {
+            isSprinting = true;
+            return true;
+        }
+        return false;
+    }
+    //Returns 'true' if the player had pressed the crouch key;
+    protected virtual bool IsCrouching()
+    {
+        return Input.GetKeyDown(_controlKeyBinding.crouch);
     }
 
     //Handle state transitions;
