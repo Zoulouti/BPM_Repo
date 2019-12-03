@@ -38,8 +38,23 @@ public class CameraWalkerController : BasicWalkerController {
 		//Use camera axes to construct movement direction;
 		// _direction += cameraControls.GetFacingDirection() * _verticalInput;
 		// _direction += cameraControls.GetStrafeDirection() * _horizontalInput;
-		_direction += m_cameraRotation.forward * _verticalInput;
-		_direction += m_cameraRotation.right * _horizontalInput;
+        if(_currentActionState != ActionState.Slide)
+        {
+		    _direction += m_cameraRotation.forward * _verticalInput;
+		    _direction += m_cameraRotation.right * _horizontalInput;
+        }
+        //else
+        //{
+            //if(_verticalInput > 0)
+            //{
+            //_direction += slidingFwrd * _verticalInput;
+            //}
+            //else
+            //{
+                //_currentActionState = ActionState.Walk;
+            //}
+		    //_direction += slidingRight * _horizontalInput;
+        //}
 
 		//Clamp movement vector to magnitude of '1f';
 		if(_direction.magnitude > 1f)

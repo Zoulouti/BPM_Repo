@@ -112,12 +112,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &17887788 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1457344649512708, guid: 5d075d3ed32dfe1498e31454964d07e8,
-    type: 3}
-  m_PrefabInstance: {fileID: 1001233133}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &52617226
 GameObject:
   m_ObjectHideFlags: 0
@@ -1360,7 +1354,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4122625377137146, guid: 5d075d3ed32dfe1498e31454964d07e8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4122625377137146, guid: 5d075d3ed32dfe1498e31454964d07e8, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1398,80 +1392,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 136958806423733192, guid: 5d075d3ed32dfe1498e31454964d07e8,
-        type: 3}
-      propertyPath: m_Center.y
-      value: 0.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 136958806423733192, guid: 5d075d3ed32dfe1498e31454964d07e8,
-        type: 3}
-      propertyPath: m_Radius
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 136958806423733192, guid: 5d075d3ed32dfe1498e31454964d07e8,
-        type: 3}
-      propertyPath: m_Height
-      value: 1.98
-      objectReference: {fileID: 0}
-    - target: {fileID: 114620730111555832, guid: 5d075d3ed32dfe1498e31454964d07e8,
-        type: 3}
-      propertyPath: colliderHeight
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114620730111555832, guid: 5d075d3ed32dfe1498e31454964d07e8,
-        type: 3}
-      propertyPath: colliderThickness
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114620730111555832, guid: 5d075d3ed32dfe1498e31454964d07e8,
-        type: 3}
-      propertyPath: colliderOffset.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114620730111555832, guid: 5d075d3ed32dfe1498e31454964d07e8,
-        type: 3}
-      propertyPath: isInDebugMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114620730111555832, guid: 5d075d3ed32dfe1498e31454964d07e8,
-        type: 3}
-      propertyPath: stepHeight
-      value: 0.01
-      objectReference: {fileID: 0}
     - target: {fileID: 114036295079588584, guid: 5d075d3ed32dfe1498e31454964d07e8,
         type: 3}
-      propertyPath: slopeLimit
-      value: 80
+      propertyPath: crouchLayer.m_Bits
+      value: 16
       objectReference: {fileID: 0}
-    - target: {fileID: 114036295079588584, guid: 5d075d3ed32dfe1498e31454964d07e8,
-        type: 3}
-      propertyPath: slideGravity
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 114036295079588584, guid: 5d075d3ed32dfe1498e31454964d07e8,
-        type: 3}
-      propertyPath: airControl
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114036295079588584, guid: 5d075d3ed32dfe1498e31454964d07e8,
-        type: 3}
-      propertyPath: jumpSpeed
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1457344649512708, guid: 5d075d3ed32dfe1498e31454964d07e8, type: 3}
-      propertyPath: m_TagString
-      value: MainCamera
-      objectReference: {fileID: 0}
-    - target: {fileID: 20395501606822184, guid: 5d075d3ed32dfe1498e31454964d07e8,
-        type: 3}
-      propertyPath: field of view
-      value: 88
-      objectReference: {fileID: 0}
-    - target: {fileID: 114824084839813896, guid: 5d075d3ed32dfe1498e31454964d07e8,
-        type: 3}
-      propertyPath: objCam
-      value: 
-      objectReference: {fileID: 17887788}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d075d3ed32dfe1498e31454964d07e8, type: 3}
 --- !u!1 &1025980781
@@ -1918,7 +1843,7 @@ GameObject:
   - component: {fileID: 1645878090}
   - component: {fileID: 1645878089}
   - component: {fileID: 1645878088}
-  m_Layer: 9
+  m_Layer: 4
   m_Name: Cube (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1934,7 +1859,7 @@ Transform:
   m_GameObject: {fileID: 1645878086}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -11, y: 1.5, z: 0.363}
-  m_LocalScale: {x: 1, y: 0.1, z: 4.7}
+  m_LocalScale: {x: 4.0097, y: 0.1, z: 4.7}
   m_Children: []
   m_Father: {fileID: 2100344076}
   m_RootOrder: 19

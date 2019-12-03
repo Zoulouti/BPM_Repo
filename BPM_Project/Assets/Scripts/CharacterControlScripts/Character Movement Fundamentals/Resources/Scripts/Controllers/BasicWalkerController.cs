@@ -61,6 +61,11 @@ public class BasicWalkerController : MonoBehaviour {
     public float fovWhenSprinting = 110f;
     float currentFOV;
     [Space]
+    [Header("Crouch varibales")]
+    public float crouchColliderHeight;
+    public LayerMask crouchLayer;
+    float initialColliderHeight;
+    [Space]
     [Header("Jump variables")]
 	//'Aircontrol' determines to what degree the player is able to move while in the air;
 	[Range(0f, 1f)]
@@ -105,20 +110,34 @@ public class BasicWalkerController : MonoBehaviour {
 		Jumping
 	}
 	ControllerState currentControllerState = ControllerState.Falling;
+
+    //Enum describing in what state the PC is
+    protected enum ActionState
+    {
+        Walk,
+        Sprint,
+        Crouch,
+        Slide,
+    }
+    protected ActionState _currentActionState = ActionState.Walk;
 	 
 	//Get references to all necessary components;
 	void Awake () {
+
+
+        
 		mover = GetComponent<Mover>();
 		trans = GetComponent<Transform>();
 
 		Setup();
         walkingSpeed = movementSpeed;
-
+        initialColliderHeight = mover.colliderHeight;
     }
 
     //This function is called right after Awake(); It can be overridden by inheriting scripts;
     protected virtual void Setup()
 	{
+
 	}
 
 	void Update()
@@ -134,7 +153,19 @@ public class BasicWalkerController : MonoBehaviour {
 		bool _newJumpKeyPressedState = IsJumpKeyPressed();
 
 		if(jumpKeyIsPressed == false && _newJumpKeyPressedState == true)
-			jumpKeyWasPressed = true;
+        {
+            RaycastHit _hit;
+            if (!Physics.Raycast(new Ray(transform.position, transform.up), out _hit, Mathf.Infinity, crouchLayer))
+            {
+                jumpKeyWasPressed = true;
+                if (isCrouching)
+                {
+                    CrouchingSwitch();
+                }
+            }
+            Debug.DrawLine(transform.position, transform.up * 100, Color.blue, 0.1f);
+        }
+
 
 		if(jumpKeyIsPressed == false && _newJumpKeyPressedState == false)
 			jumpKeyWasLetGo = true;
@@ -147,10 +178,11 @@ public class BasicWalkerController : MonoBehaviour {
     {
         bool _newSprintKeyPressedState = IsSprintActive();
         bool _forwardKeyIsPressed = IsForwarding();
-        if (isSprinting && _forwardKeyIsPressed)
+        if (_newSprintKeyPressedState && _forwardKeyIsPressed && !isCrouching)   // verify when the sprint needs to be canceled
         {
             movementSpeed = sprintingSpeed;
 
+            #region FOV
             Camera.main.fieldOfView = Mathf.Lerp(currentFOV, fovWhenSprinting, Time.deltaTime * 4f);
 
             currentFOV = Camera.main.fieldOfView;
@@ -159,33 +191,87 @@ public class BasicWalkerController : MonoBehaviour {
             {
                 currentFOV = fovWhenSprinting;
             }
+            #endregion
 
+            _currentActionState = ActionState.Sprint;
         }
         else if(currentControllerState == ControllerState.Grounded)
         {
             movementSpeed = walkingSpeed;
+
+            #region FOV
             Camera.main.fieldOfView = Mathf.Lerp(currentFOV, fovWhenWalking, Time.deltaTime * 4f);
             currentFOV = Camera.main.fieldOfView;
             if (currentFOV < fovWhenWalking + 0.5f)
             {
                 currentFOV = fovWhenWalking;
             }
+            #endregion
+
             isSprinting = false;
+            if (!isCrouching)
+            {
+                _currentActionState = ActionState.Walk;
+            }
+
         }
     }
+
+    
+
 
     //Handle crouch booleans
     void HandleCrouchKeyInput()
     {
         bool _crouchKeyIsPressed = IsCrouching();
-        if (_crouchKeyIsPressed && !isCrouching)
+
+        if (_crouchKeyIsPressed)
         {
-            isCrouching = true;
+            CrouchingSwitch();
         }
-        else if (isCrouching)
+    }
+
+
+    protected Vector3 slidingFwrd;
+    protected Vector3 slidingRight;
+
+    void CrouchingSwitch()
+    {
+        switch (isCrouching)
         {
-            isCrouching = false;
+            case true:
+
+                mover.colliderHeight = initialColliderHeight;
+                _currentActionState = ActionState.Walk;
+                isCrouching = false;
+
+                break;
+            case false:
+                mover.colliderHeight = crouchColliderHeight;
+                isCrouching = true;
+                if (_currentActionState != ActionState.Sprint)
+                {
+                    _currentActionState = ActionState.Crouch;
+                }
+                else
+                {
+                    _currentActionState = ActionState.Slide;
+                    slidingFwrd = Camera.main.transform.forward;
+                    StartCoroutine(_slidingCoroutine());
+                }
+
+                break;
+            default:
+                break;
         }
+    }
+
+
+    IEnumerator _slidingCoroutine()
+    {
+        yield return new WaitForSeconds(0.02f);
+        //GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * 100f, ForceMode.Force);
+
     }
 
     //FixedUpdate;
@@ -304,7 +390,11 @@ public class BasicWalkerController : MonoBehaviour {
     //Returns 'true' if the player had pressed the crouch key;
     protected virtual bool IsCrouching()
     {
-        return Input.GetKeyDown(_controlKeyBinding.crouch);
+        if (Input.GetKeyDown(_controlKeyBinding.crouch))
+        {
+            return true;
+        }
+        return false;
     }
 
     //Handle state transitions;
