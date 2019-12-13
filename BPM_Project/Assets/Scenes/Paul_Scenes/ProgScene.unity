@@ -1481,7 +1481,7 @@ PrefabInstance:
     - target: {fileID: 114036295079588584, guid: 5d075d3ed32dfe1498e31454964d07e8,
         type: 3}
       propertyPath: customCurve.m_Curve.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 114036295079588584, guid: 5d075d3ed32dfe1498e31454964d07e8,
         type: 3}
@@ -1591,12 +1591,12 @@ PrefabInstance:
     - target: {fileID: 114036295079588584, guid: 5d075d3ed32dfe1498e31454964d07e8,
         type: 3}
       propertyPath: slideMaxSpeed
-      value: 15
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 114036295079588584, guid: 5d075d3ed32dfe1498e31454964d07e8,
         type: 3}
       propertyPath: _useCustomCurve
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114036295079588584, guid: 5d075d3ed32dfe1498e31454964d07e8,
         type: 3}
@@ -1646,17 +1646,17 @@ PrefabInstance:
     - target: {fileID: 114036295079588584, guid: 5d075d3ed32dfe1498e31454964d07e8,
         type: 3}
       propertyPath: customCurve.m_Curve.Array.data[1].time
-      value: 1
+      value: 0.57461727
       objectReference: {fileID: 0}
     - target: {fileID: 114036295079588584, guid: 5d075d3ed32dfe1498e31454964d07e8,
         type: 3}
       propertyPath: customCurve.m_Curve.Array.data[1].value
-      value: 0
+      value: 1.1176996
       objectReference: {fileID: 0}
     - target: {fileID: 114036295079588584, guid: 5d075d3ed32dfe1498e31454964d07e8,
         type: 3}
       propertyPath: customCurve.m_Curve.Array.data[1].tangentMode
-      value: 136
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114036295079588584, guid: 5d075d3ed32dfe1498e31454964d07e8,
         type: 3}
@@ -1666,6 +1666,36 @@ PrefabInstance:
     - target: {fileID: 114036295079588584, guid: 5d075d3ed32dfe1498e31454964d07e8,
         type: 3}
       propertyPath: customCurve.m_Curve.Array.data[1].outWeight
+      value: 0.04565126
+      objectReference: {fileID: 0}
+    - target: {fileID: 114036295079588584, guid: 5d075d3ed32dfe1498e31454964d07e8,
+        type: 3}
+      propertyPath: customCurve.m_Curve.Array.data[1].inSlope
+      value: 5.4166684
+      objectReference: {fileID: 0}
+    - target: {fileID: 114036295079588584, guid: 5d075d3ed32dfe1498e31454964d07e8,
+        type: 3}
+      propertyPath: customCurve.m_Curve.Array.data[1].outSlope
+      value: 5.4166684
+      objectReference: {fileID: 0}
+    - target: {fileID: 114036295079588584, guid: 5d075d3ed32dfe1498e31454964d07e8,
+        type: 3}
+      propertyPath: customCurve.m_Curve.Array.data[2].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114036295079588584, guid: 5d075d3ed32dfe1498e31454964d07e8,
+        type: 3}
+      propertyPath: customCurve.m_Curve.Array.data[2].tangentMode
+      value: 136
+      objectReference: {fileID: 0}
+    - target: {fileID: 114036295079588584, guid: 5d075d3ed32dfe1498e31454964d07e8,
+        type: 3}
+      propertyPath: customCurve.m_Curve.Array.data[2].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 114036295079588584, guid: 5d075d3ed32dfe1498e31454964d07e8,
+        type: 3}
+      propertyPath: customCurve.m_Curve.Array.data[2].outWeight
       value: 0.33333334
       objectReference: {fileID: 0}
     - target: {fileID: 20395501606822184, guid: 5d075d3ed32dfe1498e31454964d07e8,
@@ -1783,6 +1813,24 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1025980781}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1076557357 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1273852644323278, guid: 5d075d3ed32dfe1498e31454964d07e8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1001233133}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1076557358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1076557357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d41697ba670d415469cac1566015790a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1098252553
 GameObject:
   m_ObjectHideFlags: 0

@@ -147,12 +147,9 @@ public class BasicWalkerController : MonoBehaviour {
 
         #region Animation Curve Initialisation
 
-        if (!_useCustomCurve)
-        {
-            //_animationcurveFirstKey = slideMaxSpeed / sprintingSpeed;
-            _curve = new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 0));
-            detlaSpeed = slideMaxSpeed - sprintingSpeed;
-        }
+        detlaSpeed = slideMaxSpeed - sprintingSpeed;
+        //_animationcurveFirstKey = slideMaxSpeed / sprintingSpeed;
+        _curve = new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 0));
 
         #endregion
 
