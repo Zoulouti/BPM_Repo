@@ -52,8 +52,8 @@ public class BasicWalkerController : MonoBehaviour {
     [Space]
     [Header("Movement speed variables")]
     //Movement speed;
-    public float movementSpeed = 7f;
-    float walkingSpeed;
+    float _currentSpeed;
+    public float walkingSpeed = 7f;
     public float sprintingSpeed = 17f;
     [Space]
     [Header("Sprint variables")]
@@ -65,6 +65,19 @@ public class BasicWalkerController : MonoBehaviour {
     public float crouchColliderHeight;
     public LayerMask crouchLayer;
     float initialColliderHeight;
+    [Space]
+    [Header("Slide varibales")]
+    public float slideMaxSpeed = 20f;
+    public float slideTime = 1f;
+    float _currentSlidingTime;
+    float detlaSpeed;
+    AnimationCurve _curve;
+
+    float _animationcurveFirstKey;
+
+    [Tooltip("True if you want to use your custom curve")]
+    public bool _useCustomCurve;
+    public AnimationCurve customCurve;
     [Space]
     [Header("Jump variables")]
 	//'Aircontrol' determines to what degree the player is able to move while in the air;
@@ -123,15 +136,26 @@ public class BasicWalkerController : MonoBehaviour {
 	 
 	//Get references to all necessary components;
 	void Awake () {
-
-
         
 		mover = GetComponent<Mover>();
 		trans = GetComponent<Transform>();
 
 		Setup();
-        walkingSpeed = movementSpeed;
+        _currentSpeed = walkingSpeed;
         initialColliderHeight = mover.colliderHeight;
+
+
+        #region Animation Curve Initialisation
+
+        if (!_useCustomCurve)
+        {
+            //_animationcurveFirstKey = slideMaxSpeed / sprintingSpeed;
+            _curve = new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 0));
+            detlaSpeed = slideMaxSpeed - sprintingSpeed;
+        }
+
+        #endregion
+
     }
 
     //This function is called right after Awake(); It can be overridden by inheriting scripts;
@@ -145,6 +169,7 @@ public class BasicWalkerController : MonoBehaviour {
 		HandleJumpKeyInput();
         HandleSprintKeyInput();
         HandleCrouchKeyInput();
+
     }
 
 	//Handle jump booleans for later use in FixedUpdate;
@@ -154,6 +179,18 @@ public class BasicWalkerController : MonoBehaviour {
 
 		if(jumpKeyIsPressed == false && _newJumpKeyPressedState == true)
         {
+
+            if (_currentActionState == ActionState.Slide || _currentActionState == ActionState.Sprint)
+            {
+                _currentActionState = ActionState.Sprint;
+                StopCoroutine(_slidingCoroutine(_useCustomCurve));
+                isCrouching = true;
+            }
+            else if(_currentActionState == ActionState.Crouch || _currentActionState == ActionState.Walk)
+            {
+                _currentActionState = ActionState.Walk;
+            }
+
             RaycastHit _hit;
             if (!Physics.Raycast(new Ray(transform.position, transform.up), out _hit, Mathf.Infinity, crouchLayer))
             {
@@ -180,7 +217,7 @@ public class BasicWalkerController : MonoBehaviour {
         bool _forwardKeyIsPressed = IsForwarding();
         if (_newSprintKeyPressedState && _forwardKeyIsPressed && !isCrouching)   // verify when the sprint needs to be canceled
         {
-            movementSpeed = sprintingSpeed;
+            _currentSpeed = sprintingSpeed;
 
             #region FOV
             Camera.main.fieldOfView = Mathf.Lerp(currentFOV, fovWhenSprinting, Time.deltaTime * 4f);
@@ -195,9 +232,9 @@ public class BasicWalkerController : MonoBehaviour {
 
             _currentActionState = ActionState.Sprint;
         }
-        else if(currentControllerState == ControllerState.Grounded)
+        else if(currentControllerState == ControllerState.Grounded && _currentActionState != ActionState.Slide)
         {
-            movementSpeed = walkingSpeed;
+            _currentSpeed = walkingSpeed;
 
             #region FOV
             Camera.main.fieldOfView = Mathf.Lerp(currentFOV, fovWhenWalking, Time.deltaTime * 4f);
@@ -247,17 +284,19 @@ public class BasicWalkerController : MonoBehaviour {
 
                 break;
             case false:
+
                 mover.colliderHeight = crouchColliderHeight;
                 isCrouching = true;
+
                 if (_currentActionState != ActionState.Sprint)
                 {
                     _currentActionState = ActionState.Crouch;
                 }
-                else
+                else if(_currentActionState != ActionState.Slide)
                 {
                     _currentActionState = ActionState.Slide;
                     slidingFwrd = Camera.main.transform.forward;
-                    StartCoroutine(_slidingCoroutine());
+                    StartCoroutine(_slidingCoroutine(_useCustomCurve));
                 }
 
                 break;
@@ -266,12 +305,32 @@ public class BasicWalkerController : MonoBehaviour {
         }
     }
 
-
-    IEnumerator _slidingCoroutine()
+    IEnumerator _slidingCoroutine(bool CustomCurve)
     {
-        yield return new WaitForSeconds(0.02f);
-        //GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * 100f, ForceMode.Force);
+        _currentSlidingTime = 0;
+        while (_currentSlidingTime / slideTime <= 1 && _currentActionState == ActionState.Slide)
+        {
+            yield return new WaitForSeconds(0.02f);
+            _currentSlidingTime += Time.deltaTime;
+            if (!CustomCurve)
+            {
+                float speed = _curve.Evaluate(_currentSlidingTime / slideTime);
+                _currentSpeed = sprintingSpeed + (detlaSpeed * speed);
+            }
+            else
+            {
+                float speed = customCurve.Evaluate(_currentSlidingTime / slideTime);
+                _currentSpeed = sprintingSpeed + (detlaSpeed * speed);
+            }
+        }
 
+        if(_currentActionState != ActionState.Sprint)
+        {
+            isCrouching = false;
+            CrouchingSwitch();
+        }
+        _currentSlidingTime = 0;
+        StopCoroutine(_slidingCoroutine(_useCustomCurve));
     }
 
     //FixedUpdate;
@@ -351,11 +410,11 @@ public class BasicWalkerController : MonoBehaviour {
 		Vector3 _velocityDirection = _velocity;
 
 		//Multiply (normalized) velocity with movement speed;
-		_velocity *= movementSpeed;
+		_velocity *= _currentSpeed;
 
 		//If controller is in the air, multiply movement velocity with 'airControl';
 		if(!IsGrounded())
-			_velocity = _velocityDirection * movementSpeed * airControl;
+			_velocity = _velocityDirection * _currentSpeed * airControl;
 
 		//If controller is standing (or walking) on a slope, decrease player velocity based on the slope's angle;
 		if(currentControllerState == ControllerState.Sliding)
@@ -581,7 +640,7 @@ public class BasicWalkerController : MonoBehaviour {
 		//If velocity would exceed the controller's movement speed, decrease movement velocity appropriately;
 		//This prevents unwanted accumulation of velocity;
 		float _horizontalMomentumSpeed = VectorMath.RemoveDotVector(GetMomentum(), trans.up).magnitude;
-		Vector3 _currentVelocity = GetMomentum() + Vector3.ClampMagnitude(savedMovementVelocity, Mathf.Clamp(movementSpeed - _horizontalMomentumSpeed, 0f, movementSpeed));
+		Vector3 _currentVelocity = GetMomentum() + Vector3.ClampMagnitude(savedMovementVelocity, Mathf.Clamp(_currentSpeed - _horizontalMomentumSpeed, 0f, _currentSpeed));
 
 		//Calculate length and direction from '_currentVelocity';
 		float _length = _currentVelocity.magnitude;
@@ -592,8 +651,8 @@ public class BasicWalkerController : MonoBehaviour {
 			_velocityDirection = _currentVelocity/_length;
 
 		//Subtract from '_length', based on 'movementSpeed' and 'airControl', check for overshooting;
-		if(_length >= movementSpeed * airControl)
-			_length -= movementSpeed * airControl;
+		if(_length >= _currentSpeed * airControl)
+			_length -= _currentSpeed * airControl;
 		else
 			_length = 0f;
 
