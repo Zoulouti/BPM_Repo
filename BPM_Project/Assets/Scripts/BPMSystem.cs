@@ -10,6 +10,7 @@ public class BPMSystem : MonoBehaviour
     public class BPM
     {
         public int maxBPM = 300;
+        public int startingBPM = 100;
         public int criticalLvlOfBPM = 75;
     }
 
@@ -59,14 +60,17 @@ public class BPMSystem : MonoBehaviour
 
     private void Start()
     {
-        _currentBPM = _BPM.maxBPM;
+        _currentBPM = _BPM.startingBPM;
         _currentElectrarythmiePoints = _electrarythmie.maxElectrarythmiePoints;
         _currentOverdrenalineCooldown = _overdrenaline.overdrenalineCooldown;
     }
 
+    // ---------- A virer -----------
     RaycastHit _hit;
     public Transform origin;
     public GameObject camera;
+    // ---------- A virer -----------
+
 
     private void Update()
     {
