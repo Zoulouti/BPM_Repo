@@ -65,11 +65,7 @@ public class BPMSystem : MonoBehaviour
         _currentOverdrenalineCooldown = _overdrenaline.overdrenalineCooldown;
     }
 
-    // ---------- A virer -----------
-    RaycastHit _hit;
-    public Transform origin;
-    public GameObject camera;
-    // ---------- A virer -----------
+
 
 
     private void Update()
@@ -88,39 +84,6 @@ public class BPMSystem : MonoBehaviour
             {
                 _overdrenalineCooldownOver = true;
             }
-        }
-
-
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            if(Physics.Raycast(origin.position, camera.transform.forward, out _hit, Mathf.Infinity))
-            {
-
-                Debug.DrawRay(origin.position, camera.transform.forward, Color.blue, 10f);
-
-                if (_hit.collider.CompareTag("NoSpot"))
-                {
-                    GainBPM(10f);
-                }
-                else if (_hit.collider.CompareTag("WeakSpot"))
-                {
-                    GainBPM(20f);
-                }
-                else if (_hit.collider.CompareTag("ArmorSpot"))
-                {
-                    GainBPM(5f);
-                }
-                else if (_hit.collider.CompareTag("DestroyableObject"))
-                {
-                    GainBPM(5f);
-                    GainElectrarythmiePoints(5);
-                }
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            LoseBPM(10f);
         }
     }
 
