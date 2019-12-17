@@ -40,7 +40,9 @@ public class BPMSystem : MonoBehaviour
     {
         [Tooltip("When does the electrarythmie have to trigger ?")]
         public int electrarythmieBPMTrigger = 50;
+        public int startingElectrarythmiePoints;
         public int maxElectrarythmiePoints = 100;
+
     }
 
     float _currentElectrarythmiePoints;
@@ -61,7 +63,7 @@ public class BPMSystem : MonoBehaviour
     private void Start()
     {
         _currentBPM = _BPM.startingBPM;
-        _currentElectrarythmiePoints = _electrarythmie.maxElectrarythmiePoints;
+        _currentElectrarythmiePoints = _electrarythmie.startingElectrarythmiePoints;
         _currentOverdrenalineCooldown = _overdrenaline.overdrenalineCooldown;
     }
 
