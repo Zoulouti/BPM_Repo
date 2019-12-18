@@ -6,11 +6,15 @@ using System;
 public class WeaponBehaviour : MonoBehaviour
 {
     public Weapon[] allWeapons;
-
+    [Space]
     public GameObject projectils;
 
     BPMSystem _BPMSystem;
     int activatedWeapon = 0;
+
+    int defaultDistance = 500;
+
+    
 
     private void Awake()
     {
@@ -19,18 +23,23 @@ public class WeaponBehaviour : MonoBehaviour
 
     // ---------- A virer -----------
     RaycastHit _hit;
+    public GameObject firePoint;
     // ---------- A virer -----------
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            Vector3 posToLookAt;
             _BPMSystem.LoseBPM(allWeapons[activatedWeapon]._weaponLevel0.BPMCost);
-
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out _hit, Mathf.Infinity))
             {
 
-                Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward, Color.blue, 10f);
+                posToLookAt = _hit.point;
+
+
+                Debug.DrawLine(Camera.main.transform.position, _hit.transform.position, Color.blue, 10f);
+
 
                 if (_hit.collider.CompareTag("NoSpot"))
                 {
@@ -48,8 +57,28 @@ public class WeaponBehaviour : MonoBehaviour
                 {
                     _BPMSystem.GainBPM(5f);
                     _BPMSystem.GainElectrarythmiePoints(5);
-                }
+                } 
             }
+            else
+            {
+                posToLookAt = GetProjectilLookAt();
+            }
+
+            GameObject go = Instantiate(allWeapons[activatedWeapon]._weaponLevel0.bullet, firePoint.transform.position, firePoint.transform.rotation);
+            Enum m_projectilState = go.GetComponent<Projectile>().m_projectileType = Projectile.ProjectileType.Player;
+            go.transform.LookAt(posToLookAt);
+
+            OnShoot(m_projectilState);
         }
+    }
+
+    public void OnShoot(Enum m_projectileType)
+    {
+        Debug.Log(m_projectileType);
+    }
+
+    Vector3 GetProjectilLookAt()
+    {
+        return Camera.main.transform.position + Camera.main.transform.forward * defaultDistance;
     }
 }

@@ -1962,8 +1962,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allWeapons:
   - {fileID: 11400000, guid: fb3e97c66800ad94ebde8f727819c49a, type: 2}
+  - {fileID: 11400000, guid: 6b30406b4ed6a7a43b3d0491088d9325, type: 2}
   projectils: {fileID: 8129173191346671849, guid: 3a70a0991be4a6641ac4a9238603934f,
     type: 3}
+  firePoint: {fileID: 1357262616}
 --- !u!1 &1098252553
 GameObject:
   m_ObjectHideFlags: 0
@@ -2470,6 +2472,12 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1357262616 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1427200434, guid: 6b0a1a6ab700f824ca9eb2598130b4a1,
+    type: 3}
+  m_PrefabInstance: {fileID: 1561398998}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1561398998
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2536,6 +2544,18 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1427200435, guid: 6b0a1a6ab700f824ca9eb2598130b4a1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1427200435, guid: 6b0a1a6ab700f824ca9eb2598130b4a1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1427200435, guid: 6b0a1a6ab700f824ca9eb2598130b4a1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6b0a1a6ab700f824ca9eb2598130b4a1, type: 3}
