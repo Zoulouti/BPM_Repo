@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8129173191346671848}
   - component: {fileID: 3289840442711770242}
   - component: {fileID: 114654326254760370}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,10 +121,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9509c76dc125d0e4ab877ec90f3e5349, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_projectileType: 0
-  m_damage: 10
-  m_speed: 25
-  m_dieFX: {fileID: 0}
-  m_haveMaxLifeTime: 1
-  m_dieWhenHit: 1
+  m_speed: 20
+  m_dieFX: {fileID: 1834864717962692, guid: 4d0007966fbcf9e4ba218ea8c592dea1, type: 3}
   m_maxLifeTime: 5
