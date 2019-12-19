@@ -426,7 +426,7 @@ public class BasicWalkerController : MonoBehaviour {
 	//Returns 'true' if the player presses the jump key;
 	protected virtual bool IsJumpKeyPressed()
 	{
-		 return (Input.GetKeyDown(jumpKey));
+		 return (Input.GetKeyDown(jumpKey) || Input.GetButtonDown("Jump"));
 	}
     //Returns 'true' if the player presses the forward key;
     protected virtual bool IsForwarding()
@@ -436,7 +436,7 @@ public class BasicWalkerController : MonoBehaviour {
     //Returns 'true' if the player had pressed the sprint key;
     protected virtual bool IsSprintActive()
     {
-        if(Input.GetKeyDown(sprintKey) || isSprinting)
+        if(Input.GetKeyDown(sprintKey) || Input.GetButtonDown("Sprint") || isSprinting)
         {
             isSprinting = true;
             return true;
@@ -446,7 +446,7 @@ public class BasicWalkerController : MonoBehaviour {
     //Returns 'true' if the player had pressed the crouch key;
     protected virtual bool IsCrouching()
     {
-        if (Input.GetKeyDown(_controlKeyBinding.crouch))
+        if (Input.GetKeyDown(_controlKeyBinding.crouch) || Input.GetButtonDown("Crouch"))
         {
             return true;
         }
