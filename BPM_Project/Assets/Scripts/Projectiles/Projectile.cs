@@ -87,6 +87,7 @@ public class Projectile : MonoBehaviour
                 case "NoSpot":
 
                     BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnNoSpot);
+                    col.GetComponent<ReferenceScipt>().cara.TakeDamage(Damage, 0);
                     Debug.Log(tag);
 
                     break;
@@ -95,6 +96,7 @@ public class Projectile : MonoBehaviour
                 case "WeakSpot":
 
                     BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnWeak);
+                    col.GetComponent<ReferenceScipt>().cara.TakeDamage(Damage, 1);
                     Debug.Log(tag);
 
                     break;
@@ -102,6 +104,7 @@ public class Projectile : MonoBehaviour
                 case "ArmorSpot":
 
                     BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnArmor);
+                    col.GetComponent<ReferenceScipt>().cara.TakeDamage(Damage, 2);
                     Debug.Log(tag);
 
                     break;

@@ -14,7 +14,7 @@ public class WeaponBehaviour : MonoBehaviour
 
     int defaultDistance = 500;
 
-    
+    int _currentDamage;
 
     private void Awake()
     {
@@ -32,8 +32,25 @@ public class WeaponBehaviour : MonoBehaviour
         {
             OnPlayerShoot();
         }
-    }
+        switch (_BPMSystem.CurrentWeaponState)
+        {
+            case BPMSystem.WeaponState.Level0:
 
+                _currentDamage = allWeapons[activatedWeapon]._weaponLevel0.damage;
+
+                break;
+            case BPMSystem.WeaponState.Level1:
+
+                _currentDamage = allWeapons[activatedWeapon]._weaponLevel1.damage;
+
+                break;
+            case BPMSystem.WeaponState.Level2:
+
+                _currentDamage = allWeapons[activatedWeapon]._weaponLevel2.damage;
+
+                break;
+        }
+    }
     void OnPlayerShoot()
     {
         Vector3 posToLookAt;
@@ -53,6 +70,7 @@ public class WeaponBehaviour : MonoBehaviour
         Projectile projScript = go.GetComponent<Projectile>();
 
         projScript.BPMSystem = _BPMSystem;
+        projScript.Damage = _currentDamage;
         Enum m_projectilState = projScript.ProjectileType1 = Projectile.ProjectileType.Player;
 
         go.transform.LookAt(posToLookAt);

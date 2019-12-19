@@ -30,13 +30,14 @@ public class BPMSystem : MonoBehaviour
         public int secondWeaponLevel = 225;
     }
 
-    enum WeaponState
+    public enum WeaponState
     {
         Level0,
         Level1,
         Level2
     }
     WeaponState _currentWeaponState = WeaponState.Level0;
+    public WeaponState CurrentWeaponState { get => _currentWeaponState; set => _currentWeaponState = value; }
 
     [Space]
     public Electrarythmie _electrarythmie = new Electrarythmie();
@@ -64,6 +65,7 @@ public class BPMSystem : MonoBehaviour
     float _currentOverdrenalineCooldown;
     bool _overdrenalineCooldownOver;
     bool _hasOverdrenaline;
+
 
     private void Start()
     {
@@ -103,11 +105,11 @@ public class BPMSystem : MonoBehaviour
             {
                 if (_hasElectrarythmie)
                 {
-                    Debug.Log("Critical with electra");
+                    //Debug.Log("Critical with electra");
                 }
                 else
                 {
-                    Debug.Log("Critical without electra");
+                    //Debug.Log("Critical without electra");
                 }
             }
             _currentBPM -= BPMLoss;
@@ -118,16 +120,16 @@ public class BPMSystem : MonoBehaviour
         {
             _currentBPM = _electrarythmie.electrarythmieBPMTrigger;
 
-            Debug.Log("Electrarythmie Time");
+            //Debug.Log("Electrarythmie Time");
             ActivateElectrarythmie();
 
         }
         else                                                                   //If not it's death
         {
-            Debug.Log("Je suis mort");
+            //Debug.Log("Je suis mort");
         }
 
-        Debug.Log("Level of BPM : " + _currentBPM);
+        //Debug.Log("Level of BPM : " + _currentBPM);
 
     }
 
@@ -145,7 +147,7 @@ public class BPMSystem : MonoBehaviour
             _hasOverdrenaline = true;
 
         }
-        Debug.Log("Level of BPM : " + _currentBPM);
+        //Debug.Log("Level of BPM : " + _currentBPM);
     }
     #endregion
 
@@ -164,7 +166,7 @@ public class BPMSystem : MonoBehaviour
                 _currentWeaponState = WeaponState.Level1;
             }
         }
-        Debug.Log("WeaponState : "+_currentWeaponState);
+        //Debug.Log("WeaponState : "+_currentWeaponState);
     }
 
     void DeactivateWeaponLevel(float currentBPM)
@@ -180,7 +182,7 @@ public class BPMSystem : MonoBehaviour
                 _currentWeaponState = WeaponState.Level1;
             }
         }
-        Debug.Log("WeaponState : " + _currentWeaponState);
+        //Debug.Log("WeaponState : " + _currentWeaponState);
     }
 
     // script contien les armes ?
@@ -208,7 +210,7 @@ public class BPMSystem : MonoBehaviour
             _currentElectrarythmiePoints = _electrarythmie.maxElectrarythmiePoints;
             _hasElectrarythmie = true;
         }
-        Debug.Log("ElectraPoints : " + _currentElectrarythmiePoints);
+        //Debug.Log("ElectraPoints : " + _currentElectrarythmiePoints);
     }
     #endregion
 }
