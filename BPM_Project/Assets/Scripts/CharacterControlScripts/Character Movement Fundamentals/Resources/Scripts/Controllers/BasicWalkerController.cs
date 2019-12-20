@@ -62,6 +62,7 @@ public class BasicWalkerController : MonoBehaviour {
     float currentFOV;
     [Space]
     [Header("Crouch varibales")]
+    public float crouchingSpeed = 5f;
     public float crouchColliderHeight;
     public LayerMask crouchLayer;
     float initialColliderHeight;
@@ -231,7 +232,7 @@ public class BasicWalkerController : MonoBehaviour {
         }
         else if(currentControllerState == ControllerState.Grounded && _currentActionState != ActionState.Slide)
         {
-            _currentSpeed = walkingSpeed;
+            _currentSpeed = crouchingSpeed;
 
             #region FOV
             Camera.main.fieldOfView = Mathf.Lerp(currentFOV, fovWhenWalking, Time.deltaTime * 4f);
@@ -245,6 +246,7 @@ public class BasicWalkerController : MonoBehaviour {
             isSprinting = false;
             if (!isCrouching)
             {
+                _currentSpeed = walkingSpeed;
                 _currentActionState = ActionState.Walk;
             }
 
