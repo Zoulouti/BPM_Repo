@@ -4,10 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Undefined
   - NoSpot
-  - ArmorSpot
   - WeakSpot
+  - ArmorSpot
   - DestroyableObject
   layers:
   - Default
@@ -18,10 +17,10 @@ TagManager:
   - UI
   - 
   - 
-  - Weapon
+  - PostProcessing
+  - WalkableEnvironment
   - Projectile
-  - 
-  - 
+  - Weapon
   - 
   - 
   - 
