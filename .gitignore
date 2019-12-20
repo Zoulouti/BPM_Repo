@@ -34,3 +34,6 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+# Ajouts de Quentin
+.meta
+ !.*.meta
