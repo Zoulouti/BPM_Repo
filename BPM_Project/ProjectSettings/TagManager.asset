@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Undefined
+  - NoSpot
+  - ArmorSpot
+  - WeakSpot
+  - DestroyableObject
   layers:
   - Default
   - TransparentFX
@@ -13,17 +18,10 @@ TagManager:
   - UI
   - 
   - 
-<<<<<<< HEAD
-  - 
-  - 
-  - 
-  - 
-=======
-  - PostProcessing
-  - WalkableEnvironment
-  - Projectile
   - Weapon
->>>>>>> 54a19301755dd8788f86f7d8ab48be0e754e1e3b
+  - Projectile
+  - 
+  - 
   - 
   - 
   - 
