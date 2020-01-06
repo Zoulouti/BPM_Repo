@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: TestArchetype
   m_EditorClassIdentifier: 
   _head:
-    _typeOfSpot: 0
+    _typeOfSpot: 1
   _rightShoulder:
-    _typeOfSpot: 0
+    _typeOfSpot: 1
   _leftShoulder:
-    _typeOfSpot: 0
+    _typeOfSpot: 2
   _torso:
-    _typeOfSpot: 0
+    _typeOfSpot: 2
   _backo:
-    _typeOfSpot: 0
+    _typeOfSpot: 1
   _rightKnee:
-    _typeOfSpot: 0
+    _typeOfSpot: 1
   _leftKnee:
-    _typeOfSpot: 0
+    _typeOfSpot: 1

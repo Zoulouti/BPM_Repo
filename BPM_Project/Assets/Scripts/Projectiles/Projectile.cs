@@ -54,7 +54,10 @@ public class Projectile : MonoBehaviour
 
     public void FixedUpdate()
     {
-        RBody.velocity = transform.forward * m_speed;
+        if(RBody != null)
+        {
+            RBody.velocity = transform.forward * m_speed;
+        }
     }
 
     void OnTriggerEnter(Collider col)
@@ -131,6 +134,7 @@ public class Projectile : MonoBehaviour
 
     void DestroyProjectile()
     {
+        Debug.Log("hop");
         Destroy(gameObject);
 
         if (m_dieFX != null)
