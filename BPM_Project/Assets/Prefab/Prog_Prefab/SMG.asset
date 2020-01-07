@@ -16,8 +16,7 @@ MonoBehaviour:
     damage: 10
     attackCooldown: 0.25
     BPMCost: 5
-    bullet: {fileID: 8129173191346671849, guid: 3a70a0991be4a6641ac4a9238603934f,
-      type: 3}
+    bullet: {fileID: 153592, guid: 8a8989707aba4754dbae031ca01527e3, type: 3}
   _weaponLevel1:
     damage: 20
     attackCooldown: 0.1
@@ -26,5 +25,4 @@ MonoBehaviour:
     damage: 40
     attackCooldown: 0.05
     BPMCost: 1
-    newBullet: {fileID: 8129173191346671849, guid: 3a70a0991be4a6641ac4a9238603934f,
-      type: 3}
+    newBullet: {fileID: 153592, guid: 8a8989707aba4754dbae031ca01527e3, type: 3}
