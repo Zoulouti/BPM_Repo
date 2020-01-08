@@ -364,16 +364,10 @@ MonoBehaviour:
   allWeapons:
   - {fileID: 11400000, guid: fb3e97c66800ad94ebde8f727819c49a, type: 2}
   - {fileID: 11400000, guid: 6b30406b4ed6a7a43b3d0491088d9325, type: 2}
-  projectils: {fileID: 153592, guid: 8a8989707aba4754dbae031ca01527e3, type: 3}
   projectilRoot: {fileID: 0}
-  typeOfFire: 1
-  _burst:
-    nbrOfShoot: 3
-    timeBetweenShoots: 0.07
-    timeBetweenEachBurst: 0.2
-  _auto:
-    timeBetweenShoots: 0.08
-  firePoint: {fileID: 867028361}
+  _SMG:
+    typeOfFire: 1
+    firePoint: {fileID: 867028361}
 --- !u!1 &1457344649512708
 GameObject:
   m_ObjectHideFlags: 0

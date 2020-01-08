@@ -101,15 +101,9 @@ public class NewProjectilWithFX : MonoBehaviour
         DestroyProjectile();
     }
 
-    void OnProjectilHits()
-    {
-
-    }
-
 
     void DestroyProjectile()
     {
-        Debug.Log("hop");
         Destroy(parent);
     }
 

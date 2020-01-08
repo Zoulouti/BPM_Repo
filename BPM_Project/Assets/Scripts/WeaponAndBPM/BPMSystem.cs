@@ -165,8 +165,10 @@ public class BPMSystem : MonoBehaviour
             {
                 _currentWeaponState = WeaponState.Level1;
             }
+
+            ChangeWeaponLevel();
+
         }
-        //Debug.Log("WeaponState : "+_currentWeaponState);
     }
 
     void DeactivateWeaponLevel(float currentBPM)
@@ -181,8 +183,15 @@ public class BPMSystem : MonoBehaviour
             {
                 _currentWeaponState = WeaponState.Level1;
             }
+
+            ChangeWeaponLevel();
+
         }
-        //Debug.Log("WeaponState : " + _currentWeaponState);
+    }
+
+    void ChangeWeaponLevel()
+    {
+        GetComponent<WeaponBehaviour>().ChangeWeaponStats();
     }
 
     // script contien les armes ?
