@@ -11,7 +11,12 @@ public class Weapon : ScriptableObject
     [Serializable] public class WeaponLevel0
     {
         public int damage;
+        [Space]
         public float attackCooldown;
+        [Tooltip("Only if you use Rafale")]
+        public float timeBetweenBurst;
+        [Tooltip("Only if you use Rafale")]
+        public int nbrOfShoot;
         [Space]
         public int BPMCost;
         [Space]
@@ -23,7 +28,12 @@ public class Weapon : ScriptableObject
     public class WeaponLevel1
     {
         public int damage;
+        [Space]
         public float attackCooldown;
+        [Tooltip("Only if you use Rafale")]
+        public float timeBetweenBurst;
+        [Tooltip("Only if you use Rafale")]
+        public int nbrOfShoot;
         [Space]
         public int BPMCost;
     }
@@ -32,7 +42,12 @@ public class Weapon : ScriptableObject
     public class WeaponLevel2
     {
         public int damage;
+        [Space]
         public float attackCooldown;
+        [Tooltip("Only if you use Rafale")]
+        public float timeBetweenBurst;
+        [Tooltip("Only if you use Rafale")]
+        public int nbrOfShoot;
         [Space]
         public int BPMCost;
         [Space]

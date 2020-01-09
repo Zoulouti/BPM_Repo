@@ -14,15 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _weaponLevel0:
     damage: 10
-    attackCooldown: 0.25
+    attackCooldown: 0.08
+    timeBetweenBurst: 0.2
+    nbrOfShoot: 3
     BPMCost: 5
     bullet: {fileID: 153592, guid: 8a8989707aba4754dbae031ca01527e3, type: 3}
   _weaponLevel1:
     damage: 20
-    attackCooldown: 0.1
+    attackCooldown: 0.07
+    timeBetweenBurst: 0.175
+    nbrOfShoot: 4
     BPMCost: 2
   _weaponLevel2:
     damage: 40
     attackCooldown: 0.05
+    timeBetweenBurst: 0.15
+    nbrOfShoot: 5
     BPMCost: 1
     newBullet: {fileID: 153592, guid: 8a8989707aba4754dbae031ca01527e3, type: 3}
