@@ -18,6 +18,8 @@ public class Weapon : ScriptableObject
         [Tooltip("Only if you use Rafale")]
         public int nbrOfShoot;
         [Space]
+        public float BPMGainOnHit;
+        [Space]
         public int BPMCost;
         [Space]
         public GameObject bullet;
@@ -35,6 +37,8 @@ public class Weapon : ScriptableObject
         [Tooltip("Only if you use Rafale")]
         public int nbrOfShoot;
         [Space]
+        public float BPMGainOnHit;
+        [Space]
         public int BPMCost;
     }
     public WeaponLevel2 _weaponLevel2 = new WeaponLevel2();
@@ -48,6 +52,8 @@ public class Weapon : ScriptableObject
         public float timeBetweenBurst;
         [Tooltip("Only if you use Rafale")]
         public int nbrOfShoot;
+        [Space]
+        public float BPMGainOnHit;
         [Space]
         public int BPMCost;
         [Space]

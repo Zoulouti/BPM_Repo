@@ -12,13 +12,6 @@ public class EnemyArchetype : ScriptableObject
     public class Head
     {
         public TypeOfSpot _typeOfSpot;
-       /* public enum TypeOfSpot
-        {
-            NoSpot,
-            WeakSpot,
-            ArmorSpot
-        }*/
-
     }
     [Space]
     public RightShoulder _rightShoulder = new RightShoulder();
@@ -26,12 +19,6 @@ public class EnemyArchetype : ScriptableObject
     public class RightShoulder
     {
         public TypeOfSpot _typeOfSpot;
-       /* public enum TypeOfSpot
-        {
-            NoSpot,
-            WeakSpot,
-            ArmorSpot
-        }*/
     }
     [Space]
     public LeftShoulder _leftShoulder = new LeftShoulder();
@@ -39,12 +26,6 @@ public class EnemyArchetype : ScriptableObject
     public class LeftShoulder
     {
         public TypeOfSpot _typeOfSpot;
-       /* public enum TypeOfSpot
-        {
-            NoSpot,
-            WeakSpot,
-            ArmorSpot
-        }*/
     }
     [Space]
     public Torso _torso = new Torso();
@@ -52,12 +33,6 @@ public class EnemyArchetype : ScriptableObject
     public class Torso
     {
         public TypeOfSpot _typeOfSpot;
-        /*public enum TypeOfSpot
-        {
-            NoSpot,
-            WeakSpot,
-            ArmorSpot
-        }*/
     }
     [Space]
     public Backo _backo = new Backo();
@@ -65,12 +40,6 @@ public class EnemyArchetype : ScriptableObject
     public class Backo
     {
         public TypeOfSpot _typeOfSpot;
-       /* public enum TypeOfSpot
-        {
-            NoSpot,
-            WeakSpot,
-            ArmorSpot
-        }*/
     }
     [Space]
     public RightKnee _rightKnee = new RightKnee();
@@ -78,12 +47,6 @@ public class EnemyArchetype : ScriptableObject
     public class RightKnee
     {
         public TypeOfSpot _typeOfSpot;
-       /* public enum TypeOfSpot
-        {
-            NoSpot,
-            WeakSpot,
-            ArmorSpot
-        }*/
     }
     [Space]
     public LeftKnee _leftKnee = new LeftKnee();
@@ -91,12 +54,6 @@ public class EnemyArchetype : ScriptableObject
     public class LeftKnee
     {
         public TypeOfSpot _typeOfSpot;
-       /* public enum TypeOfSpot
-        {
-            NoSpot,
-            WeakSpot,
-            ArmorSpot
-        }*/
     }
 
     TypeOfSpot[] _typeOfSpot;

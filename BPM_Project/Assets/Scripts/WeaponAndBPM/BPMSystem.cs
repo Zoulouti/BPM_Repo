@@ -124,12 +124,12 @@ public class BPMSystem : MonoBehaviour
             ActivateElectrarythmie();
 
         }
-        else                                                                   //If not it's death
+        else                                                                   //If not, it's death
         {
             //Debug.Log("Je suis mort");
         }
 
-        //Debug.Log("Level of BPM : " + _currentBPM);
+       Debug.Log("Level of BPM : " + _currentBPM);
 
     }
 
@@ -147,7 +147,7 @@ public class BPMSystem : MonoBehaviour
             _hasOverdrenaline = true;
 
         }
-        //Debug.Log("Level of BPM : " + _currentBPM);
+        Debug.Log("Level of BPM : " + _currentBPM);
     }
     #endregion
 

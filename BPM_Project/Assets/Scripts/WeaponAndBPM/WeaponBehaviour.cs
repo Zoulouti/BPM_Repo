@@ -7,6 +7,7 @@ public class WeaponBehaviour : MonoBehaviour
 {
     public Weapon[] allWeapons;
     [Space]
+    public GameObject weaponObj;
     public Transform projectilRoot;
 
     /*[Flags]
@@ -28,24 +29,21 @@ public class WeaponBehaviour : MonoBehaviour
     [Serializable] public class SMG
     {
         public TypeOfFire typeOfFire;
-        /*public Burst _burst = new Burst();
-        [Serializable]
-        public class Burst
-        {
-            public int nbrOfShoot = 3;
-            public float timeBetweenShoots;
-            public float timeBetweenEachBurst;
-        }*/
-
-        /*public Auto _auto = new Auto();
-        [Serializable]
-        public class Auto
-        {
-            public float timeBetweenShoots;
-        }*/
+        public GameObject firePoint;
+        public GameObject fireAudio;
+        [Space]
+        public AnimationCurve recoilCurve;
+        public float timeToRecoverFromRecoil;
+        public float recoilHeight;
+    }
+    float _currentTimeToRecoverFromRecoil;
+    public ShotGun _ShotGun = new ShotGun();
+    [Serializable]
+    public class ShotGun
+    {
+        public TypeOfFire typeOfFire;
         public GameObject firePoint;
     }
-
     BPMSystem _BPMSystem;
 
     int activatedWeapon = 0;
@@ -54,14 +52,21 @@ public class WeaponBehaviour : MonoBehaviour
 
     float _currentAttackSpeed;
     float _currentTimeBetweenEachBurst;
+
     int _currentnbrOfShoot;
+
+    float _currentBPMGain;
+
+    float _originalWeaponXRotation;
 
     bool canShoot = true;
 
     private void Awake()
     {
         _BPMSystem = GetComponent<BPMSystem>();
+        _originalWeaponXRotation = weaponObj.transform.localRotation.eulerAngles.x;
     }
+
     // ---------- A virer -----------
     RaycastHit _hit;
     // ---------- A virer -----------
@@ -105,7 +110,7 @@ public class WeaponBehaviour : MonoBehaviour
 
                 _currentDamage = allWeapons[activatedWeapon]._weaponLevel0.damage;
                 _currentAttackSpeed = allWeapons[activatedWeapon]._weaponLevel0.attackCooldown;
-
+                _currentBPMGain = allWeapons[activatedWeapon]._weaponLevel0.BPMGainOnHit;
                 if (_SMG.typeOfFire == TypeOfFire.Rafale)
                 {
                     _currentTimeBetweenEachBurst = allWeapons[activatedWeapon]._weaponLevel0.timeBetweenBurst;
@@ -117,6 +122,7 @@ public class WeaponBehaviour : MonoBehaviour
 
                 _currentDamage = allWeapons[activatedWeapon]._weaponLevel1.damage;
                 _currentAttackSpeed = allWeapons[activatedWeapon]._weaponLevel1.attackCooldown;
+                _currentBPMGain = allWeapons[activatedWeapon]._weaponLevel1.BPMGainOnHit;
 
                 if (_SMG.typeOfFire == TypeOfFire.Rafale)
                 {
@@ -129,6 +135,7 @@ public class WeaponBehaviour : MonoBehaviour
 
                 _currentDamage = allWeapons[activatedWeapon]._weaponLevel2.damage;
                 _currentAttackSpeed = allWeapons[activatedWeapon]._weaponLevel2.attackCooldown;
+                _currentBPMGain = allWeapons[activatedWeapon]._weaponLevel2.BPMGainOnHit;
 
                 if (_SMG.typeOfFire == TypeOfFire.Rafale)
                 {
@@ -149,6 +156,8 @@ public class WeaponBehaviour : MonoBehaviour
         for (int i = 0; i < nbrOfShoot; ++i)
         {
 
+            StartCoroutine(RecoilCurve());
+
             InitiateProjectileVar(InstatiateProj(_BPMSystem.CurrentWeaponState), OnSearchForLookAt());
 
             yield return new WaitForSeconds(timeEachShoot);
@@ -159,6 +168,32 @@ public class WeaponBehaviour : MonoBehaviour
         canShoot = true;
     }
 
+    IEnumerator RecoilCurve()
+    {
+        _currentTimeToRecoverFromRecoil = 0;
+        while (_currentTimeToRecoverFromRecoil / _SMG.timeToRecoverFromRecoil <= 1)
+        {
+            yield return new WaitForSeconds(0.01f);
+            _currentTimeToRecoverFromRecoil += Time.deltaTime;
+
+            float recoil = _SMG.recoilCurve.Evaluate(_currentTimeToRecoverFromRecoil / _SMG.timeToRecoverFromRecoil);
+
+            Vector3 rotationTemp = weaponObj.transform.localRotation.eulerAngles;
+
+            float rotationX = _originalWeaponXRotation - _SMG.recoilHeight * recoil;
+            Debug.Log(rotationX);
+            rotationTemp.x = rotationX;
+
+            //weaponObj.transform.rotation. = rotationTemp;
+            weaponObj.transform.localEulerAngles = rotationTemp;
+
+
+        }
+        _currentTimeToRecoverFromRecoil = 0;
+    }
+
+
+    #region Proj Init Methods
     Vector3 OnSearchForLookAt()
     {
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out _hit, Mathf.Infinity))
@@ -195,12 +230,11 @@ public class WeaponBehaviour : MonoBehaviour
 
     void InitiateProjectileVar(GameObject gameObject, Vector3 posToLookAt)
     {
-
-        
         NewProjectilWithFX projScript = gameObject.GetComponentInChildren<NewProjectilWithFX>();
 
         projScript.BPMSystem = _BPMSystem;
         projScript.Damage = _currentDamage;
+        projScript.BPMGain = _currentBPMGain;
         Enum m_projectilState = projScript.ProjectileType1 = NewProjectilWithFX.ProjectileType.Player;
 
         gameObject.transform.LookAt(posToLookAt);
@@ -210,4 +244,7 @@ public class WeaponBehaviour : MonoBehaviour
     {
         return Camera.main.transform.position + Camera.main.transform.forward * defaultDistance;            // Dirige le projectil dans la bonne direction (par rapport au reticule)
     }
+    #endregion
+
+
 }

@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
     {
         public int damage;
         public float timeBetweenShots;
-        public float recoilTime;
+        public float reloadTime;
     }
     public Health _health = new Health();
     [Serializable]

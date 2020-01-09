@@ -19,6 +19,7 @@ public class NewProjectilWithFX : MonoBehaviour
     Rigidbody m_rBody;
     WeaponBehaviour _WeaponBehaviour;
     BPMSystem m_BPMSystem;
+    float _BPMGain;
 
     #region Get Set
     public Rigidbody RBody
@@ -38,6 +39,7 @@ public class NewProjectilWithFX : MonoBehaviour
     public WeaponBehaviour WeaponBehaviour { get => _WeaponBehaviour; set => _WeaponBehaviour = value; }
     public ProjectileType ProjectileType1 { get => m_projectileType; set => m_projectileType = value; }
     public BPMSystem BPMSystem { get => m_BPMSystem; set => m_BPMSystem = value; }
+    public float BPMGain { get => _BPMGain; set => _BPMGain = value; }
     #endregion
 
 
@@ -64,33 +66,33 @@ public class NewProjectilWithFX : MonoBehaviour
                 // Le tir du player touche un NoSpot
                 case "NoSpot":
 
-                    BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnNoSpot);
+                    BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnNoSpot * BPMGain);
                     col.collider.GetComponent<ReferenceScipt>().cara.TakeDamage(Damage, 0);
-                    Debug.Log(tag);
+                    //Debug.Log(tag);
 
                     break;
 
                 // Le tir du player touche un WeakSpot
                 case "WeakSpot":
 
-                    BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnWeak);
+                    BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnWeak * BPMGain);
                     col.collider.GetComponent<ReferenceScipt>().cara.TakeDamage(Damage, 1);
-                    Debug.Log(tag);
+                    //Debug.Log(tag);
 
                     break;
                 // Le tir du player touche un ArmorSpot
                 case "ArmorSpot":
 
-                    BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnArmor);
+                    BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnArmor * BPMGain);
                     col.collider.GetComponent<ReferenceScipt>().cara.TakeDamage(Damage, 2);
-                    Debug.Log(tag);
+                    //Debug.Log(tag);
 
                     break;
                 // Le tir du player touche un DestroyableObject
                 case "DestroyableObject":
 
                     BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnDestructableEnvironment);
-                    Debug.Log(tag);
+                    //Debug.Log(tag);
 
                     break;
                 default:
