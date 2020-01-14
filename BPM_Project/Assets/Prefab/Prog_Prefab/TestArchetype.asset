@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: TestArchetype
   m_EditorClassIdentifier: 
   _head:
-    _typeOfSpot: 1
+    _typeOfSpot: 0
   _rightShoulder:
-    _typeOfSpot: 1
+    _typeOfSpot: 0
   _leftShoulder:
     _typeOfSpot: 2
   _torso:

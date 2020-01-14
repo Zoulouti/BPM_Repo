@@ -59,6 +59,8 @@ public class WeaponBehaviour : MonoBehaviour
 
     float _originalWeaponXRotation;
 
+    float _currentBPMCost;
+
     bool canShoot = true;
 
     private void Awake()
@@ -111,6 +113,7 @@ public class WeaponBehaviour : MonoBehaviour
                 _currentDamage = allWeapons[activatedWeapon]._weaponLevel0.damage;
                 _currentAttackSpeed = allWeapons[activatedWeapon]._weaponLevel0.attackCooldown;
                 _currentBPMGain = allWeapons[activatedWeapon]._weaponLevel0.BPMGainOnHit;
+                _currentBPMCost = allWeapons[activatedWeapon]._weaponLevel0.BPMCost;
                 if (_SMG.typeOfFire == TypeOfFire.Rafale)
                 {
                     _currentTimeBetweenEachBurst = allWeapons[activatedWeapon]._weaponLevel0.timeBetweenBurst;
@@ -123,6 +126,7 @@ public class WeaponBehaviour : MonoBehaviour
                 _currentDamage = allWeapons[activatedWeapon]._weaponLevel1.damage;
                 _currentAttackSpeed = allWeapons[activatedWeapon]._weaponLevel1.attackCooldown;
                 _currentBPMGain = allWeapons[activatedWeapon]._weaponLevel1.BPMGainOnHit;
+                _currentBPMCost = allWeapons[activatedWeapon]._weaponLevel1.BPMCost;
 
                 if (_SMG.typeOfFire == TypeOfFire.Rafale)
                 {
@@ -136,6 +140,7 @@ public class WeaponBehaviour : MonoBehaviour
                 _currentDamage = allWeapons[activatedWeapon]._weaponLevel2.damage;
                 _currentAttackSpeed = allWeapons[activatedWeapon]._weaponLevel2.attackCooldown;
                 _currentBPMGain = allWeapons[activatedWeapon]._weaponLevel2.BPMGainOnHit;
+                _currentBPMCost = allWeapons[activatedWeapon]._weaponLevel2.BPMCost;
 
                 if (_SMG.typeOfFire == TypeOfFire.Rafale)
                 {
@@ -151,7 +156,7 @@ public class WeaponBehaviour : MonoBehaviour
     {
         canShoot = false;
 
-        _BPMSystem.LoseBPM(allWeapons[activatedWeapon]._weaponLevel0.BPMCost);
+        _BPMSystem.LoseBPM(_currentBPMCost);
 
         for (int i = 0; i < nbrOfShoot; ++i)
         {
@@ -181,7 +186,6 @@ public class WeaponBehaviour : MonoBehaviour
             Vector3 rotationTemp = weaponObj.transform.localRotation.eulerAngles;
 
             float rotationX = _originalWeaponXRotation - _SMG.recoilHeight * recoil;
-            Debug.Log(rotationX);
             rotationTemp.x = rotationX;
 
             //weaponObj.transform.rotation. = rotationTemp;

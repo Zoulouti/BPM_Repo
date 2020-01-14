@@ -10,6 +10,7 @@ public class EnemyCara : MonoBehaviour
     {
         public GameObject[] weakSpots;
         public GameObject[] armorSpots;
+        public GameObject[] noSpot;
     }
     [Space]
     public EnemyArchetype enemyArchetype;
@@ -48,9 +49,10 @@ public class EnemyCara : MonoBehaviour
     public void Awake()
     {
 
-        #region Get Singleton
+        /*#region Get Singleton
         manager = GameManager.Instance;
-        #endregion
+        Debug.Log(manager);
+        #endregion*/
 
         enemyArchetype.PopulateArray();
 
@@ -61,21 +63,30 @@ public class EnemyCara : MonoBehaviour
             {
                 _debug.weakSpots[i].SetActive(true);
                 _debug.armorSpots[i].SetActive(false);
+                _debug.noSpot[i].SetActive(false);
             }
             else if(enemyArchetype.e_TypeOfSpot[i] == EnemyArchetype.TypeOfSpot.ArmorSpot)
             {
                 _debug.weakSpots[i].SetActive(false);
                 _debug.armorSpots[i].SetActive(true);
+                _debug.noSpot[i].SetActive(false);
             }
             else if(enemyArchetype.e_TypeOfSpot[i] == EnemyArchetype.TypeOfSpot.NoSpot)
             {
                 _debug.weakSpots[i].SetActive(false);
                 _debug.armorSpots[i].SetActive(false);
+                _debug.noSpot[i].SetActive(true);
             }
         }
         #endregion
 
         InitializeEnemyStats(_enemyCaractéristique.useCustomTweaking);
+    }
+    private void Start()
+    {
+        #region Get Singleton
+        manager = GameManager.Instance;
+        #endregion
     }
 
     public void TakeDamage(float damage, int i)

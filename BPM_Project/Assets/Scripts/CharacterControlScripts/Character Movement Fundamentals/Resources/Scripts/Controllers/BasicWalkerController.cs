@@ -156,6 +156,8 @@ public class BasicWalkerController : MonoBehaviour {
 
     }
 
+    bool _canMove = true;
+
     //This function is called right after Awake(); It can be overridden by inheriting scripts;
     protected virtual void Setup()
 	{
@@ -164,9 +166,12 @@ public class BasicWalkerController : MonoBehaviour {
 
 	void Update()
 	{
-		HandleJumpKeyInput();
-        HandleSprintKeyInput();
-        HandleCrouchKeyInput();
+        if (CanMove)
+        {
+		    HandleJumpKeyInput();
+            HandleSprintKeyInput();
+            HandleCrouchKeyInput();
+        }
 
     }
 
@@ -271,6 +276,8 @@ public class BasicWalkerController : MonoBehaviour {
     protected Vector3 slidingFwrd;
     protected Vector3 slidingRight;
 
+    public bool CanMove { get => _canMove; set => _canMove = value; }
+
     void CrouchingSwitch()
     {
         switch (isCrouching)
@@ -347,24 +354,26 @@ public class BasicWalkerController : MonoBehaviour {
 		//Check if the player has initiated a jump;
 		HandleJumping();
 
-		//Calculate movement velocity;
-		Vector3 _velocity = CalculateMovementVelocity();
-
-		//Add current momentum to velocity;
-		_velocity += momentum;
+        //Calculate movement velocity;
+        if (CanMove)
+        {
+		    Vector3 _velocity = CalculateMovementVelocity();
+		    //Add current momentum to velocity;
+		    _velocity += momentum;
 		
-		//If player is grounded or sliding on a slope, extend mover's sensor range;
-		//This enables the player to walk up/down stairs and slopes without losing ground contact;
-		mover.SetExtendSensorRange(IsGrounded());
+		    //If player is grounded or sliding on a slope, extend mover's sensor range;
+		    //This enables the player to walk up/down stairs and slopes without losing ground contact;
+		    mover.SetExtendSensorRange(IsGrounded());
 
-		//Set mover velocity;		
-		mover.SetVelocity(_velocity);
-		// Debug.Log("Forward Velocity= " + _velocity.z);
-		// Debug.Log("Right Velocity= " + _velocity.x);
+		    //Set mover velocity;		
+		    mover.SetVelocity(_velocity);
+		    // Debug.Log("Forward Velocity= " + _velocity.z);
+		    // Debug.Log("Right Velocity= " + _velocity.x);
 
-		//Store velocity for next frame;
-		savedVelocity = _velocity;
-		savedMovementVelocity = _velocity - momentum;
+		    //Store velocity for next frame;
+		    savedVelocity = _velocity;
+		    savedMovementVelocity = _velocity - momentum;
+        }
 
 		//Reset jump key booleans;
 		jumpKeyWasLetGo = false;

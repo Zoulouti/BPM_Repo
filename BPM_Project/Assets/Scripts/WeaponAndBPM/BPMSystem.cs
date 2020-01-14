@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class BPMSystem : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class BPMSystem : MonoBehaviour
         public int BPMGain_OnWeak;
         public int BPMGain_OnArmor;
         public int BPMGain_OnDestructableEnvironment;
+        [Space]
+        public Image BPM_Gauge;
+        public Image Electra_Gauge;
     }
 
     float _currentBPM;
@@ -48,7 +52,11 @@ public class BPMSystem : MonoBehaviour
         public int electrarythmieBPMTrigger = 50;
         public int startingElectrarythmiePoints;
         public int maxElectrarythmiePoints = 100;
-
+        [Space]
+        public float timeOfElectrarythmie = 10f;
+        [Space]
+        public int _electrarythmieGain_OnDestructableEnvironment;
+        public Image _electraFeedBack;
     }
 
     float _currentElectrarythmiePoints;
@@ -61,17 +69,31 @@ public class BPMSystem : MonoBehaviour
     {
         [Tooltip("In seconds")]
         public float overdrenalineCooldown = 60f;
+        public float timeOfOverAdrenaline = 15f;
+        [Space]
+        public Image _overadrenalineCoolDownGauge;
+        public Image _overdrenalineFeedBack;
+        public Image _overdrenalineButton;
+
     }
     float _currentOverdrenalineCooldown;
-    bool _overdrenalineCooldownOver;
+    bool _overdrenalineCooldownOver = true;
     bool _hasOverdrenaline;
+    bool _overdrenalineHasBeenUsed;
 
+    bool _currentCanMove;
 
     private void Start()
     {
         _currentBPM = _BPM.startingBPM;
         _currentElectrarythmiePoints = _electrarythmie.startingElectrarythmiePoints;
         _currentOverdrenalineCooldown = _overdrenaline.overdrenalineCooldown;
+
+        _BPM.Electra_Gauge.fillAmount = Mathf.InverseLerp(0, _electrarythmie.maxElectrarythmiePoints, _currentElectrarythmiePoints);
+        _BPM.BPM_Gauge.fillAmount = Mathf.InverseLerp(0, _BPM.maxBPM, _currentBPM);
+
+        _currentCanMove = gameObject.GetComponent<BasicWalkerController>().CanMove = true;
+
     }
 
 
@@ -82,15 +104,21 @@ public class BPMSystem : MonoBehaviour
         if(_hasOverdrenaline && Input.GetKey(KeyCode.A) && _overdrenalineCooldownOver)
         {
             _hasOverdrenaline = false;
+            _overdrenalineHasBeenUsed = true;
+            _overdrenalineCooldownOver = false;
             _currentOverdrenalineCooldown = _overdrenaline.overdrenalineCooldown;
-
+            _overdrenaline._overdrenalineButton.gameObject.SetActive(false);
+            StartCoroutine(OnOverADActivate());
         }
 
         if (!_hasOverdrenaline && !_overdrenalineCooldownOver)
         {
+            Debug.Log(_currentOverdrenalineCooldown);
             _currentOverdrenalineCooldown -= Time.deltaTime;
-            if(_currentOverdrenalineCooldown <= 0)
+            _overdrenaline._overadrenalineCoolDownGauge.fillAmount = Mathf.InverseLerp(_overdrenaline.overdrenalineCooldown, 0, _currentOverdrenalineCooldown);
+            if (_currentOverdrenalineCooldown <= 0)
             {
+                _currentOverdrenalineCooldown = 0;
                 _overdrenalineCooldownOver = true;
             }
         }
@@ -99,37 +127,42 @@ public class BPMSystem : MonoBehaviour
     #region BPM Gain and Loss
     public void LoseBPM(float BPMLoss)
     {
-        if (_currentBPM - BPMLoss >= _electrarythmie.electrarythmieBPMTrigger)  //Check if the damage reaches the trigger
+        if (!_overdrenalineHasBeenUsed && _currentCanMove)
         {
-            if (_currentBPM - BPMLoss <= _BPM.criticalLvlOfBPM)
+            if (_currentBPM - BPMLoss >= _electrarythmie.electrarythmieBPMTrigger)  //Check if the damage reaches the trigger
             {
-                if (_hasElectrarythmie)
+                //Debug.Log(BPMLoss);
+                if (_currentBPM - BPMLoss <= _BPM.criticalLvlOfBPM)
                 {
-                    //Debug.Log("Critical with electra");
+                    if (_hasElectrarythmie)
+                    {
+                        //Debug.Log("Critical with electra");
+                    }
+                    else
+                    {
+                        //Debug.Log("Critical without electra");
+                    }
                 }
-                else
-                {
-                    //Debug.Log("Critical without electra");
-                }
+                _currentBPM -= BPMLoss;
+                DeactivateWeaponLevel(_currentBPM);
+
             }
-            _currentBPM -= BPMLoss;
-            DeactivateWeaponLevel(_currentBPM);
+            else if (_hasElectrarythmie)                                           //Check if the player has the electrarythmie activated
+            {
+                _currentBPM = _electrarythmie.electrarythmieBPMTrigger;
 
-        }
-        else if (_hasElectrarythmie)                                           //Check if the player has the electrarythmie activated
-        {
-            _currentBPM = _electrarythmie.electrarythmieBPMTrigger;
+                //Debug.Log("Electrarythmie Time");
+                ActivateElectrarythmie();
 
-            //Debug.Log("Electrarythmie Time");
-            ActivateElectrarythmie();
-
-        }
-        else                                                                   //If not, it's death
-        {
-            //Debug.Log("Je suis mort");
+            }
+            else                                                                   //If not, it's death
+            {
+                //Debug.Log("Je suis mort");
+            }
         }
 
-       Debug.Log("Level of BPM : " + _currentBPM);
+       //Debug.Log("Level of BPM (lose): " + _currentBPM);
+       FeedBackBPM();
 
     }
 
@@ -143,11 +176,20 @@ public class BPMSystem : MonoBehaviour
         else
         {
             _currentBPM = _BPM.maxBPM;
-
-            _hasOverdrenaline = true;
+            if (_overdrenalineCooldownOver)
+            {
+                _overdrenaline._overdrenalineButton.gameObject.SetActive(true);
+                _hasOverdrenaline = true;
+            }
 
         }
-        Debug.Log("Level of BPM : " + _currentBPM);
+        //Debug.Log("Level of BPM (gain): " + _currentBPM);
+        FeedBackBPM();
+    }
+
+    void FeedBackBPM()
+    {
+        _BPM.BPM_Gauge.fillAmount = Mathf.InverseLerp(0, _BPM.maxBPM, _currentBPM);
     }
     #endregion
 
@@ -205,8 +247,21 @@ public class BPMSystem : MonoBehaviour
     void ActivateElectrarythmie()
     {
         _currentElectrarythmiePoints = 0;
+        _BPM.Electra_Gauge.fillAmount = Mathf.InverseLerp(0, _electrarythmie.maxElectrarythmiePoints, _currentElectrarythmiePoints);
+        StartCoroutine(OnElectrarythmieActivate());
         _hasElectrarythmie = false;
+
     }
+
+    IEnumerator OnElectrarythmieActivate()
+    {
+        _currentCanMove = gameObject.GetComponent<BasicWalkerController>().CanMove = false;
+        _electrarythmie._electraFeedBack.gameObject.SetActive(true);
+        yield return new WaitForSeconds(_electrarythmie.timeOfElectrarythmie);
+        _currentCanMove = gameObject.GetComponent<BasicWalkerController>().CanMove = true;
+        _electrarythmie._electraFeedBack.gameObject.SetActive(false);
+    }
+
 
     public void GainElectrarythmiePoints(int points)
     {
@@ -220,6 +275,18 @@ public class BPMSystem : MonoBehaviour
             _hasElectrarythmie = true;
         }
         //Debug.Log("ElectraPoints : " + _currentElectrarythmiePoints);
+        _BPM.Electra_Gauge.fillAmount = Mathf.InverseLerp(0, _electrarythmie.maxElectrarythmiePoints, _currentElectrarythmiePoints);
+    }
+    #endregion
+
+    #region Overadrenaline
+
+    IEnumerator OnOverADActivate()
+    {
+        _overdrenaline._overdrenalineFeedBack.gameObject.SetActive(true);
+        yield return new WaitForSeconds(_overdrenaline.timeOfOverAdrenaline);
+        _overdrenaline._overdrenalineFeedBack.gameObject.SetActive(false);
+        _overdrenalineHasBeenUsed = false;
     }
     #endregion
 }
