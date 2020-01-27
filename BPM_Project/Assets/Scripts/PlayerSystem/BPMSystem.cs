@@ -113,7 +113,7 @@ public class BPMSystem : MonoBehaviour
 
         if (!_hasOverdrenaline && !_overdrenalineCooldownOver)
         {
-            Debug.Log(_currentOverdrenalineCooldown);
+            //Debug.Log(_currentOverdrenalineCooldown);
             _currentOverdrenalineCooldown -= Time.deltaTime;
             _overdrenaline._overadrenalineCoolDownGauge.fillAmount = Mathf.InverseLerp(_overdrenaline.overdrenalineCooldown, 0, _currentOverdrenalineCooldown);
             if (_currentOverdrenalineCooldown <= 0)

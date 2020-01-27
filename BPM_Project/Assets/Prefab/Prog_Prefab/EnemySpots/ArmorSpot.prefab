@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8432409340521077732}
   - component: {fileID: 8432409340521077733}
   - component: {fileID: 2960120921530962172}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ArmorSpot
   m_TagString: ArmorSpot
   m_Icon: {fileID: 0}

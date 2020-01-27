@@ -17,12 +17,12 @@ MonoBehaviour:
   _rightShoulder:
     _typeOfSpot: 0
   _leftShoulder:
-    _typeOfSpot: 2
+    _typeOfSpot: 0
   _torso:
-    _typeOfSpot: 2
+    _typeOfSpot: 0
   _backo:
-    _typeOfSpot: 1
+    _typeOfSpot: 0
   _rightKnee:
-    _typeOfSpot: 1
+    _typeOfSpot: 0
   _leftKnee:
-    _typeOfSpot: 1
+    _typeOfSpot: 0

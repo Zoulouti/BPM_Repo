@@ -27,6 +27,10 @@ public class Projectile : MonoBehaviour
     WeaponBehaviour _WeaponBehaviour;
     BPMSystem m_BPMSystem;
 
+    Vector3 m_awakeDistance;
+    Vector3 m_currentDistance;
+    Vector3 m_distanceToReach;
+
     #region Get Set
     public Rigidbody RBody
     {
@@ -45,22 +49,39 @@ public class Projectile : MonoBehaviour
     public WeaponBehaviour WeaponBehaviour { get => _WeaponBehaviour; set => _WeaponBehaviour = value; }
     public ProjectileType ProjectileType1 { get => m_projectileType; set => m_projectileType = value; }
     public BPMSystem BPMSystem { get => m_BPMSystem; set => m_BPMSystem = value; }
+    public Vector3 DistanceToReach { get => m_distanceToReach; set => m_distanceToReach = value; }
     #endregion
 
     public void Start()
     {
         RBody = GetComponent<Rigidbody>();
+        m_awakeDistance = transform.position;
     }
 
     public void FixedUpdate()
     {
         if(RBody != null)
         {
+            m_currentDistance = transform.position;
             RBody.velocity = transform.forward * m_speed;
+            //Debug.Log("La m_distanceToReach est : " + m_distanceToReach.magnitude);
+
+            //Debug.Log("La m_currentDistance est : " + m_currentDistance.sqrMagnitude);
+            float deltaLength = Mathf.Abs(m_distanceToReach.magnitude - m_awakeDistance.magnitude);
+            float newLength = deltaLength - Vector3.Distance(m_currentDistance, m_awakeDistance);
+            //float deltaLength = Vector3.Distance(m_distanceToReach, m_currentDistance);
+
+            //Debug.Log("La deltaLength est : " + deltaLength);
+            //Debug.Log("La newLength est : " + deltaLength);
+
+            if (newLength <= 0)
+            {
+                DestroyProjectile();
+            }
         }
     }
 
-    void OnTriggerEnter(Collider col)
+    /*void OnTriggerEnter(Collider col)
     {
         string tag = col.tag;
 
@@ -124,7 +145,7 @@ public class Projectile : MonoBehaviour
         }
 
         DestroyProjectile();
-    }
+    }*/
 
     void OnProjectilHits()
     {
@@ -134,7 +155,6 @@ public class Projectile : MonoBehaviour
 
     void DestroyProjectile()
     {
-        Debug.Log("hop");
         Destroy(gameObject);
 
         if (m_dieFX != null)
