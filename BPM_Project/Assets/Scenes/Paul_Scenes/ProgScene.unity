@@ -4232,23 +4232,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3421608735032399574, guid: afa9eecb96c518548a307d2ca9de695b,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3421608736556704507, guid: afa9eecb96c518548a307d2ca9de695b,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8798216646479647648, guid: afa9eecb96c518548a307d2ca9de695b,
-        type: 3}
-      propertyPath: _SMG.typeOfFire
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 3421608735032399574, guid: afa9eecb96c518548a307d2ca9de695b, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afa9eecb96c518548a307d2ca9de695b, type: 3}
 --- !u!1 &1645878086
 GameObject:

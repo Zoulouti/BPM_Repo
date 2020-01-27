@@ -1020,7 +1020,6 @@ GameObject:
   - component: {fileID: 3340929416925374310}
   - component: {fileID: 3381466140209346092}
   - component: {fileID: 3421608735032399566}
-  - component: {fileID: 3421608735032399574}
   - component: {fileID: 8798216646479647648}
   m_Layer: 8
   m_Name: FirstPersonWalker
@@ -1336,20 +1335,6 @@ MonoBehaviour:
     _overadrenalineCoolDownGauge: {fileID: 2910878827602924827}
     _overdrenalineFeedBack: {fileID: 7066383509064848297}
     _overdrenalineButton: {fileID: 3421608735337753798}
---- !u!114 &3421608735032399574
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3422587882778152750}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f6524b9a72aa364db986b2662f29658, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponObj: {fileID: 4410666827998708448}
-  projectilRoot: {fileID: 0}
 --- !u!114 &8798216646479647648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1369,9 +1354,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 3072
   _SMG:
-    typeOfCast: 0
     weaponStats: {fileID: 11400000, guid: fb3e97c66800ad94ebde8f727819c49a, type: 2}
-    typeOfFire: 1
+    typeOfFire: 0
     firePoint: {fileID: 3421608736316058985}
     fireAudio: {fileID: 0}
     recoilCurve:
