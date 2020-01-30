@@ -10,18 +10,22 @@ public class Weapon : ScriptableObject
     public WeaponLevel0 _weaponLevel0 = new WeaponLevel0();
     [Serializable] public class WeaponLevel0
     {
+        [Header("Level 0 stats")]
         public int damage;
-        [Space]
         public float attackCooldown;
+        [Space]
+        [Header("For Rafale")]
         [Tooltip("Only if you use Rafale")]
         public float timeBetweenBurst;
         [Tooltip("Only if you use Rafale")]
         public int nbrOfShoot;
         [Space]
+        [Header("Level 0 BPM stats")]
         public float BPMGainOnHit;
-        [Space]
         public int BPMCost;
         [Space]
+        [Header("Level 0 bullet stats")]
+        public float bulletSpeed;
         public GameObject bullet;
 
     }
@@ -29,35 +33,45 @@ public class Weapon : ScriptableObject
     [Serializable]
     public class WeaponLevel1
     {
+        [Header("Level 1 stats")]
         public int damage;
-        [Space]
         public float attackCooldown;
+        [Space]
+        [Header("For Rafale")]
         [Tooltip("Only if you use Rafale")]
         public float timeBetweenBurst;
         [Tooltip("Only if you use Rafale")]
         public int nbrOfShoot;
         [Space]
+        [Header("Level 1 BPM stats")]
         public float BPMGainOnHit;
-        [Space]
         public int BPMCost;
+        [Space]
+        [Header("Level 1 bullet stats")]
+        public float bulletSpeed;
     }
     public WeaponLevel2 _weaponLevel2 = new WeaponLevel2();
     [Serializable]
     public class WeaponLevel2
     {
+        [Header("Level 2 stats")]
         public int damage;
-        [Space]
         public float attackCooldown;
+        [Space]
+        [Header("For Rafale")]
         [Tooltip("Only if you use Rafale")]
         public float timeBetweenBurst;
         [Tooltip("Only if you use Rafale")]
         public int nbrOfShoot;
         [Space]
+        [Header("Level 2 BPM stats")]
         public float BPMGainOnHit;
-        [Space]
         public int BPMCost;
         [Space]
+        [Header("Level 2 bullet stats")]
+        public float bulletSpeed;
         public GameObject newBullet;
+
     }
 
 }

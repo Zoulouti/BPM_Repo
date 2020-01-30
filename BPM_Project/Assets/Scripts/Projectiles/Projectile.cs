@@ -23,28 +23,15 @@ public class Projectile : MonoBehaviour
 
     public float m_maxLifeTime = 5;
 
-    Rigidbody m_rBody;
     WeaponBehaviour _WeaponBehaviour;
     BPMSystem m_BPMSystem;
 
     Vector3 m_awakeDistance;
     Vector3 m_currentDistance;
     Vector3 m_distanceToReach;
-
+    float deltaLength;
+    float newLength;
     #region Get Set
-    public Rigidbody RBody
-    {
-        get
-        {
-            return m_rBody;
-        }
-
-        set
-        {
-            m_rBody = value;
-        }
-    }
-
     public int Damage { get => damage; set => damage = value; }
     public WeaponBehaviour WeaponBehaviour { get => _WeaponBehaviour; set => _WeaponBehaviour = value; }
     public ProjectileType ProjectileType1 { get => m_projectileType; set => m_projectileType = value; }
@@ -54,31 +41,23 @@ public class Projectile : MonoBehaviour
 
     public void Start()
     {
-        RBody = GetComponent<Rigidbody>();
         m_awakeDistance = transform.position;
+        deltaLength = Vector3.Distance(m_distanceToReach, m_awakeDistance);
     }
 
-    public void FixedUpdate()
+    public void Update()
     {
-        if(RBody != null)
+
+        transform.Translate(Vector3.forward * m_speed * Time.deltaTime);
+
+        m_currentDistance = transform.position;
+
+        newLength = deltaLength - Vector3.Distance(m_currentDistance, m_awakeDistance);
+        if (newLength <= 0)
         {
-            m_currentDistance = transform.position;
-            RBody.velocity = transform.forward * m_speed;
-            //Debug.Log("La m_distanceToReach est : " + m_distanceToReach.magnitude);
-
-            //Debug.Log("La m_currentDistance est : " + m_currentDistance.sqrMagnitude);
-            float deltaLength = Mathf.Abs(m_distanceToReach.magnitude - m_awakeDistance.magnitude);
-            float newLength = deltaLength - Vector3.Distance(m_currentDistance, m_awakeDistance);
-            //float deltaLength = Vector3.Distance(m_distanceToReach, m_currentDistance);
-
-            //Debug.Log("La deltaLength est : " + deltaLength);
-            //Debug.Log("La newLength est : " + deltaLength);
-
-            if (newLength <= 0)
-            {
-                DestroyProjectile();
-            }
+            DestroyProjectile();
         }
+
     }
 
     /*void OnTriggerEnter(Collider col)
