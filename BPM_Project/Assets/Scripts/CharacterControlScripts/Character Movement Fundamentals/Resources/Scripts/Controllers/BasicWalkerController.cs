@@ -13,33 +13,16 @@ public class BasicWalkerController : MonoBehaviour {
 	protected Mover mover;
 
 	//Names of input axes used for horizontal and vertical input;
-	public string horizontalInputAxis = "Horizontal";
-	public string verticalInputAxis = "Vertical";
+	protected string horizontalInputAxis = "Horizontal";
+	protected string verticalInputAxis = "Vertical";
 
 	//Whether or not to use raw input values;
 	public bool useRawInput = false;
-    public ControlKeyBinding _controlKeyBinding = new ControlKeyBinding();
-    [Serializable] public class ControlKeyBinding
-    {
-        [Header("Movement KeyBind")]
-        public KeyCode forward = KeyCode.Z;
-        public KeyCode back = KeyCode.S;
-        public KeyCode left= KeyCode.D;
-        public KeyCode right= KeyCode.Q;
-        [Header("Crouch KeyBind")]
-        public KeyCode crouch = KeyCode.LeftControl;
-    }
-    [Space]
-    //Keycode used for jumping;
-    public KeyCode jumpKey = KeyCode.Space;
 
 	//Jump key variables;
 	bool jumpKeyWasPressed = false;
 	bool jumpKeyWasLetGo = false;
 	bool jumpKeyIsPressed = false;
-
-    //Keycode used for Sprinting;
-    public KeyCode sprintKey = KeyCode.LeftShift;
 
     //crouch key variables
     bool isCrouching;
@@ -53,7 +36,7 @@ public class BasicWalkerController : MonoBehaviour {
     [Header("Movement speed variables")]
     //Movement speed;
     float _currentSpeed;
-    public float walkingSpeed = 7f;
+    // public float walkingSpeed = 7f;
     public float sprintingSpeed = 17f;
     [Space]
     [Header("Sprint variables")]
@@ -98,7 +81,7 @@ public class BasicWalkerController : MonoBehaviour {
 	public float groundFriction = 100f;
 
 	//Current momentum;
-	Vector3 momentum = Vector3.zero;
+	Vector3 m_momentum = Vector3.zero;
 
 	//Saved velocity from last frame;
 	Vector3 savedVelocity = Vector3.zero;
@@ -128,12 +111,13 @@ public class BasicWalkerController : MonoBehaviour {
     //Enum describing in what state the PC is
     protected enum ActionState
     {
-        Walk,
+        // Walk,
         Sprint,
         Crouch,
         Slide,
     }
-    protected ActionState _currentActionState = ActionState.Walk;
+    // protected ActionState _currentActionState = ActionState.Walk;
+    protected ActionState _currentActionState = ActionState.Sprint;
 	 
 	//Get references to all necessary components;
 	void Awake () {
@@ -142,7 +126,8 @@ public class BasicWalkerController : MonoBehaviour {
 		trans = GetComponent<Transform>();
 
 		Setup();
-        _currentSpeed = walkingSpeed;
+        // _currentSpeed = walkingSpeed;
+        _currentSpeed = sprintingSpeed;
         initialColliderHeight = mover.colliderHeight;
 
 
@@ -171,6 +156,11 @@ public class BasicWalkerController : MonoBehaviour {
 		    HandleJumpKeyInput();
             HandleSprintKeyInput();
             HandleCrouchKeyInput();
+
+			if (IsSliding() && _currentActionState != ActionState.Slide)
+			{
+				Slide();
+			}
         }
 
     }
@@ -189,9 +179,11 @@ public class BasicWalkerController : MonoBehaviour {
                 StopCoroutine(_slidingCoroutine(_useCustomCurve));
                 isCrouching = true;
             }
-            else if(_currentActionState == ActionState.Crouch || _currentActionState == ActionState.Walk)
+            // else if(_currentActionState == ActionState.Crouch || _currentActionState == ActionState.Walk)
+            else if(_currentActionState == ActionState.Crouch || _currentActionState == ActionState.Sprint)
             {
-                _currentActionState = ActionState.Walk;
+                // _currentActionState = ActionState.Walk;
+                _currentActionState = ActionState.Sprint;
             }
 
             RaycastHit _hit;
@@ -216,50 +208,51 @@ public class BasicWalkerController : MonoBehaviour {
     //Handle sprint booleans
     void HandleSprintKeyInput()
     {
-        bool _newSprintKeyPressedState = IsSprintActive();
-        bool _forwardKeyIsPressed = IsForwarding();
-        if (_newSprintKeyPressedState && _forwardKeyIsPressed && !isCrouching)   // verify when the sprint needs to be canceled
-        {
-            _currentSpeed = sprintingSpeed;
+		// Utiliser ce changement de FOV lorsqu'on slide !
 
-            #region FOV
-            Camera.main.fieldOfView = Mathf.Lerp(currentFOV, fovWhenSprinting, Time.deltaTime * 4f);
+        // bool _newSprintKeyPressedState = IsSprintActive();
+        // bool _forwardKeyIsPressed = IsForwarding();
+        // if (_newSprintKeyPressedState && _forwardKeyIsPressed && !isCrouching)   // verify when the sprint needs to be canceled
+        // {
+        //     _currentSpeed = sprintingSpeed;
 
-            currentFOV = Camera.main.fieldOfView;
+        //     #region FOV
+        //     Camera.main.fieldOfView = Mathf.Lerp(currentFOV, fovWhenSprinting, Time.deltaTime * 4f);
 
-            if(currentFOV > fovWhenSprinting - 0.5f)
-            {
-                currentFOV = fovWhenSprinting;
-            }
-            #endregion
+        //     currentFOV = Camera.main.fieldOfView;
 
-            _currentActionState = ActionState.Sprint;
-        }
-        else if(currentControllerState == ControllerState.Grounded && _currentActionState != ActionState.Slide)
-        {
-            _currentSpeed = crouchingSpeed;
+        //     if(currentFOV > fovWhenSprinting - 0.5f)
+        //     {
+        //         currentFOV = fovWhenSprinting;
+        //     }
+        //     #endregion
 
-            #region FOV
-            Camera.main.fieldOfView = Mathf.Lerp(currentFOV, fovWhenWalking, Time.deltaTime * 4f);
-            currentFOV = Camera.main.fieldOfView;
-            if (currentFOV < fovWhenWalking + 0.5f)
-            {
-                currentFOV = fovWhenWalking;
-            }
-            #endregion
+        //     _currentActionState = ActionState.Sprint;
+        // }
+        // else if(currentControllerState == ControllerState.Grounded && _currentActionState != ActionState.Slide)
+        // {
+        //     _currentSpeed = crouchingSpeed;
 
-            isSprinting = false;
-            if (!isCrouching)
-            {
-                _currentSpeed = walkingSpeed;
-                _currentActionState = ActionState.Walk;
-            }
+        //     #region FOV
+        //     Camera.main.fieldOfView = Mathf.Lerp(currentFOV, fovWhenWalking, Time.deltaTime * 4f);
+        //     currentFOV = Camera.main.fieldOfView;
+        //     if (currentFOV < fovWhenWalking + 0.5f)
+        //     {
+        //         currentFOV = fovWhenWalking;
+        //     }
+        //     #endregion
 
-        }
+        //     isSprinting = false;
+        //     if (!isCrouching)
+        //     {
+        //         // _currentSpeed = walkingSpeed;
+        //         _currentSpeed = sprintingSpeed;
+        //         // _currentActionState = ActionState.Walk;
+        //         _currentActionState = ActionState.Sprint;
+        //     }
+
+        // }
     }
-
-    
-
 
     //Handle crouch booleans
     void HandleCrouchKeyInput()
@@ -271,7 +264,6 @@ public class BasicWalkerController : MonoBehaviour {
             CrouchingSwitch();
         }
     }
-
 
     protected Vector3 slidingFwrd;
     protected Vector3 slidingRight;
@@ -285,7 +277,8 @@ public class BasicWalkerController : MonoBehaviour {
             case true:
 
                 mover.colliderHeight = initialColliderHeight;
-                _currentActionState = ActionState.Walk;
+                // _currentActionState = ActionState.Walk;
+                _currentActionState = ActionState.Sprint;
                 isCrouching = false;
 
                 break;
@@ -294,22 +287,29 @@ public class BasicWalkerController : MonoBehaviour {
                 mover.colliderHeight = crouchColliderHeight;
                 isCrouching = true;
 
-                if (_currentActionState != ActionState.Sprint)
-                {
+                // if (_currentActionState != ActionState.Sprint)
+                // {
                     _currentActionState = ActionState.Crouch;
-                }
-                else if(_currentActionState != ActionState.Slide)
-                {
-                    _currentActionState = ActionState.Slide;
-                    slidingFwrd = Camera.main.transform.forward;
-                    StartCoroutine(_slidingCoroutine(_useCustomCurve));
-                }
+                // }
+                // /*else*/ if(_currentActionState != ActionState.Slide)
+                // {
+                //     _currentActionState = ActionState.Slide;
+                //     slidingFwrd = Camera.main.transform.forward;
+                //     StartCoroutine(_slidingCoroutine(_useCustomCurve));
+                // }
 
                 break;
             default:
                 break;
         }
     }
+
+	void Slide()
+	{
+		_currentActionState = ActionState.Slide;
+		slidingFwrd = Camera.main.transform.forward;
+		StartCoroutine(_slidingCoroutine(_useCustomCurve));
+	}
 
     IEnumerator _slidingCoroutine(bool CustomCurve)
     {
@@ -359,7 +359,7 @@ public class BasicWalkerController : MonoBehaviour {
         {
 		    Vector3 _velocity = CalculateMovementVelocity();
 		    //Add current momentum to velocity;
-		    _velocity += momentum;
+		    _velocity += m_momentum;
 		
 		    //If player is grounded or sliding on a slope, extend mover's sensor range;
 		    //This enables the player to walk up/down stairs and slopes without losing ground contact;
@@ -372,7 +372,7 @@ public class BasicWalkerController : MonoBehaviour {
 
 		    //Store velocity for next frame;
 		    savedVelocity = _velocity;
-		    savedMovementVelocity = _velocity - momentum;
+		    savedMovementVelocity = _velocity - m_momentum;
         }
 
 		//Reset jump key booleans;
@@ -437,32 +437,45 @@ public class BasicWalkerController : MonoBehaviour {
 	//Returns 'true' if the player presses the jump key;
 	protected virtual bool IsJumpKeyPressed()
 	{
-		 return (Input.GetKeyDown(jumpKey) || Input.GetButtonDown("Jump"));
+		 return (Input.GetButtonDown("Jump"));
 	}
     //Returns 'true' if the player presses the forward key;
     protected virtual bool IsForwarding()
     {
-        return Input.GetKey(_controlKeyBinding.forward);
+        // return Input.GetKey(_controlKeyBinding.forward);
+		if (Input.GetAxis(verticalInputAxis) > 0.1)
+		{
+			return true;
+		}
+		return false;
     }
     //Returns 'true' if the player had pressed the sprint key;
-    protected virtual bool IsSprintActive()
-    {
-        if(Input.GetKeyDown(sprintKey) || Input.GetButtonDown("Sprint") || isSprinting)
-        {
-            isSprinting = true;
-            return true;
-        }
-        return false;
-    }
+    // protected virtual bool IsSprintActive()
+    // {
+    //     if(Input.GetButtonDown("Sprint") || isSprinting)
+    //     {
+    //         isSprinting = true;
+    //         return true;
+    //     }
+    //     return false;
+    // }
     //Returns 'true' if the player had pressed the crouch key;
     protected virtual bool IsCrouching()
     {
-        if (Input.GetKeyDown(_controlKeyBinding.crouch) || Input.GetButtonDown("Crouch"))
+        if (Input.GetButtonDown("Crouch"))
         {
             return true;
         }
         return false;
     }
+	protected virtual bool IsSliding()
+	{
+		if (Input.GetButtonDown("Slide"))
+		{
+			return true;
+		}
+		return false;
+	}
 
     //Handle state transitions;
     //Determine current controller state based on current momentum and whether the controller is grounded (or not);
@@ -501,12 +514,12 @@ public class BasicWalkerController : MonoBehaviour {
 			}
 			if(mover.IsGrounded() && !_isSliding){
 				currentControllerState = ControllerState.Grounded;
-				OnGroundContactRegained(momentum);
+				OnGroundContactRegained(m_momentum);
 				break;
 			}
 			if(_isSliding){
 				currentControllerState = ControllerState.Sliding;
-				OnGroundContactRegained(momentum);
+				OnGroundContactRegained(m_momentum);
 				break;
 			}
 			break;
@@ -523,7 +536,7 @@ public class BasicWalkerController : MonoBehaviour {
 				break;
 			}
 			if(mover.IsGrounded() && !_isSliding){
-				OnGroundContactRegained(momentum);
+				OnGroundContactRegained(m_momentum);
 				currentControllerState = ControllerState.Grounded;
 				break;
 			}
@@ -534,7 +547,7 @@ public class BasicWalkerController : MonoBehaviour {
 			if(!_isRising){
 				if(mover.IsGrounded() && !_isSliding){
 					currentControllerState = ControllerState.Grounded;
-					OnGroundContactRegained(momentum);
+					OnGroundContactRegained(m_momentum);
 					break;
 				}
 				if(_isSliding){
@@ -586,10 +599,10 @@ public class BasicWalkerController : MonoBehaviour {
 		Vector3 _horizontalMomentum = Vector3.zero;
 
 		//Split momentum into vertical and horizontal components;
-		if(momentum != Vector3.zero)
+		if(m_momentum != Vector3.zero)
 		{
-			_verticalMomentum = VectorMath.ExtractDotVector(momentum, trans.up);
-			_horizontalMomentum = momentum - _verticalMomentum;
+			_verticalMomentum = VectorMath.ExtractDotVector(m_momentum, trans.up);
+			_horizontalMomentum = m_momentum - _verticalMomentum;
 		}
 
 		//Add gravity to vertical momentum;
@@ -609,19 +622,19 @@ public class BasicWalkerController : MonoBehaviour {
 			_horizontalMomentum = VectorMath.IncrementVectorLengthTowardTargetLength(_horizontalMomentum, airFriction, Time.deltaTime, 0f); 
 
 		//Add horizontal and vertical momentum back together;
-		momentum = _horizontalMomentum + _verticalMomentum;
+		m_momentum = _horizontalMomentum + _verticalMomentum;
 
 		//Project the current momentum onto the current ground normal if the controller is sliding down a slope;
 		if(currentControllerState == ControllerState.Sliding)
 		{
-			momentum = Vector3.ProjectOnPlane(momentum, mover.GetGroundNormal());
+			m_momentum = Vector3.ProjectOnPlane(m_momentum, mover.GetGroundNormal());
 		}
 
 		//If controller is jumping, override vertical velocity with jumpSpeed;
 		if(currentControllerState == ControllerState.Jumping)
 		{
-			momentum = VectorMath.RemoveDotVector(momentum, trans.up);
-			momentum += trans.up * jumpSpeed;
+			m_momentum = VectorMath.RemoveDotVector(m_momentum, trans.up);
+			m_momentum += trans.up * jumpSpeed;
 		}
 	}
 
@@ -631,14 +644,14 @@ public class BasicWalkerController : MonoBehaviour {
 	void OnJumpStart()
 	{
 		//Add jump force to momentum;
-		momentum += trans.up * jumpSpeed;
+		m_momentum += trans.up * jumpSpeed;
 
 		//Set jump start time;
 		currentJumpStartTime = Time.time;
 
 		//Call event;
 		if(OnJump != null)
-			OnJump(momentum);
+			OnJump(m_momentum);
 	}
 
 	//This function is called when the player has lost ground contact, i.e. is either falling or rising, or generally in the air;
@@ -664,7 +677,7 @@ public class BasicWalkerController : MonoBehaviour {
 		else
 			_length = 0f;
 
-		momentum = _velocityDirection * _length;
+		m_momentum = _velocityDirection * _length;
 	}
 
 	//This function is called when the player has landed on a surface after being in the air;
@@ -681,7 +694,7 @@ public class BasicWalkerController : MonoBehaviour {
 	private bool IsRisingOrFalling()
 	{
 		//Calculate current vertical momentum;
-		Vector3 _verticalMomentum = VectorMath.ExtractDotVector(momentum, trans.up);
+		Vector3 _verticalMomentum = VectorMath.ExtractDotVector(m_momentum, trans.up);
 
 		//Setup threshold to check against;
 		//For most applications, a value of '0.001f' is recommended;
@@ -708,7 +721,7 @@ public class BasicWalkerController : MonoBehaviour {
 	//Get current momentum;
 	public Vector3 GetMomentum()
 	{
-		return momentum;
+		return m_momentum;
 	}
 
 	//Returns 'true' if controller is grounded (or sliding down a slope);
@@ -720,7 +733,7 @@ public class BasicWalkerController : MonoBehaviour {
 	//Add momentum to controller;
 	public void AddMomentum (Vector3 _momentum)
 	{
-		momentum += _momentum;	
+		m_momentum += _momentum;	
 	}
 
 	//Events;

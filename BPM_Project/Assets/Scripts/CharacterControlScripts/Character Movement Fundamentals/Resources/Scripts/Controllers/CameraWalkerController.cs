@@ -51,7 +51,8 @@ public class CameraWalkerController : BasicWalkerController {
             }
             else
             {
-                _currentActionState = ActionState.Walk;
+                // _currentActionState = ActionState.Walk;
+                _currentActionState = ActionState.Sprint;
             }
             _direction += slidingRight * _horizontalInput;
         }
