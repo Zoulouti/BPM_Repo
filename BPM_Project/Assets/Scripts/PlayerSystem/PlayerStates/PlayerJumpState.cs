@@ -51,6 +51,11 @@ public class PlayerJumpState : IState
             m_playerController.On_PlayerHasDoubleJump(true);
             m_playerController.ChangeState(PlayerState.Jump);
         }
+
+        if(m_playerController.IsDashKeyPressed() && m_playerController.CanDash())
+        {
+            m_playerController.ChangeState(PlayerState.Dash);
+        }
     }
     public void LateUpdate()
     {

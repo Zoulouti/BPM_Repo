@@ -1506,6 +1506,9 @@ MonoBehaviour:
   m_cameraPivot: {fileID: 8087587520425720305}
   m_sM:
     m_currentStateString: 
+  m_useGravity: 1
+  m_dashDistance: 5
+  m_timeToDash: 0.5
   m_useRawInput: 1
   m_sprintingSpeed: 10
   m_fovWhenWalking: 80

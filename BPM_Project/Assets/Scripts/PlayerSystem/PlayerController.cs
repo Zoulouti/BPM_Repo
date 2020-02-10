@@ -14,6 +14,11 @@ public class PlayerController : MonoBehaviour
 
 #region [SerializeField] Variables
     [SerializeField] StateMachine m_sM = new StateMachine();
+	public bool m_useGravity = true;
+
+	[Header("Sprint")]
+	public float m_dashDistance = 5;
+	public float m_timeToDash = 0.5f;
 
 #endregion
 
@@ -103,6 +108,8 @@ public class PlayerController : MonoBehaviour
 
 	bool m_hasJump = false;
 	bool m_hasDoubleJump = false;
+
+	Vector3 m_playerMoveInputsDirection;
 
 #endregion
 
@@ -327,6 +334,7 @@ public class PlayerController : MonoBehaviour
         if (_direction.magnitude > 1f)
 			_direction.Normalize();
 
+		m_playerMoveInputsDirection = _direction;
 		return _direction;
 	}
 
@@ -364,6 +372,18 @@ public class PlayerController : MonoBehaviour
 	public bool CanJump()
 	{
 		return !m_hasJump || !m_hasDoubleJump;
+	}
+
+	public bool IsDashKeyPressed()
+	{
+        return (Input.GetButtonDown("Dash"));
+	}
+	public bool CanDash()
+	{
+		if (CalculateMovementDirection() != Vector3.zero)
+			return true;
+		
+		return false;
 	}
 	
     //Returns 'true' if the player presses the forward key;
@@ -409,13 +429,15 @@ public class PlayerController : MonoBehaviour
 		}
 
         //Add gravity to vertical momentum;
-		if(m_isSliding)
-			_verticalMomentum -= m_trans.up * m_slideGravity * Time.deltaTime;
-		else
-			_verticalMomentum -= m_trans.up * m_gravity * Time.deltaTime;
-
-        if(PlayerIsGrounded() && !m_isSliding)
-			_verticalMomentum = Vector3.zero;
+		if (m_useGravity)
+		{
+			if(m_isSliding)
+				_verticalMomentum -= m_trans.up * m_slideGravity * Time.deltaTime;
+			else
+				_verticalMomentum -= m_trans.up * m_gravity * Time.deltaTime;
+			if(PlayerIsGrounded() && !m_isSliding)
+				_verticalMomentum = Vector3.zero;
+		}
 
 		//Apply friction to horizontal momentum based on whether the controller is grounded;
 		if(PlayerIsGrounded())
@@ -581,6 +603,10 @@ public class PlayerController : MonoBehaviour
         m_savedVelocity = velocity;
         m_savedMovementVelocity = velocity - m_momentum;
 	}
+	public void ResetPlayerVelocity()
+	{
+		SetPlayerVelocity(Vector3.zero);
+	}
 
 	public void On_PlayerHasJump(bool hasJump)
 	{
@@ -613,6 +639,11 @@ public class PlayerController : MonoBehaviour
 	public void AddMomentum (Vector3 _momentum)
 	{
 		m_momentum += _momentum;	
+	}
+
+	public Vector3 GetPlayerMoveInputsDirection()
+	{
+		return m_playerMoveInputsDirection;
 	}
 
 	//Events;

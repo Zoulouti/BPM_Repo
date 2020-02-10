@@ -29,7 +29,7 @@ public class PlayerIdleState : IState
 
         m_playerController.PlayerIsSliding();
 
-        m_playerController.SetPlayerVelocity(Vector3.zero);
+        m_playerController.ResetPlayerVelocity();
     }
     public void Update()
     {
