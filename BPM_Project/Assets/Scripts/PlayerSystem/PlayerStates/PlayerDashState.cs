@@ -22,6 +22,8 @@ public class PlayerDashState : IState
 
     public void Enter()
     {
+        m_playerController.On_PlayerHasDash(true);
+
         m_dashDirection = m_playerController.GetPlayerMoveInputsDirection();
 
         m_dashTimer = 0;
@@ -31,6 +33,8 @@ public class PlayerDashState : IState
 
         m_dashSpeed = m_playerController.m_dashDistance / m_playerController.m_timeToDash;
         // Debug.Log("m_dashSpeed = " + m_dashSpeed);
+
+        m_playerController.ChangeCameraFov(m_playerController.m_fov.m_dashFov, m_playerController.m_fov.m_startDash.m_timeToChangeFov, m_playerController.m_fov.m_startDash.m_changeFovCurve);
     }
     public void FixedUpdate()
     {
@@ -53,7 +57,12 @@ public class PlayerDashState : IState
     }
     public void Exit()
     {
+        m_playerController.ChangeCameraFov(m_playerController.m_fov.m_normalFov, m_playerController.m_fov.m_endDash.m_timeToChangeFov, m_playerController.m_fov.m_endDash.m_changeFovCurve);
 
+        if (m_playerController.PlayerIsGrounded())
+        {
+		    m_playerController.On_PlayerHasDash(false);
+        }
     }
 
 }

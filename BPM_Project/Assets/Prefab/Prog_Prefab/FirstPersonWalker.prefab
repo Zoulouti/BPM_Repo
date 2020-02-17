@@ -1124,12 +1124,12 @@ GameObject:
   - component: {fileID: 3358959967916761896}
   - component: {fileID: 3381299478746224664}
   - component: {fileID: 3439231820701400556}
-  - component: {fileID: 3381882690652885512}
   - component: {fileID: 3340929416925374310}
   - component: {fileID: 3381466140209346092}
   - component: {fileID: 3421608735032399566}
   - component: {fileID: 8798216646479647648}
   - component: {fileID: 3421608736393940812}
+  - component: {fileID: 3955707959416290225}
   m_Layer: 8
   m_Name: FirstPersonWalker
   m_TagString: Untagged
@@ -1211,72 +1211,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &3381882690652885512
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3422587882778152750}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37a8548b2e7bab04099c2934f2863767, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useRawInput: 1
-  sprintingSpeed: 10
-  fovWhenWalking: 80
-  fovWhenSprinting: 100
-  crouchingSpeed: 5
-  crouchColliderHeight: 1
-  crouchLayer:
-    serializedVersion: 2
-    m_Bits: 16
-  slideMaxSpeed: 30
-  slideTime: 1
-  _useCustomCurve: 1
-  customCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 136
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.57461727
-      value: 1.1176996
-      inSlope: 5.4166684
-      outSlope: 5.4166684
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.04565126
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 136
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  airControl: 0.2
-  jumpSpeed: 10
-  jumpDuration: 0.2
-  airFriction: 0.5
-  groundFriction: 100
-  gravity: 30
-  slideGravity: 90
-  slopeLimit: 80
-  m_cameraPivot: {fileID: 8087587520425720305}
 --- !u!82 &3340929416925374310
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1507,17 +1441,65 @@ MonoBehaviour:
   m_sM:
     m_currentStateString: 
   m_useGravity: 1
-  m_dashDistance: 5
+  m_dashDistance: 20
   m_timeToDash: 0.5
   m_useRawInput: 1
   m_sprintingSpeed: 10
-  m_fovWhenWalking: 80
-  m_fovWhenSprinting: 100
-  m_crouchingSpeed: 5
-  m_crouchColliderHeight: 1
-  m_crouchLayer:
-    serializedVersion: 2
-    m_Bits: 16
+  m_fov:
+    m_normalFov: 70
+    m_dashFov: 75
+    m_startDash:
+      m_timeToChangeFov: 0.125
+      m_changeFovCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 2
+          outSlope: 2
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    m_endDash:
+      m_timeToChangeFov: 0.5
+      m_changeFovCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 2
+          outSlope: 2
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
   m_airControl: 0.4
   m_jumpSpeed: 10
   m_jumpDuration: 0.2
@@ -1526,6 +1508,44 @@ MonoBehaviour:
   m_gravity: 35
   m_slideGravity: 90
   m_slopeLimit: 80
+--- !u!114 &3955707959416290225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3422587882778152750}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f5e44db14072ea4c964da3b192181c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useRawInput: 0
+  sprintingSpeed: 17
+  fovWhenWalking: 90
+  fovWhenSprinting: 110
+  crouchingSpeed: 5
+  crouchColliderHeight: 0
+  crouchLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  slideMaxSpeed: 20
+  slideTime: 1
+  _useCustomCurve: 0
+  customCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  airControl: 0.4
+  jumpSpeed: 10
+  jumpDuration: 0.2
+  airFriction: 0.5
+  groundFriction: 100
+  gravity: 30
+  slideGravity: 30
+  slopeLimit: 80
 --- !u!1 &3422606679811486316
 GameObject:
   m_ObjectHideFlags: 0

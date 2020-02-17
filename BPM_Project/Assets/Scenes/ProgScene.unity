@@ -4992,5 +4992,55 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 217.28369
       objectReference: {fileID: 0}
+    - target: {fileID: 3421608736393940812, guid: afa9eecb96c518548a307d2ca9de695b,
+        type: 3}
+      propertyPath: m_fov.m_startDashFovCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3421608736393940812, guid: afa9eecb96c518548a307d2ca9de695b,
+        type: 3}
+      propertyPath: m_fov.m_endDashFovCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3421608736393940812, guid: afa9eecb96c518548a307d2ca9de695b,
+        type: 3}
+      propertyPath: m_fov.m_startDashFovCurve.m_Curve.Array.data[0].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3421608736393940812, guid: afa9eecb96c518548a307d2ca9de695b,
+        type: 3}
+      propertyPath: m_fov.m_startDashFovCurve.m_Curve.Array.data[0].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3421608736393940812, guid: afa9eecb96c518548a307d2ca9de695b,
+        type: 3}
+      propertyPath: m_fov.m_startDashFovCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3421608736393940812, guid: afa9eecb96c518548a307d2ca9de695b,
+        type: 3}
+      propertyPath: m_fov.m_startDashFovCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3421608736393940812, guid: afa9eecb96c518548a307d2ca9de695b,
+        type: 3}
+      propertyPath: m_fov.m_endDashFovCurve.m_Curve.Array.data[0].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3421608736393940812, guid: afa9eecb96c518548a307d2ca9de695b,
+        type: 3}
+      propertyPath: m_fov.m_endDashFovCurve.m_Curve.Array.data[0].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3421608736393940812, guid: afa9eecb96c518548a307d2ca9de695b,
+        type: 3}
+      propertyPath: m_fov.m_endDashFovCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3421608736393940812, guid: afa9eecb96c518548a307d2ca9de695b,
+        type: 3}
+      propertyPath: m_fov.m_endDashFovCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afa9eecb96c518548a307d2ca9de695b, type: 3}

@@ -1,14 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PlayerStateEnum;
 
 public class PlayerController : MonoBehaviour
 {
-
     public static PlayerController s_instance;
 
-    CameraController m_cameraControls;
+    CameraController m_cameraController;
 
 	[SerializeField] Transform m_cameraPivot;
 
@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] StateMachine m_sM = new StateMachine();
 	public bool m_useGravity = true;
 
-	[Header("Sprint")]
+	[Header("Dash")]
 	public float m_dashDistance = 5;
 	public float m_timeToDash = 0.5f;
 
@@ -35,25 +35,30 @@ public class PlayerController : MonoBehaviour
 	//Whether or not to use raw input values;
 	[SerializeField] bool m_useRawInput = false;
 
-    //crouch key variables
-    bool m_isCrouching;
-
     [Header("Movement speed variables")]
     //Movement speed;
     float m_currentSpeed;
-    // public float walkingSpeed = 7f;
     [SerializeField] float m_sprintingSpeed = 17f;
     [Space]
-    [Header("Sprint variables")]
-    [SerializeField] float m_fovWhenWalking = 90f;
-    [SerializeField] float m_fovWhenSprinting = 110f;
-    float m_currentFOV;
-    [Space]
-    [Header("Crouch varibales")]
-    [SerializeField] float m_crouchingSpeed = 5f;
-    [SerializeField] float m_crouchColliderHeight;
-    [SerializeField] LayerMask m_crouchLayer;
-    float m_initialColliderHeight;
+
+    [Header("Field Of View")]
+	[SerializeField] public FieldOfView m_fov;
+	[Serializable] public class FieldOfView
+	{
+		[Header("Values")]
+		public float m_normalFov = 90f;
+		public float m_dashFov = 110f;
+
+		[Header("Anims")]
+		public FovChanger m_startDash;
+		public FovChanger m_endDash;
+
+		[Serializable] public class FovChanger
+		{
+			public float m_timeToChangeFov;
+			public AnimationCurve m_changeFovCurve;
+		}
+	}
 
     [Header("Jump variables")]
 	//'Aircontrol' determines to what degree the player is able to move while in the air;
@@ -108,6 +113,7 @@ public class PlayerController : MonoBehaviour
 
 	bool m_hasJump = false;
 	bool m_hasDoubleJump = false;
+	bool m_hasDash = false;
 
 	Vector3 m_playerMoveInputsDirection;
 
@@ -122,12 +128,9 @@ public class PlayerController : MonoBehaviour
         m_mover = GetComponent<Mover>();
 		m_trans = GetComponent<Transform>();
 
-        //Search for camera controller reference in this gameobjects' children;
-		m_cameraControls = GetComponentInChildren<CameraController>();
+		m_cameraController = GetComponentInChildren<CameraController>();
 
-        // _currentSpeed = walkingSpeed;
         m_currentSpeed = m_sprintingSpeed;
-        m_initialColliderHeight = m_mover.colliderHeight;
 	}
 
 	void OnEnable()
@@ -147,11 +150,7 @@ public class PlayerController : MonoBehaviour
 
 	void Update()
 	{
-		UpdateInputs();
 		m_sM.Update();
-
-        // HandleSprintKeyInput();
-        // HandleCrouchKeyInput();
 	}
 
 	void LateUpdate()
@@ -192,103 +191,6 @@ public class PlayerController : MonoBehaviour
 
         ChangeState(PlayerState.Idle);
 	}
-
-	void UpdateInputs()
-	{
-		
-	}
-
-	// Utiliser ce changement de FOV lorsqu'on slide !
-    void HandleSprintKeyInput()
-    {
-        // bool _newSprintKeyPressedState = IsSprintActive();
-        // bool _forwardKeyIsPressed = IsForwarding();
-        // if (_newSprintKeyPressedState && _forwardKeyIsPressed && !isCrouching)   // verify when the sprint needs to be canceled
-        // {
-        //     _currentSpeed = sprintingSpeed;
-
-        //     #region FOV
-        //     Camera.main.fieldOfView = Mathf.Lerp(currentFOV, fovWhenSprinting, Time.deltaTime * 4f);
-
-        //     currentFOV = Camera.main.fieldOfView;
-
-        //     if(currentFOV > fovWhenSprinting - 0.5f)
-        //     {
-        //         currentFOV = fovWhenSprinting;
-        //     }
-        //     #endregion
-
-        //     _currentActionState = ActionState.Sprint;
-        // }
-        // else if(currentControllerState == ControllerState.Grounded && _currentActionState != ActionState.Slide)
-        // {
-        //     _currentSpeed = crouchingSpeed;
-
-        //     #region FOV
-        //     Camera.main.fieldOfView = Mathf.Lerp(currentFOV, fovWhenWalking, Time.deltaTime * 4f);
-        //     currentFOV = Camera.main.fieldOfView;
-        //     if (currentFOV < fovWhenWalking + 0.5f)
-        //     {
-        //         currentFOV = fovWhenWalking;
-        //     }
-        //     #endregion
-
-        //     isSprinting = false;
-        //     if (!isCrouching)
-        //     {
-        //         // _currentSpeed = walkingSpeed;
-        //         _currentSpeed = sprintingSpeed;
-        //         // _currentActionState = ActionState.Walk;
-        //         _currentActionState = ActionState.Sprint;
-        //     }
-
-        // }
-    }
-
-    //Handle crouch booleans
-    void HandleCrouchKeyInput()
-    {
-        bool _crouchKeyIsPressed = IsCrouching();
-
-        if (_crouchKeyIsPressed)
-        {
-            CrouchingSwitch();
-        }
-    }
-
-    void CrouchingSwitch()
-    {
-        switch (m_isCrouching)
-        {
-            case true:
-
-                m_mover.colliderHeight = m_initialColliderHeight;
-                // _currentActionState = ActionState.Walk;
-                m_currentActionState = ActionState.Sprint;
-                m_isCrouching = false;
-
-                break;
-            case false:
-
-                m_mover.colliderHeight = m_crouchColliderHeight;
-                m_isCrouching = true;
-
-                // if (_currentActionState != ActionState.Sprint)
-                // {
-                    m_currentActionState = ActionState.Crouch;
-                // }
-                // /*else*/ if(_currentActionState != ActionState.Slide)
-                // {
-                //     _currentActionState = ActionState.Slide;
-                //     slidingFwrd = Camera.main.transform.forward;
-                //     StartCoroutine(_slidingCoroutine(_useCustomCurve));
-                // }
-
-                break;
-            default:
-                break;
-        }
-    }
 
     //Calculate and return movement direction based on player input;
 	//This function can be overridden by inheriting scripts to implement different player controls;
@@ -380,9 +282,9 @@ public class PlayerController : MonoBehaviour
 	}
 	public bool CanDash()
 	{
-		if (CalculateMovementDirection() != Vector3.zero)
+		if (CalculateMovementDirection() != Vector3.zero && !m_hasDash)
 			return true;
-		
+
 		return false;
 	}
 	
@@ -515,6 +417,7 @@ public class PlayerController : MonoBehaviour
 	{
 		On_PlayerHasJump(false);
 		On_PlayerHasDoubleJump(false);
+		On_PlayerHasDash(false);
 
 		//Call 'OnLand' event;
 		if(OnLand != null)
@@ -616,6 +519,10 @@ public class PlayerController : MonoBehaviour
 	{
 		m_hasDoubleJump = hasDoubleJump;
 	}
+	public void On_PlayerHasDash(bool hasDash)
+	{
+		m_hasDash = hasDash;
+	}
 
     //Get last frame's velocity;
 	public Vector3 GetVelocity ()
@@ -650,6 +557,11 @@ public class PlayerController : MonoBehaviour
 	public delegate void VectorEvent(Vector3 v);
 	public event VectorEvent OnJump;
 	public event VectorEvent OnLand;
+
+	public void ChangeCameraFov(float newFov, float timeToChangeFov, AnimationCurve changeFovCurve)
+	{
+		m_cameraController.ChangeCameraFov(newFov, timeToChangeFov, changeFovCurve);
+	}
 
 #endregion
     

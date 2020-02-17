@@ -54,25 +54,23 @@ public class CameraController : MonoBehaviour {
 	Vector3 upwardsDirection;
 
 	//References to transform and camera components;
-	protected Transform tr;
-	protected Camera cam;
+	protected Transform m_trans;
+	protected Camera m_camera;
 
-    //public GameObject objCam;
+	IEnumerator m_fovChangerCorout;
 
+#region Event Functions
 	//Setup references.
 	void Awake () {
-		tr = transform;
-		cam = GetComponent<Camera>();
+		m_trans = transform;
 
-		//If no camera component has been attached to this gameobject, search the transform's children;
-		if(cam == null)
-			cam = GetComponentInChildren<Camera>();
+		m_camera = GetComponentInChildren<Camera>();
 
-		lastPosition = tr.position;
+		lastPosition = m_trans.position;
 
 		//Set angle variables to current rotation angles of this transform;
-		currentXAngle = tr.localRotation.eulerAngles.x;
-		currentYAngle = tr.localRotation.eulerAngles.y;
+		currentXAngle = m_trans.localRotation.eulerAngles.x;
+		currentYAngle = m_trans.localRotation.eulerAngles.y;
 
 		//Execute camera rotation code once to calculate facing and upwards direction;
 		RotateCamera(0f, 0f);
@@ -80,15 +78,17 @@ public class CameraController : MonoBehaviour {
 		Setup();
 	}
 
+	void Update()
+	{
+		HandleCameraRotation();
+	}
+#endregion
+
+#region Private Functions
 	//This function is called right after Awake(); It can be overridden by inheriting scripts;
 	protected virtual void Setup()
 	{
 		
-	}
-
-	void Update()
-	{
-		HandleCameraRotation();
 	}
 
 	//Return user input; This function can be overridden by extending scripts to implement custom input;
@@ -159,22 +159,42 @@ public class CameraController : MonoBehaviour {
 	//Update camera rotation based on x and y angles;
 	protected void UpdateRotation()
 	{
-		tr.localRotation = Quaternion.Euler(new Vector3(0, currentYAngle, 0));
+		m_trans.localRotation = Quaternion.Euler(new Vector3(0, currentYAngle, 0));
 
 		//Save 'facingDirection' and 'upwardsDirection' for later;
-		facingDirection = tr.forward;
-		upwardsDirection = tr.up;
+		facingDirection = m_trans.forward;
+		upwardsDirection = m_trans.up;
 
-		tr.localRotation = Quaternion.Euler(new Vector3(currentXAngle, currentYAngle, 0));
+		m_trans.localRotation = Quaternion.Euler(new Vector3(currentXAngle, currentYAngle, 0));
 	}
 
-    //[HideInInspector]
-    //public float camera_FOV;
-
-	//Set the camera's field-of-view (FOV);
-	public void SetFOV(float _fov)
+	IEnumerator FovChangerCorout(float newFov, float timeToChangeFov, AnimationCurve changeFovCurve)
 	{
-        GetComponentInChildren<Camera>().fieldOfView = _fov;	
+		float fromFov = GetCameraFov();
+        float fracJourney = 0;
+        float distance = Mathf.Abs(fromFov - newFov);
+        float vitesse = distance / timeToChangeFov;
+        float actualFov = fromFov;
+
+        while (actualFov != newFov)
+        {
+            fracJourney += (Time.deltaTime) * vitesse / distance;
+            actualFov = Mathf.Lerp(fromFov, newFov, changeFovCurve.Evaluate(fracJourney));
+			SetCameraFOV(actualFov);
+            yield return null;
+        }
+	}
+#endregion
+
+#region Public Functions
+	//Set the camera's field-of-view (FOV);
+	public void SetCameraFOV(float fov)
+	{
+        m_camera.fieldOfView = fov;
+	}
+	public float GetCameraFov()
+	{
+		return m_camera.fieldOfView;
 	}
 
 	//Set x and y angle directly;
@@ -190,7 +210,7 @@ public class CameraController : MonoBehaviour {
 	public void RotateTowardPosition(Vector3 _position, float _lookSpeed)
 	{
 		//Calculate target look vector;
-		Vector3 _direction = (_position - tr.position);
+		Vector3 _direction = (_position - m_trans.position);
 
 		RotateTowardDirection(_direction, _lookSpeed);
 	}
@@ -202,11 +222,11 @@ public class CameraController : MonoBehaviour {
 		_direction.Normalize();
 
 		//Transform target look vector to this transform's local space;
-		_direction = tr.parent.InverseTransformDirection(_direction);
+		_direction = m_trans.parent.InverseTransformDirection(_direction);
 
 		//Calculate (local) current look vector; 
 		Vector3 _currentLookVector = GetAimingDirection();
-		_currentLookVector = tr.parent.InverseTransformDirection(_currentLookVector);
+		_currentLookVector = m_trans.parent.InverseTransformDirection(_currentLookVector);
 
 		//Calculate x angle difference;
 		float _xAngleDifference = VectorMath.GetAngle(new Vector3(0f, _currentLookVector.y, 1f), new Vector3(0f, _direction.y, 1f), Vector3.right);
@@ -263,13 +283,13 @@ public class CameraController : MonoBehaviour {
 	//This vector points in the direction the camera is "aiming" and could be used for instantiating projectiles or raycasts.
 	public Vector3 GetAimingDirection ()
 	{
-		return tr.forward;
+		return m_trans.forward;
 	}
 
 	// Returns the 'right' vector of this gameobject;
 	public Vector3 GetStrafeDirection ()
 	{
-		return tr.right;
+		return m_trans.right;
 	}
 
 	// Returns the 'up' vector of this gameobject;
@@ -278,5 +298,15 @@ public class CameraController : MonoBehaviour {
 		return upwardsDirection;
 	}
 	
-	
+	public void ChangeCameraFov(float newFov, float timeToChangeFov, AnimationCurve changeFovCurve)
+	{
+		if (m_fovChangerCorout != null)
+		{
+			StopCoroutine(m_fovChangerCorout);
+		}
+		m_fovChangerCorout = FovChangerCorout(newFov, timeToChangeFov, changeFovCurve);
+		StartCoroutine(m_fovChangerCorout);
+	}
+#endregion
+
 }
