@@ -15,6 +15,7 @@ public class WeaponBehaviour : MonoBehaviour
     protected float _currentTimeToRecoverFromRecoil;
     protected float _currentAttackSpeed;
     protected float _currentTimeBetweenEachBurst;
+    protected float _currentProjectilSpeed;
 
     public virtual void Awake()
     {
