@@ -96,56 +96,50 @@ public class WeaponPlayerBehaviour : WeaponBehaviour
         {
             case BPMSystem.WeaponState.Level0:
 
-                _currentDamage = _SMG.weaponStats._weaponLevel0.damage;
+                InitiateWeaponVar(_SMG.weaponStats._weaponLevel0.damage, _SMG.weaponStats._weaponLevel0.attackCooldown, _SMG.weaponStats._weaponLevel0.BPMGainOnHit, _SMG.weaponStats._weaponLevel0.BPMCost, _SMG.weaponStats._weaponLevel0.bullet, _SMG.weaponStats._weaponLevel0.bulletSpeed);
 
-                _currentAttackSpeed = _SMG.weaponStats._weaponLevel0.attackCooldown;
-                _currentBPMGain = _SMG.weaponStats._weaponLevel0.BPMGainOnHit;
-                _currentBPMCost = _SMG.weaponStats._weaponLevel0.BPMCost;
-
-                _currentProjectil = _SMG.weaponStats._weaponLevel0.bullet;
-
-                if (_SMG.typeOfFire == TypeOfFire.Rafale)
-                {
-                    _currentTimeBetweenEachBurst = _SMG.weaponStats._weaponLevel0.timeBetweenBurst;
-                    _currentnbrOfShoot = _SMG.weaponStats._weaponLevel0.nbrOfShoot;
-                }
+                //if (_SMG.typeOfFire == TypeOfFire.Rafale)
+                //{
+                //    _currentTimeBetweenEachBurst = _SMG.weaponStats._weaponLevel0.timeBetweenBurst;
+                //    _currentnbrOfShoot = _SMG.weaponStats._weaponLevel0.nbrOfShoot;
+                //}
 
                 break;
             case BPMSystem.WeaponState.Level1:
 
-                _currentDamage = _SMG.weaponStats._weaponLevel1.damage;
+                InitiateWeaponVar(_SMG.weaponStats._weaponLevel1.damage, _SMG.weaponStats._weaponLevel1.attackCooldown, _SMG.weaponStats._weaponLevel1.BPMGainOnHit, _SMG.weaponStats._weaponLevel1.BPMCost, _SMG.weaponStats._weaponLevel0.bullet, _SMG.weaponStats._weaponLevel1.bulletSpeed);
 
-                _currentAttackSpeed = _SMG.weaponStats._weaponLevel1.attackCooldown;
-                _currentBPMGain = _SMG.weaponStats._weaponLevel1.BPMGainOnHit;
-                _currentBPMCost = _SMG.weaponStats._weaponLevel1.BPMCost;
-
-                _currentProjectil = _SMG.weaponStats._weaponLevel0.bullet;
-
-                if (_SMG.typeOfFire == TypeOfFire.Rafale)
-                {
-                    _currentTimeBetweenEachBurst = _SMG.weaponStats._weaponLevel1.timeBetweenBurst;
-                    _currentnbrOfShoot = _SMG.weaponStats._weaponLevel1.nbrOfShoot;
-                }
+                //if (_SMG.typeOfFire == TypeOfFire.Rafale)
+                //{
+                //    _currentTimeBetweenEachBurst = _SMG.weaponStats._weaponLevel1.timeBetweenBurst;
+                //    _currentnbrOfShoot = _SMG.weaponStats._weaponLevel1.nbrOfShoot;
+                //}
 
                 break;
             case BPMSystem.WeaponState.Level2:
 
-                _currentDamage = _SMG.weaponStats._weaponLevel2.damage;
+                InitiateWeaponVar(_SMG.weaponStats._weaponLevel2.damage, _SMG.weaponStats._weaponLevel2.attackCooldown, _SMG.weaponStats._weaponLevel2.BPMGainOnHit, _SMG.weaponStats._weaponLevel2.BPMCost, _SMG.weaponStats._weaponLevel2.newBullet, _SMG.weaponStats._weaponLevel2.bulletSpeed);
 
-                _currentAttackSpeed = _SMG.weaponStats._weaponLevel2.attackCooldown;
-                _currentBPMGain = _SMG.weaponStats._weaponLevel2.BPMGainOnHit;
-                _currentBPMCost = _SMG.weaponStats._weaponLevel2.BPMCost;
-
-                _currentProjectil = _SMG.weaponStats._weaponLevel2.newBullet;
-
-                if (_SMG.typeOfFire == TypeOfFire.Rafale)
-                {
-                    _currentTimeBetweenEachBurst = _SMG.weaponStats._weaponLevel2.timeBetweenBurst;
-                    _currentnbrOfShoot = _SMG.weaponStats._weaponLevel2.nbrOfShoot;
-                }
+                //if (_SMG.typeOfFire == TypeOfFire.Rafale)
+                //{
+                //    _currentTimeBetweenEachBurst = _SMG.weaponStats._weaponLevel2.timeBetweenBurst;
+                //    _currentnbrOfShoot = _SMG.weaponStats._weaponLevel2.nbrOfShoot;
+                //}
 
                 break;
         }
+    }
+
+    void InitiateWeaponVar(int damage, float attackSpeed, float BPMGain, float BPMCost, GameObject projectileObject, float projectileSpeed)
+    {
+        _currentDamage = damage;
+
+        _currentAttackSpeed = attackSpeed;
+        _currentBPMGain = BPMGain;
+        _currentBPMCost = BPMCost;
+
+        _currentProjectil = projectileObject;
+        _currentProjectilSpeed = projectileSpeed;
     }
 
     #region ShootingMethods
@@ -195,7 +189,9 @@ public class WeaponPlayerBehaviour : WeaponBehaviour
     public override GameObject InstatiateProj()
     {
         _SMG.firePoint.transform.LookAt(OnSearchForLookAt());
-        return Instantiate(_currentProjectil, _SMG.firePoint.transform.position, _SMG.firePoint.transform.rotation, projectilRoot);
+        GameObject go = Instantiate(_currentProjectil, _SMG.firePoint.transform.position, _SMG.firePoint.transform.rotation, projectilRoot);
+        go.GetComponent<Projectile>().Speed = _currentProjectilSpeed;
+        return go;
     }
 
     public override Vector3 OnSearchForLookAt()
@@ -240,43 +236,16 @@ public class WeaponPlayerBehaviour : WeaponBehaviour
             if(projVar != null)
             {
                 projVar.DistanceToReach = _hit.point;
+                projVar.Col = _hit.collider;
+                projVar.BPMSystem = _BPMSystem;
+                projVar.RayCastCollision = rayCastCollision;
+                projVar.TransfoPos = playerCamera.transform.position;
+                projVar.TransfoDir = playerCamera.transform.forward;
+                projVar.CurrentBPMGain = _currentBPMGain;
+                projVar.CurrentDamage = _currentDamage;
             }
             #endregion
 
-            switch (tag)
-            {
-                // Le tir du player touche un NoSpot
-                case "NoSpot":
-
-                    _BPMSystem.GainBPM(_BPMSystem._BPM.BPMGain_OnNoSpot * _currentBPMGain);
-                    _hit.collider.GetComponent<ReferenceScipt>().cara.TakeDamage(_currentDamage, 0);
-
-                    break;
-
-                // Le tir du player touche un WeakSpot
-                case "WeakSpot":
-
-                    _BPMSystem.GainBPM(_BPMSystem._BPM.BPMGain_OnWeak * _currentBPMGain);
-                    _hit.collider.GetComponent<ReferenceScipt>().cara.TakeDamage(_currentDamage, 1);
-
-                    break;
-                // Le tir du player touche un ArmorSpot
-                case "ArmorSpot":
-
-                    _BPMSystem.GainBPM(_BPMSystem._BPM.BPMGain_OnArmor * _currentBPMGain);
-                    _hit.collider.GetComponent<ReferenceScipt>().cara.TakeDamage(_currentDamage, 2);
-
-                    break;
-                // Le tir du player touche un DestroyableObject
-                case "DestroyableObject":
-
-                    _BPMSystem.GainBPM(_BPMSystem._BPM.BPMGain_OnDestructableEnvironment);
-                    //_BPMSystem.GainElectrarythmiePoints(_BPMSystem._electrarythmie._electrarythmieGain_OnDestructableEnvironment);
-
-                    break;
-                default:
-                    break;
-            }
         }
     }
 

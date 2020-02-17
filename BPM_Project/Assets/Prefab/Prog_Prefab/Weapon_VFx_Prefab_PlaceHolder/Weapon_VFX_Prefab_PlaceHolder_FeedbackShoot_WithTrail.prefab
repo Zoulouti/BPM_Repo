@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1454259416518092219
 Transform:
   m_ObjectHideFlags: 0
@@ -4496,7 +4496,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 526f0b2488c04c64296e9cda80feba80, type: 2}
+  - {fileID: 2100000, guid: 7c997e4f7f8d18446a6e4829e7b24a5f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4516,7 +4516,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.4
+  m_Time: 5
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -4525,7 +4525,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.15
+        value: 0.3
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -4534,13 +4534,13 @@ TrailRenderer:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: 0.10592988
         inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -4548,10 +4548,10 @@ TrailRenderer:
       serializedVersion: 2
       key0: {r: 1, g: 1, b: 1, a: 1}
       key1: {r: 1, g: 1, b: 1, a: 1}
-      key2: {r: 1, g: 1, b: 1, a: 1}
-      key3: {r: 1, g: 1, b: 1, a: 1}
+      key2: {r: 1, g: 1, b: 1, a: 0}
+      key3: {r: 1, g: 1, b: 1, a: 0}
       key4: {r: 1, g: 1, b: 1, a: 0}
-      key5: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 1, g: 1, b: 1, a: 0}
       key6: {r: 0, g: 0, b: 0, a: 0}
       key7: {r: 0, g: 0, b: 0, a: 0}
       ctime0: 0
@@ -4559,28 +4559,28 @@ TrailRenderer:
       ctime2: 32768
       ctime3: 49151
       ctime4: 65535
-      ctime5: 0
+      ctime5: 65535
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 16384
-      atime2: 32768
-      atime3: 49151
+      atime1: 7903
+      atime2: 39707
+      atime3: 65535
       atime4: 65535
       atime5: 0
       atime6: 0
       atime7: 0
       m_Mode: 0
       m_NumColorKeys: 5
-      m_NumAlphaKeys: 5
+      m_NumAlphaKeys: 3
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 2
+    textureMode: 0
     shadowBias: 0
     generateLightingData: 0
   m_MinVertexDistance: 0.01
-  m_Autodestruct: 0
+  m_Autodestruct: 1
   m_Emitting: 1
 --- !u!114 &1564813281711936537
 MonoBehaviour:
@@ -4589,7 +4589,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1451251342410081077}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a77114ad80b1e541a25be4916cdf46f, type: 3}
   m_Name: 
@@ -4674,7 +4674,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9509c76dc125d0e4ab877ec90f3e5349, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_speed: 10
   m_dieFX: {fileID: 6277809500041374232, guid: fec7091287b88ea4b84c452a8370cd1c, type: 3}
   m_maxLifeTime: 5
 --- !u!1 &1452222328529539705
@@ -4719,7 +4718,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 2
-  m_Color: {r: 1, g: 0.4198783, b: 0.04411763, a: 1}
+  m_Color: {r: 1, g: 0.3776854, b: 0.043137252, a: 1}
   m_Intensity: 1
   m_Range: 5
   m_SpotAngle: 30

@@ -4,8 +4,9 @@
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: VerticalTrails
   m_Shader: {fileID: 4800000, guid: 18cc8fe7d50c89741b56c1ae6a5baa66, type: 3}
   m_ShaderKeywords: BlendAdd Clip_OFF FrameBlend_OFF SoftParticles_OFF VertLight_OFF
@@ -142,6 +143,6 @@ Material:
     - _HeightUVScrollDistort: {r: 8, g: 12, b: 0, a: 0}
     - _MainColor: {r: 1, g: 1, b: 1, a: 1}
     - _Tiling: {r: 800, g: 800, b: 8, a: 8}
-    - _TintColor: {r: 2.4264712, g: 3.7576027, b: 30, a: 1}
+    - _TintColor: {r: 30.000004, g: 2.5130908, b: 2.513089, a: 1}
     - _TintColorBack: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
     - _TintColorFront: {r: 0.1, g: 0.1, b: 0.1, a: 0.1}

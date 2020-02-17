@@ -14,7 +14,7 @@ public class Projectile : MonoBehaviour
     #endregion Projectile Type
 
     int damage;
-    public float m_speed = 25;
+    float m_speed = 25;
     [Space]
     [Header("FX")]
     public GameObject m_dieFX;
@@ -28,36 +28,71 @@ public class Projectile : MonoBehaviour
 
     Vector3 m_awakeDistance;
     Vector3 m_currentDistance;
+    Collider m_col;
     Vector3 m_distanceToReach;
+    float m_BPMGain;
     float deltaLength;
     float newLength;
+    LayerMask m_rayCastCollision;
+    Vector3 m_transfoPos;
+    Vector3 m_transfoDir;
+    float _currentBPMGain;
+    int _currentDamage;
     #region Get Set
-    public int Damage { get => damage; set => damage = value; }
     public WeaponBehaviour WeaponBehaviour { get => _WeaponBehaviour; set => _WeaponBehaviour = value; }
-    public ProjectileType ProjectileType1 { get => m_projectileType; set => m_projectileType = value; }
+    public LayerMask RayCastCollision { get => m_rayCastCollision; set => m_rayCastCollision = value; }
     public BPMSystem BPMSystem { get => m_BPMSystem; set => m_BPMSystem = value; }
+
+    public int CurrentDamage { get => _currentDamage; set => _currentDamage = value; }
+    public float CurrentBPMGain { get => _currentBPMGain; set => _currentBPMGain = value; }
+    public int Damage { get => damage; set => damage = value; }
+    public float BPMGain { get => m_BPMGain; set => m_BPMGain = value; }
+    public float Speed { get => m_speed; set => m_speed = value; }
+
+    public Vector3 TransfoPos { get => m_transfoPos; set => m_transfoPos = value; }
+    public Vector3 TransfoDir { get => m_transfoDir; set => m_transfoDir = value; }
+    public Collider Col { get => m_col; set => m_col = value; }
     public Vector3 DistanceToReach { get => m_distanceToReach; set => m_distanceToReach = value; }
+
+    public ProjectileType ProjectileType1 { get => m_projectileType; set => m_projectileType = value; }
     #endregion
 
+    bool startCalculateDistance;
     public void Start()
     {
-        m_awakeDistance = transform.position;
+        startCalculateDistance = true;
+        m_awakeDistance = transform.localPosition;
         deltaLength = Vector3.Distance(m_distanceToReach, m_awakeDistance);
+        StartCoroutine(CalculateDistance());
     }
-
     public void Update()
     {
+        //Debug.Log(startCalculateDistance);
 
-        transform.Translate(Vector3.forward * m_speed * Time.deltaTime);
-
-        m_currentDistance = transform.position;
-
-        newLength = deltaLength - Vector3.Distance(m_currentDistance, m_awakeDistance);
-        if (newLength <= 0)
+        if (startCalculateDistance)
         {
-            DestroyProjectile();
+            //Debug.Log("DELATLENGTH " + deltaLength);
+            //Debug.Log("NewLength "+ newLength);
+            //Debug.Log("Distance "+ Vector3.Distance(m_currentDistance, m_awakeDistance));
+            //Debug.Log("startCalculateDistance = " + startCalculateDistance);
+            if (newLength <= 0)
+            {
+                //Debug.Log("startCalculateDistance = " + startCalculateDistance);
+                startCalculateDistance = false;
+            }
         }
+    }
 
+    IEnumerator CalculateDistance()
+    {
+        while(newLength > 0)
+        {
+            transform.Translate(Vector3.forward * Speed * Time.deltaTime);
+            m_currentDistance = transform.localPosition;
+            newLength = deltaLength - Vector3.Distance(m_currentDistance, m_awakeDistance);
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+        DestroyProjectile();
     }
 
     /*void OnTriggerEnter(Collider col)
@@ -131,25 +166,76 @@ public class Projectile : MonoBehaviour
 
     }
 
-
+    RaycastHit _hit;
     void DestroyProjectile()
     {
-        Destroy(gameObject);
-
-        if (m_dieFX != null)
+        bool ray = Physics.Raycast(transform.position, transform.forward, out _hit, Mathf.Infinity, RayCastCollision, QueryTriggerInteraction.Collide);
+        if (ray)
         {
-            Level.AddFX(m_dieFX, transform.position, Quaternion.identity);    //Impact FX
+            string tag = _hit.collider.tag;
+            if(Col == _hit.collider)
+            {
+                switch (tag)
+                {
+                    // Le tir du player touche un NoSpot
+                    case "NoSpot":
+
+                        BPMGain = BPMSystem._BPM.BPMGain_OnNoSpot * CurrentBPMGain;
+
+                        _hit.collider.GetComponent<ReferenceScipt>().cara.TakeDamage(CurrentDamage, 0);
+
+                        break;
+
+                    // Le tir du player touche un WeakSpot
+                    case "WeakSpot":
+
+                        BPMGain = BPMSystem._BPM.BPMGain_OnWeak * CurrentBPMGain;
+
+                        _hit.collider.GetComponent<ReferenceScipt>().cara.TakeDamage(CurrentDamage, 1);
+
+                        break;
+                    /*// Le tir du player touche un ArmorSpot
+                    case "ArmorSpot":
+
+                        BPMGain = BPMSystem._BPM.BPMGain_OnArmor * CurrentBPMGain;
+
+                        _hit.collider.GetComponent<ReferenceScipt>().cara.TakeDamage(CurrentDamage, 2);
+
+                        break;*/
+                }
+                //Debug.Log(BPMGain);
+                BPMSystem.GainBPM(BPMGain);
+                if (m_dieFX != null)
+                {
+                    Level.AddFX(m_dieFX, transform.position, Quaternion.identity);    //Impact FX
+                }
+                Destroy(gameObject);
+            }
+            else
+            {
+                Debug.DrawLine(transform.position, _hit.point, Color.blue, 5f);
+                Debug.DrawRay(transform.localPosition, transform.forward, Color.red, 5f);
+
+                m_awakeDistance = m_currentDistance = transform.localPosition;
+                m_distanceToReach = _hit.point;
+
+                deltaLength = newLength = Vector3.Distance(m_distanceToReach, m_awakeDistance);
+
+                StartCoroutine(CalculateDistance());
+
+                Col = _hit.collider;
+
+            }
         }
     }
 
-
-    public void SetTargetPos(Vector3 targetPos)
+    /*public void SetTargetPos(Vector3 targetPos)
     {
         Vector3 projectileToMouse = targetPos - transform.position;
         projectileToMouse.y = 0f;
         Quaternion newRotation = Quaternion.LookRotation(projectileToMouse);
         transform.rotation = newRotation;
-    }
+    }*/
 
     /*public void SetTargetPosWithGamepad(Vector3 targetPos)
     {
