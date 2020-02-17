@@ -13,31 +13,37 @@ public class Projectile : MonoBehaviour
     }
     #endregion Projectile Type
 
-    int damage;
-    float m_speed = 25;
     [Space]
     [Header("FX")]
     public GameObject m_dieFX;
     [Space]
+    public float m_maxLifeTime = 5;
+
+    RaycastHit _hit;
     bool m_dieWhenHit = true;
 
-    public float m_maxLifeTime = 5;
+    float deltaLength;
+    float newLength;
+    Vector3 m_awakeDistance;
+    Vector3 m_currentDistance;
+
 
     WeaponBehaviour _WeaponBehaviour;
     BPMSystem m_BPMSystem;
-
-    Vector3 m_awakeDistance;
-    Vector3 m_currentDistance;
-    Collider m_col;
-    Vector3 m_distanceToReach;
-    float m_BPMGain;
-    float deltaLength;
-    float newLength;
     LayerMask m_rayCastCollision;
+
+    Collider m_col;
+
+    Vector3 m_distanceToReach;
     Vector3 m_transfoPos;
     Vector3 m_transfoDir;
+
+    float m_BPMGain;
     float _currentBPMGain;
+    float m_speed = 25;
     int _currentDamage;
+    int damage;
+
     #region Get Set
     public WeaponBehaviour WeaponBehaviour { get => _WeaponBehaviour; set => _WeaponBehaviour = value; }
     public LayerMask RayCastCollision { get => m_rayCastCollision; set => m_rayCastCollision = value; }
@@ -57,34 +63,22 @@ public class Projectile : MonoBehaviour
     public ProjectileType ProjectileType1 { get => m_projectileType; set => m_projectileType = value; }
     #endregion
 
-    bool startCalculateDistance;
     public void Start()
     {
-        startCalculateDistance = true;
+
+        #region Set Starting Length
         m_awakeDistance = transform.localPosition;
         deltaLength = Vector3.Distance(m_distanceToReach, m_awakeDistance);
-        StartCoroutine(CalculateDistance());
-    }
-    public void Update()
-    {
-        //Debug.Log(startCalculateDistance);
+        newLength = deltaLength;
+        #endregion
 
-        if (startCalculateDistance)
-        {
-            //Debug.Log("DELATLENGTH " + deltaLength);
-            //Debug.Log("NewLength "+ newLength);
-            //Debug.Log("Distance "+ Vector3.Distance(m_currentDistance, m_awakeDistance));
-            //Debug.Log("startCalculateDistance = " + startCalculateDistance);
-            if (newLength <= 0)
-            {
-                //Debug.Log("startCalculateDistance = " + startCalculateDistance);
-                startCalculateDistance = false;
-            }
-        }
+        StartCoroutine(CalculateDistance());
+
     }
 
     IEnumerator CalculateDistance()
     {
+
         while(newLength > 0)
         {
             transform.Translate(Vector3.forward * Speed * Time.deltaTime);
@@ -92,89 +86,21 @@ public class Projectile : MonoBehaviour
             newLength = deltaLength - Vector3.Distance(m_currentDistance, m_awakeDistance);
             yield return new WaitForSeconds(Time.deltaTime);
         }
+
         DestroyProjectile();
     }
 
-    /*void OnTriggerEnter(Collider col)
-    {
-        string tag = col.tag;
-
-        if (col.CompareTag("Untagged"))
-        {
-            if (m_dieWhenHit)
-            {
-                DestroyProjectile();
-            }
-        }
-                // Le tir d'un enemy touche le player
-        else if (ProjectileType1 == ProjectileType.Enemy)
-        {
-            if (col.CompareTag("Player"))
-            {
-                if (m_dieWhenHit)
-                {
-                    DestroyProjectile();
-                }
-            }
-        }
-        else if (ProjectileType1 == ProjectileType.Player)
-        {
-            switch (tag)
-            {
-                // Le tir du player touche un NoSpot
-                case "NoSpot":
-
-                    BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnNoSpot);
-                    col.GetComponent<ReferenceScipt>().cara.TakeDamage(Damage, 0);
-                    Debug.Log(tag);
-
-                    break;
-
-                // Le tir du player touche un WeakSpot
-                case "WeakSpot":
-
-                    BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnWeak);
-                    col.GetComponent<ReferenceScipt>().cara.TakeDamage(Damage, 1);
-                    Debug.Log(tag);
-
-                    break;
-                // Le tir du player touche un ArmorSpot
-                case "ArmorSpot":
-
-                    BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnArmor);
-                    col.GetComponent<ReferenceScipt>().cara.TakeDamage(Damage, 2);
-                    Debug.Log(tag);
-
-                    break;
-                // Le tir du player touche un DestroyableObject
-                case "DestroyableObject":
-
-                    BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnDestructableEnvironment);
-                    Debug.Log(tag);
-
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        DestroyProjectile();
-    }*/
-
-    void OnProjectilHits()
-    {
-
-    }
-
-    RaycastHit _hit;
     void DestroyProjectile()
     {
-        bool ray = Physics.Raycast(transform.position, transform.forward, out _hit, Mathf.Infinity, RayCastCollision, QueryTriggerInteraction.Collide);
+        bool ray = Physics.Raycast(TransfoPos, TransfoDir, out _hit, Mathf.Infinity, RayCastCollision, QueryTriggerInteraction.Collide);
         if (ray)
         {
             string tag = _hit.collider.tag;
             if(Col == _hit.collider)
             {
+                StopCoroutine(CalculateDistance());
+
+                #region Switch For WeakSpots
                 switch (tag)
                 {
                     // Le tir du player touche un NoSpot
@@ -194,56 +120,32 @@ public class Projectile : MonoBehaviour
                         _hit.collider.GetComponent<ReferenceScipt>().cara.TakeDamage(CurrentDamage, 1);
 
                         break;
-                    /*// Le tir du player touche un ArmorSpot
-                    case "ArmorSpot":
-
-                        BPMGain = BPMSystem._BPM.BPMGain_OnArmor * CurrentBPMGain;
-
-                        _hit.collider.GetComponent<ReferenceScipt>().cara.TakeDamage(CurrentDamage, 2);
-
-                        break;*/
                 }
-                //Debug.Log(BPMGain);
+                #endregion
+
                 BPMSystem.GainBPM(BPMGain);
+
                 if (m_dieFX != null)
                 {
                     Level.AddFX(m_dieFX, transform.position, Quaternion.identity);    //Impact FX
                 }
+
                 Destroy(gameObject);
             }
-            else
+            else //Si la cible a bougé avant que le projectile ait atteind sa cible
             {
-                Debug.DrawLine(transform.position, _hit.point, Color.blue, 5f);
-                Debug.DrawRay(transform.localPosition, transform.forward, Color.red, 5f);
-
+                #region Set New Length
                 m_awakeDistance = m_currentDistance = transform.localPosition;
                 m_distanceToReach = _hit.point;
 
                 deltaLength = newLength = Vector3.Distance(m_distanceToReach, m_awakeDistance);
+                TransfoPos = m_awakeDistance;
+                TransfoDir = transform.forward;
+                Col = _hit.collider;
+                #endregion
 
                 StartCoroutine(CalculateDistance());
-
-                Col = _hit.collider;
-
             }
         }
     }
-
-    /*public void SetTargetPos(Vector3 targetPos)
-    {
-        Vector3 projectileToMouse = targetPos - transform.position;
-        projectileToMouse.y = 0f;
-        Quaternion newRotation = Quaternion.LookRotation(projectileToMouse);
-        transform.rotation = newRotation;
-    }*/
-
-    /*public void SetTargetPosWithGamepad(Vector3 targetPos)
-    {
-        Vector3 projectileToMouse = targetPos - transform.position;
-        projectileToMouse.y = 0f;
-        Quaternion newRotation = Quaternion.LookRotation(projectileToMouse);
-        newRotation.eulerAngles = new Vector3(newRotation.eulerAngles.x, newRotation.eulerAngles.y, newRotation.eulerAngles.z);
-        transform.rotation = newRotation;
-    }*/
-
 }
