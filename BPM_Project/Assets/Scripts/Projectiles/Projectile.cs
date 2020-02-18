@@ -21,6 +21,7 @@ public class Projectile : MonoBehaviour
     [Header("DEBUG")]
     [Space]
     public bool useRigibody;
+    public float forceBuffer = 50f;
     Rigidbody rb;
     SphereCollider col;
 
@@ -154,6 +155,11 @@ public class Projectile : MonoBehaviour
                 if (m_dieFX != null)
                 {
                     Level.AddFX(m_dieFX, transform.position, Quaternion.identity);    //Impact FX
+                    if(_hit.collider.GetComponent<Rigidbody>() != null)
+                    {
+                        Rigidbody _rb = _hit.collider.GetComponent<Rigidbody>();
+                        _rb.AddForceAtPosition(-(_hit.normal * forceBuffer), _hit.point);
+                    }
                 }
 
                 DestroyProj();
