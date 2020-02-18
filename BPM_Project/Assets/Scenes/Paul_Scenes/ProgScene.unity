@@ -2354,7 +2354,7 @@ PrefabInstance:
     - target: {fileID: 3006670858843352175, guid: 00c35a6d69442a34997ad9abb61305c9,
         type: 3}
       propertyPath: m_IsTrigger
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 00c35a6d69442a34997ad9abb61305c9, type: 3}
@@ -3071,20 +3071,10 @@ MonoBehaviour:
     criticalLvlOfBPM: 75
     BPMGain_OnNoSpot: 10
     BPMGain_OnWeak: 20
-    BPMGain_OnArmor: 5
-    BPMGain_OnDestructableEnvironment: 5
     BPM_Gauge: {fileID: 1884199753}
-    Electra_Gauge: {fileID: 256761117}
   _weaponsLevel:
     firstWeaponLevel: 75
     secondWeaponLevel: 225
-  _electrarythmie:
-    electrarythmieBPMTrigger: 0
-    startingElectrarythmiePoints: 0
-    maxElectrarythmiePoints: 100
-    timeOfElectrarythmie: 10
-    _electrarythmieGain_OnDestructableEnvironment: 10
-    _electraFeedBack: {fileID: 1307437836}
   _overdrenaline:
     overdrenalineCooldown: 60
     timeOfOverAdrenaline: 15
@@ -4504,6 +4494,11 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 3381466140209346092, guid: afa9eecb96c518548a307d2ca9de695b,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afa9eecb96c518548a307d2ca9de695b, type: 3}
 --- !u!1 &1645878086
@@ -6705,6 +6700,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7553262301704922761, guid: 48c178ae21b95ff4dafbdfad9d557a89,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 48c178ae21b95ff4dafbdfad9d557a89, type: 3}
 --- !u!1001 &8432409339754240245
@@ -6779,5 +6779,10 @@ PrefabInstance:
       propertyPath: cara
       value: 
       objectReference: {fileID: 586278370}
+    - target: {fileID: 8432409340521077733, guid: de3f5912776351b4d9d1eab7903fbb11,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de3f5912776351b4d9d1eab7903fbb11, type: 3}

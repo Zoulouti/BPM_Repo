@@ -16,13 +16,12 @@ public class BPMSystem : MonoBehaviour
         [Space]
         public int BPMGain_OnNoSpot;
         public int BPMGain_OnWeak;
-        public int BPMGain_OnArmor;
-        public int BPMGain_OnDestructableEnvironment;
+        //public int BPMGain_OnArmor;
+        //public int BPMGain_OnDestructableEnvironment;
         [Space]
         public Image BPM_Gauge;
-        public Image Electra_Gauge;
+        //public Image Electra_Gauge;
     }
-
     float _currentBPM;
 
     [Space]
@@ -58,9 +57,9 @@ public class BPMSystem : MonoBehaviour
 
     }
     float _currentOverdrenalineCooldown;
-    bool _overdrenalineCooldownOver = true;
-    bool _hasOverdrenaline;
-    bool _overdrenalineHasBeenUsed;
+    bool _canUseFury;
+    bool _furyCoolDownOver;
+    bool _isCurrentlyOnFury;
 
     private void Start()
     {
@@ -70,68 +69,42 @@ public class BPMSystem : MonoBehaviour
         _BPM.BPM_Gauge.fillAmount = Mathf.InverseLerp(0, _BPM.maxBPM, _currentBPM);
     }
 
-
-
-
     private void Update()
     {
-        if(_hasOverdrenaline && Input.GetKey(KeyCode.A) && _overdrenalineCooldownOver)
-        {
-            _hasOverdrenaline = false;
-            _overdrenalineHasBeenUsed = true;
-            _overdrenalineCooldownOver = false;
-            _currentOverdrenalineCooldown = _overdrenaline.overdrenalineCooldown;
-            _overdrenaline._overdrenalineButton.gameObject.SetActive(false);
-            StartCoroutine(OnOverADActivate());
-        }
-
-        if (!_hasOverdrenaline && !_overdrenalineCooldownOver)
-        {
-            //Debug.Log(_currentOverdrenalineCooldown);
-            _currentOverdrenalineCooldown -= Time.deltaTime;
-            _overdrenaline._overadrenalineCoolDownGauge.fillAmount = Mathf.InverseLerp(_overdrenaline.overdrenalineCooldown, 0, _currentOverdrenalineCooldown);
-            if (_currentOverdrenalineCooldown <= 0)
-            {
-                _currentOverdrenalineCooldown = 0;
-                _overdrenalineCooldownOver = true;
-            }
-        }
+        FuryHandeler();
     }
 
     #region BPM Gain and Loss
     public void LoseBPM(float BPMLoss)
     {
-    //     if (!_overdrenalineHasBeenUsed)
-    //     {
-    //         //Debug.Log(BPMLoss);
-    //         if (_currentBPM - BPMLoss <= _BPM.criticalLvlOfBPM)
-    //         {
-    //             _currentBPM -= BPMLoss;
-    //             DeactivateWeaponLevel(_currentBPM);
+        float _newCurrentBPM = _currentBPM - BPMLoss;
 
-    //         }
-    //         else if (_hasElectrarythmie)                                           //Check if the player has the electrarythmie activated
-    //         {
-    //             _currentBPM = _electrarythmie.electrarythmieBPMTrigger;
+        if (!_isCurrentlyOnFury)
+        {
+            if (_newCurrentBPM > 0)
+            {
+                _currentBPM -= BPMLoss;
+                DeactivateWeaponLevel(_currentBPM);
 
-    //             //Debug.Log("Electrarythmie Time");
-    //             ActivateElectrarythmie();
-
-    //         }
-    //         else                                                                   //If not, it's death
-    //         {
-    //             //Debug.Log("Je suis mort");
-    //         }
-    //     }
-
-    //    //Debug.Log("Level of BPM (lose): " + _currentBPM);
-    //    FeedBackBPM();
-
+                if (_currentBPM < _BPM.criticalLvlOfBPM)
+                {
+                    ///Brancher le level critique de BPM
+                }
+            }
+            else
+            {
+                _currentBPM = 0;
+                ///Tuer le personnage / Brancher respawn
+            }
+        }
+        FeedBackBPM();
     }
 
     public void GainBPM(float BPMGain)
     {
-        if(_currentBPM + BPMGain < _BPM.maxBPM)
+        float _newCurrentBPM = _currentBPM + BPMGain;
+
+        if (_newCurrentBPM < _BPM.maxBPM)
         {
             _currentBPM += BPMGain;
             ActivateWeaponLevel(_currentBPM);
@@ -139,14 +112,13 @@ public class BPMSystem : MonoBehaviour
         else
         {
             _currentBPM = _BPM.maxBPM;
-            if (_overdrenalineCooldownOver)
+            if (_furyCoolDownOver) ///Fury dispo
             {
                 _overdrenaline._overdrenalineButton.gameObject.SetActive(true);
-                _hasOverdrenaline = true;
+                _canUseFury = true;
             }
 
         }
-        //Debug.Log("Level of BPM (gain): " + _currentBPM);
         FeedBackBPM();
     }
 
@@ -155,7 +127,6 @@ public class BPMSystem : MonoBehaviour
         _BPM.BPM_Gauge.fillAmount = Mathf.InverseLerp(0, _BPM.maxBPM, _currentBPM);
     }
     #endregion
-
 
     #region Activate and Deactivate Weapon
     void ActivateWeaponLevel(float currentBPM)
@@ -205,51 +176,55 @@ public class BPMSystem : MonoBehaviour
 
     #endregion
 
-
-    #region Electrarythmie Handeler
-    void ActivateElectrarythmie()
-    {
-        // _currentElectrarythmiePoints = 0;
-        // _BPM.Electra_Gauge.fillAmount = Mathf.InverseLerp(0, _electrarythmie.maxElectrarythmiePoints, _currentElectrarythmiePoints);
-        // StartCoroutine(OnElectrarythmieActivate());
-        // _hasElectrarythmie = false;
-
-    }
-
-    // IEnumerator OnElectrarythmieActivate()
-    // {
-    //     // _currentCanMove = gameObject.GetComponent<BasicWalkerController>().CanMove = false;
-    //     // _electrarythmie._electraFeedBack.gameObject.SetActive(true);
-    //     // yield return new WaitForSeconds(_electrarythmie.timeOfElectrarythmie);
-    //     // _currentCanMove = gameObject.GetComponent<BasicWalkerController>().CanMove = true;
-    //     // _electrarythmie._electraFeedBack.gameObject.SetActive(false);
-    // }
-
-
-    // public void GainElectrarythmiePoints(int points)
-    // {
-    //     if(_currentElectrarythmiePoints + points < _electrarythmie.maxElectrarythmiePoints)
-    //     {
-    //         _currentElectrarythmiePoints += points;
-    //     }
-    //     else
-    //     {
-    //         _currentElectrarythmiePoints = _electrarythmie.maxElectrarythmiePoints;
-    //         _hasElectrarythmie = true;
-    //     }
-    //     //Debug.Log("ElectraPoints : " + _currentElectrarythmiePoints);
-    //     _BPM.Electra_Gauge.fillAmount = Mathf.InverseLerp(0, _electrarythmie.maxElectrarythmiePoints, _currentElectrarythmiePoints);
-    // }
-    #endregion
-
     #region Overadrenaline
+
+    void FuryHandeler()
+    {
+        if (HasUsedFury())
+        {
+            _canUseFury = false;
+
+            _currentOverdrenalineCooldown = 0;
+
+            _overdrenaline._overdrenalineButton.gameObject.SetActive(false);
+            StartCoroutine(OnOverADActivate());
+        }
+        _furyCoolDownOver = FuryCoolDownHandeler();
+    }
 
     IEnumerator OnOverADActivate()
     {
         _overdrenaline._overdrenalineFeedBack.gameObject.SetActive(true);
+        _isCurrentlyOnFury = true;
         yield return new WaitForSeconds(_overdrenaline.timeOfOverAdrenaline);
         _overdrenaline._overdrenalineFeedBack.gameObject.SetActive(false);
-        _overdrenalineHasBeenUsed = false;
+        _isCurrentlyOnFury = false;
+    }
+
+    bool FuryCoolDownHandeler()
+    {
+        if (!_canUseFury && _currentOverdrenalineCooldown != _overdrenaline.overdrenalineCooldown)
+        {
+            _currentOverdrenalineCooldown += Time.deltaTime;
+
+            _overdrenaline._overadrenalineCoolDownGauge.fillAmount = Mathf.InverseLerp(0, _overdrenaline.overdrenalineCooldown, _currentOverdrenalineCooldown);
+
+            if (_currentOverdrenalineCooldown >= _overdrenaline.overdrenalineCooldown)
+            {
+                _currentOverdrenalineCooldown = _overdrenaline.overdrenalineCooldown;
+                return true;
+            }
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    bool HasUsedFury()
+    {
+        return (_canUseFury && Input.GetKey(KeyCode.A) && _furyCoolDownOver);
     }
     #endregion
 }

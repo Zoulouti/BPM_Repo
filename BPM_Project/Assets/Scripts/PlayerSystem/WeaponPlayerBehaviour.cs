@@ -39,14 +39,6 @@ public class WeaponPlayerBehaviour : WeaponBehaviour
         public float recoilHeight;
     }
 
-    //public ShotGun _ShotGun = new ShotGun();
-    //[Serializable]
-    //public class ShotGun
-    //{
-    //    public TypeOfFire typeOfFire;
-    //    public GameObject firePoint;
-    //}
-
     int defaultDistance = 500;
 
     RaycastHit _hit;
@@ -98,33 +90,15 @@ public class WeaponPlayerBehaviour : WeaponBehaviour
 
                 InitiateWeaponVar(_SMG.weaponStats._weaponLevel0.damage, _SMG.weaponStats._weaponLevel0.attackCooldown, _SMG.weaponStats._weaponLevel0.BPMGainOnHit, _SMG.weaponStats._weaponLevel0.BPMCost, _SMG.weaponStats._weaponLevel0.bullet, _SMG.weaponStats._weaponLevel0.bulletSpeed);
 
-                //if (_SMG.typeOfFire == TypeOfFire.Rafale)
-                //{
-                //    _currentTimeBetweenEachBurst = _SMG.weaponStats._weaponLevel0.timeBetweenBurst;
-                //    _currentnbrOfShoot = _SMG.weaponStats._weaponLevel0.nbrOfShoot;
-                //}
-
                 break;
             case BPMSystem.WeaponState.Level1:
 
                 InitiateWeaponVar(_SMG.weaponStats._weaponLevel1.damage, _SMG.weaponStats._weaponLevel1.attackCooldown, _SMG.weaponStats._weaponLevel1.BPMGainOnHit, _SMG.weaponStats._weaponLevel1.BPMCost, _SMG.weaponStats._weaponLevel0.bullet, _SMG.weaponStats._weaponLevel1.bulletSpeed);
 
-                //if (_SMG.typeOfFire == TypeOfFire.Rafale)
-                //{
-                //    _currentTimeBetweenEachBurst = _SMG.weaponStats._weaponLevel1.timeBetweenBurst;
-                //    _currentnbrOfShoot = _SMG.weaponStats._weaponLevel1.nbrOfShoot;
-                //}
-
                 break;
             case BPMSystem.WeaponState.Level2:
 
                 InitiateWeaponVar(_SMG.weaponStats._weaponLevel2.damage, _SMG.weaponStats._weaponLevel2.attackCooldown, _SMG.weaponStats._weaponLevel2.BPMGainOnHit, _SMG.weaponStats._weaponLevel2.BPMCost, _SMG.weaponStats._weaponLevel2.newBullet, _SMG.weaponStats._weaponLevel2.bulletSpeed);
-
-                //if (_SMG.typeOfFire == TypeOfFire.Rafale)
-                //{
-                //    _currentTimeBetweenEachBurst = _SMG.weaponStats._weaponLevel2.timeBetweenBurst;
-                //    _currentnbrOfShoot = _SMG.weaponStats._weaponLevel2.nbrOfShoot;
-                //}
 
                 break;
         }
@@ -202,24 +176,6 @@ public class WeaponPlayerBehaviour : WeaponBehaviour
         }
         return playerCamera.transform.position + playerCamera.transform.forward * defaultDistance;
     }
-
-    //public override void InitiateProjectileVar(GameObject gameObject, Vector3 posToLookAt)
-    //{
-    //    NewProjectilWithFX projScript = gameObject.GetComponentInChildren<NewProjectilWithFX>();
-
-    //    projScript.BPMSystem = _BPMSystem;
-    //    projScript.Damage = _currentDamage;
-    //    projScript.BPMGain = _currentBPMGain;
-    //    Enum m_projectilState = projScript.ProjectileType1 = NewProjectilWithFX.ProjectileType.Player;
-
-    //    gameObject.transform.LookAt(posToLookAt);
-    //}
-
-
-    //public override Vector3 GetProjectilLookAt()
-    //{
-    //    return Camera.main.transform.position + Camera.main.transform.forward * defaultDistance;            // Dirige le projectil dans la bonne direction (par rapport au reticule)
-    //}
     #endregion
 
     #region RayCast Methods

@@ -121,6 +121,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9509c76dc125d0e4ab877ec90f3e5349, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_speed: 20
   m_dieFX: {fileID: 1834864717962692, guid: 4d0007966fbcf9e4ba218ea8c592dea1, type: 3}
   m_maxLifeTime: 5
+  useRigibody: 0

@@ -80,24 +80,24 @@ public class NewProjectilWithFX : MonoBehaviour
                     //Debug.Log(tag);
 
                     break;
-                // Le tir du player touche un ArmorSpot
-                case "ArmorSpot":
+                //// Le tir du player touche un ArmorSpot
+                //case "ArmorSpot":
 
-                    BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnArmor * BPMGain);
-                    col.collider.GetComponent<ReferenceScipt>().cara.TakeDamage(Damage, 2);
-                    //Debug.Log(tag);
+                //    BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnArmor * BPMGain);
+                //    col.collider.GetComponent<ReferenceScipt>().cara.TakeDamage(Damage, 2);
+                //    //Debug.Log(tag);
 
-                    break;
-                // Le tir du player touche un DestroyableObject
-                case "DestroyableObject":
+                //    break;
+                //// Le tir du player touche un DestroyableObject
+                //case "DestroyableObject":
 
-                    BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnDestructableEnvironment);
-                    // BPMSystem.GainElectrarythmiePoints(BPMSystem._electrarythmie._electrarythmieGain_OnDestructableEnvironment);
-                    //Debug.Log(tag);
+                //    BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnDestructableEnvironment);
+                //    // BPMSystem.GainElectrarythmiePoints(BPMSystem._electrarythmie._electrarythmieGain_OnDestructableEnvironment);
+                //    //Debug.Log(tag);
 
-                    break;
-                default:
-                    break;
+                //    break;
+                //default:
+                //    break;
             }
         }
 
