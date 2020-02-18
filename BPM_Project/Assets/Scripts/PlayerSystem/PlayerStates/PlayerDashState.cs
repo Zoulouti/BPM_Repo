@@ -45,7 +45,7 @@ public class PlayerDashState : IState
             m_playerController.ChangeState(PlayerState.Run);
         }
 
-        m_playerController.SetPlayerVelocity(m_dashDirection * m_playerController.m_dashDistance);
+        m_playerController.SetPlayerVelocity(m_dashDirection * m_dashSpeed);
     }
     public void Update()
     {
