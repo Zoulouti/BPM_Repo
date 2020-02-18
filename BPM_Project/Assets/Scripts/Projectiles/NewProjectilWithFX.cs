@@ -92,7 +92,7 @@ public class NewProjectilWithFX : MonoBehaviour
                 case "DestroyableObject":
 
                     BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnDestructableEnvironment);
-                    BPMSystem.GainElectrarythmiePoints(BPMSystem._electrarythmie._electrarythmieGain_OnDestructableEnvironment);
+                    // BPMSystem.GainElectrarythmiePoints(BPMSystem._electrarythmie._electrarythmieGain_OnDestructableEnvironment);
                     //Debug.Log(tag);
 
                     break;

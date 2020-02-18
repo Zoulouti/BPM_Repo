@@ -1068,7 +1068,6 @@ GameObject:
   - component: {fileID: 3421608735032399566}
   - component: {fileID: 8798216646479647648}
   - component: {fileID: 3421608736393940812}
-  - component: {fileID: 3955707959416290225}
   m_Layer: 8
   m_Name: FirstPersonWalker
   m_TagString: Untagged
@@ -1292,13 +1291,6 @@ MonoBehaviour:
   _weaponsLevel:
     firstWeaponLevel: 75
     secondWeaponLevel: 225
-  _electrarythmie:
-    electrarythmieBPMTrigger: 0
-    startingElectrarythmiePoints: 0
-    maxElectrarythmiePoints: 100
-    timeOfElectrarythmie: 10
-    _electrarythmieGain_OnDestructableEnvironment: 10
-    _electraFeedBack: {fileID: 3421608735919596527}
   _overdrenaline:
     overdrenalineCooldown: 60
     timeOfOverAdrenaline: 15
@@ -1446,44 +1438,6 @@ MonoBehaviour:
   m_gravity: 35
   m_slideGravity: 90
   m_slopeLimit: 80
---- !u!114 &3955707959416290225
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3422587882778152750}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f5e44db14072ea4c964da3b192181c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useRawInput: 0
-  sprintingSpeed: 17
-  fovWhenWalking: 90
-  fovWhenSprinting: 110
-  crouchingSpeed: 5
-  crouchColliderHeight: 0
-  crouchLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  slideMaxSpeed: 20
-  slideTime: 1
-  _useCustomCurve: 0
-  customCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  airControl: 0.4
-  jumpSpeed: 10
-  jumpDuration: 0.2
-  airFriction: 0.5
-  groundFriction: 100
-  gravity: 30
-  slideGravity: 30
-  slopeLimit: 80
 --- !u!1 &3422606679811486316
 GameObject:
   m_ObjectHideFlags: 0
