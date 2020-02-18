@@ -4957,6 +4957,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6050110779175225582, guid: afa9eecb96c518548a307d2ca9de695b,
+        type: 3}
+      propertyPath: m_Name
+      value: PlayerAudioController
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: footstepDistance
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3422587882778152750, guid: afa9eecb96c518548a307d2ca9de695b,
         type: 3}
       propertyPath: m_Name

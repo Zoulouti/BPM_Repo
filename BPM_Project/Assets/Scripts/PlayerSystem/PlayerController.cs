@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] References m_references;
 	[Serializable] class References{
 		public Transform m_cameraPivot;
+		public PlayerAudioController m_playerAudio;
 	}
 
 	[Header("Movements")]
@@ -368,17 +369,27 @@ public class PlayerController : MonoBehaviour
 		return false;
 	}
 
+	public void On_PlayerIsRunning(bool isRunning)
+	{
+		m_references.m_playerAudio.On_Run(isRunning);
+	}
 	public void On_PlayerHasJump(bool hasJump)
 	{
 		m_hasJump = hasJump;
+		if (hasJump)
+			m_references.m_playerAudio.On_Jump();
 	}
 	public void On_PlayerHasDoubleJump(bool hasDoubleJump)
 	{
 		m_hasDoubleJump = hasDoubleJump;
+		if (hasDoubleJump)
+			m_references.m_playerAudio.On_DoubleJump();
 	}
 	public void On_PlayerHasDash(bool hasDash)
 	{
 		m_hasDash = hasDash;
+		if (hasDash)
+			m_references.m_playerAudio.On_Dash();
 	}
 
     //Get last frame's velocity;
@@ -461,6 +472,8 @@ public class PlayerController : MonoBehaviour
 		//Call 'OnLand' event;
 		if(OnLand != null)
 			OnLand(m_momentum);
+
+		m_references.m_playerAudio.On_Land();
 	}
 
 	//Events;
