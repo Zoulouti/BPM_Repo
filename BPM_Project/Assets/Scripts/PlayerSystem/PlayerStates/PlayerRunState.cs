@@ -27,8 +27,6 @@ public class PlayerRunState : IState
             m_playerController.ChangeState(PlayerState.Fall);
         }
 
-        m_playerController.PlayerIsSliding();
-
         m_playerController.Move();
     }
     public void Update()

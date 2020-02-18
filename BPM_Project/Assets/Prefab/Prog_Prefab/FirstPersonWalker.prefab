@@ -1367,14 +1367,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 939a6eb7ae9f45044ad84c1d26191452, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_cameraPivot: {fileID: 8087587520425720305}
   m_sM:
     m_currentStateString: 
-  m_useGravity: 1
-  m_dashDistance: 10
-  m_timeToDash: 0.25
-  m_useRawInput: 1
-  m_sprintingSpeed: 10
+  m_references:
+    m_cameraPivot: {fileID: 8087587520425720305}
+  m_movements:
+    m_useRawInput: 0
+    m_movementSpeed: 10
+  m_physics:
+    m_airFriction: 3
+    m_groundFriction: 100
+    m_gravity: 35
+  m_jump:
+    m_airControl: 0.4
+    m_speed: 10
+    m_duration: 0.2
+  m_dash:
+    m_distance: 10
+    m_timeToDash: 0.25
   m_fov:
     m_normalFov: 70
     m_dashFov: 75
@@ -1430,14 +1440,6 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-  m_airControl: 0.4
-  m_jumpSpeed: 10
-  m_jumpDuration: 0.2
-  m_airFriction: 3
-  m_groundFriction: 100
-  m_gravity: 35
-  m_slideGravity: 90
-  m_slopeLimit: 80
 --- !u!1 &3422606679811486316
 GameObject:
   m_ObjectHideFlags: 0

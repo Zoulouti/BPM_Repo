@@ -27,8 +27,6 @@ public class PlayerIdleState : IState
             m_playerController.ChangeState(PlayerState.Fall);
         }
 
-        m_playerController.PlayerIsSliding();
-
         m_playerController.ResetPlayerVelocity();
     }
     public void Update()
