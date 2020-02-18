@@ -28,7 +28,7 @@ public class PlayerJumpState : IState
     public void FixedUpdate()
     {
         m_timer += Time.deltaTime;
-        if(m_timer > m_playerController.m_jumpDuration && !m_haseJump)
+        if(m_timer > m_playerController.m_jump.m_duration && !m_haseJump)
         {
             m_haseJump = true;
             m_playerController.ChangeState(PlayerState.Fall);
