@@ -18,9 +18,6 @@ public class EnemyCara : MonoBehaviour
     public EnemyCaractéristique _enemyCaractéristique = new EnemyCaractéristique();
     [Serializable] public class EnemyCaractéristique
     {
-        [Tooltip("Override the stats in the GameManager")]
-        public bool useCustomTweaking;
-        [Space]
         public Move _move = new Move();
         [Serializable]
         public class Move
@@ -40,11 +37,12 @@ public class EnemyCara : MonoBehaviour
         public class Health
         {
             public float maxHealth;
+            public int damageMultiplicatorOnWeakSpot = 1;
+            public int damageMultiplicatorOnNoSpot = 1;
         }
     }
     float _currentLife;
     int _currentDamage;
-    GameManager manager;
 
     public void Awake()
     {
@@ -68,13 +66,7 @@ public class EnemyCara : MonoBehaviour
         }
         #endregion
 
-        InitializeEnemyStats(_enemyCaractéristique.useCustomTweaking);
-    }
-    private void Start()
-    {
-        #region Get Singleton
-        manager = GameManager.Instance;
-        #endregion
+        InitializeEnemyStats();
     }
 
     public void TakeDamage(float damage, int i)
@@ -83,33 +75,21 @@ public class EnemyCara : MonoBehaviour
         {
             case 0:
 
-                _currentLife -= damage * manager.noSpotDamageMultiplicateur;
+                _currentLife -= damage * _enemyCaractéristique._health.damageMultiplicatorOnNoSpot;
 
                 break;
             case 1:
 
-                _currentLife -= damage * manager.weakSpotDamageMultiplicateur;
+                _currentLife -= damage * _enemyCaractéristique._health.damageMultiplicatorOnWeakSpot;
 
                 break;
             default:
                 break;
         }
     }
-
-
-    void InitializeEnemyStats(bool overRide)
+    void InitializeEnemyStats()
     {
-        if (overRide)
-        {
-            _currentLife = _enemyCaractéristique._health.maxHealth;
-            _currentDamage = _enemyCaractéristique._attack.damage;
-        }
-        else
-        {
-            _currentLife = manager._health.maxHealth;
-            _currentLife = manager._attack.damage;
-        }
+        _currentLife = _enemyCaractéristique._health.maxHealth;
+        _currentDamage = _enemyCaractéristique._attack.damage;
     }
-
-
 }

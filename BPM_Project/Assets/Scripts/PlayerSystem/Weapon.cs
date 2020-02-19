@@ -14,12 +14,6 @@ public class Weapon : ScriptableObject
         public int damage;
         public float attackCooldown;
         [Space]
-        [Header("For Rafale")]
-        [Tooltip("Only if you use Rafale")]
-        public float timeBetweenBurst;
-        [Tooltip("Only if you use Rafale")]
-        public int nbrOfShoot;
-        [Space]
         [Header("Level 0 BPM stats")]
         public float BPMGainOnHit;
         public int BPMCost;
@@ -37,12 +31,6 @@ public class Weapon : ScriptableObject
         public int damage;
         public float attackCooldown;
         [Space]
-        [Header("For Rafale")]
-        [Tooltip("Only if you use Rafale")]
-        public float timeBetweenBurst;
-        [Tooltip("Only if you use Rafale")]
-        public int nbrOfShoot;
-        [Space]
         [Header("Level 1 BPM stats")]
         public float BPMGainOnHit;
         public int BPMCost;
@@ -57,12 +45,6 @@ public class Weapon : ScriptableObject
         [Header("Level 2 stats")]
         public int damage;
         public float attackCooldown;
-        [Space]
-        [Header("For Rafale")]
-        [Tooltip("Only if you use Rafale")]
-        public float timeBetweenBurst;
-        [Tooltip("Only if you use Rafale")]
-        public int nbrOfShoot;
         [Space]
         [Header("Level 2 BPM stats")]
         public float BPMGainOnHit;

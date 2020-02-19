@@ -19,7 +19,7 @@ MonoBehaviour:
     nbrOfShoot: 3
     BPMGainOnHit: 5
     BPMCost: 0
-    bulletSpeed: 200
+    bulletSpeed: 20
     bullet: {fileID: 1451592532500230711, guid: c53459ce1f414874f9136154c77e7bd9,
       type: 3}
   _weaponLevel1:
@@ -29,7 +29,7 @@ MonoBehaviour:
     nbrOfShoot: 4
     BPMGainOnHit: 5
     BPMCost: 6
-    bulletSpeed: 200
+    bulletSpeed: 20
   _weaponLevel2:
     damage: 40
     attackCooldown: 0.05
@@ -37,6 +37,6 @@ MonoBehaviour:
     nbrOfShoot: 5
     BPMGainOnHit: 5
     BPMCost: 12
-    bulletSpeed: 300
+    bulletSpeed: 20
     newBullet: {fileID: 1451592532500230711, guid: c53459ce1f414874f9136154c77e7bd9,
       type: 3}

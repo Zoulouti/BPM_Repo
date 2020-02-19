@@ -678,12 +678,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 1447b493a3d33544d87791f45afc97e5, type: 3}
+  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1107,6 +1107,7 @@ GameObject:
   - component: {fileID: 3419531255567379398}
   - component: {fileID: 3401214553187041736}
   - component: {fileID: 3339910740037193704}
+  - component: {fileID: 77106917}
   m_Layer: 8
   m_Name: Camera
   m_TagString: MainCamera
@@ -1179,6 +1180,21 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3422404171733034980}
   m_Enabled: 1
+--- !u!114 &77106917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3422404171733034980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdcd06815c47d30489f70df42db56a48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frustumSettings:
+    baseSettings: {fileID: 0}
+    qualitySettings: {fileID: 0}
 --- !u!1 &3422587882778152750
 GameObject:
   m_ObjectHideFlags: 0
@@ -1291,8 +1307,8 @@ MonoBehaviour:
     maxBPM: 300
     startingBPM: 100
     criticalLvlOfBPM: 75
-    BPMGain_OnNoSpot: 10
-    BPMGain_OnWeak: 20
+    BPMGain_OnNoSpot: 1
+    BPMGain_OnWeak: 4
     BPM_Gauge: {fileID: 823295479828341272}
   _weaponsLevel:
     firstWeaponLevel: 75
@@ -1323,7 +1339,7 @@ MonoBehaviour:
     m_Bits: 3072
   _SMG:
     weaponStats: {fileID: 11400000, guid: fb3e97c66800ad94ebde8f727819c49a, type: 2}
-    typeOfFire: 0
+    typeOfFire: 2
     firePoint: {fileID: 3421608736316058985}
     fireAudio: {fileID: 0}
     recoilCurve:

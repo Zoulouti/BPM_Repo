@@ -4676,8 +4676,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_dieFX: {fileID: 6277809500041374232, guid: fec7091287b88ea4b84c452a8370cd1c, type: 3}
   m_maxLifeTime: 5
-  useRigibody: 0
-  force: {x: 10, y: 10, z: 10}
+  m_colType: 2
+  forceBuffer: 50
 --- !u!1 &1452222328529539705
 GameObject:
   m_ObjectHideFlags: 0
