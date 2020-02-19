@@ -8,41 +8,56 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController s_instance;
 
-    CameraController m_cameraController;
-
-	[SerializeField] Transform m_cameraPivot;
-
-#region [SerializeField] Variables
+#region Public Variables
+	[Header("Debug")]
     [SerializeField] StateMachine m_sM = new StateMachine();
-	public bool m_useGravity = true;
+	// public bool m_useGravity = true;
+
+	[Header("References")]
+	[SerializeField] References m_references;
+	[Serializable] class References{
+		public Transform m_cameraPivot;
+		public PlayerAudioController m_playerAudio;
+	}
+
+	[Header("Movements")]
+	[SerializeField] Movements m_movements;
+	[Serializable] class Movements{
+		public bool m_useRawInput = true;
+		public float m_movementSpeed = 10f;
+	}
+
+	[Header("Physics")]
+	[SerializeField] Physics m_physics;
+	[Serializable] class Physics{
+		//'AirFriction' determines how fast the controller loses its momentum while in the air;
+		public float m_airFriction = 3f;
+
+		//'GroundFriction' is used instead, if the controller is grounded;
+		public float m_groundFriction = 100f;
+
+		//Amount of downward gravitation;
+		public float m_gravity = 35f;
+	}
+
+	[Header("Jump variables")]
+	public Jump m_jump;
+	[Serializable] public class Jump{
+		//'Aircontrol' determines to what degree the player is able to move while in the air;
+		[Range(0f, 1f)] public float m_airControl = 0.4f;
+		public float m_speed = 10f;
+		public float m_duration = 0.2f;
+	}
 
 	[Header("Dash")]
-	public float m_dashDistance = 5;
-	public float m_timeToDash = 0.5f;
+	public Dash m_dash;
+	[Serializable] public class Dash{
+		public float m_distance = 10;
+		public float m_timeToDash = 0.25f;
+	}
 
-#endregion
-
-#region Private Variables
-
-    //References to attached components;
-	Transform m_trans;
-	Mover m_mover;
-
-	//Names of input axes used for horizontal and vertical input;
-	string m_horizontalInputAxis = "Horizontal";
-	string m_verticalInputAxis = "Vertical";
-
-	//Whether or not to use raw input values;
-	[SerializeField] bool m_useRawInput = false;
-
-    [Header("Movement speed variables")]
-    //Movement speed;
-    float m_currentSpeed;
-    [SerializeField] float m_sprintingSpeed = 17f;
-    [Space]
-
-    [Header("Field Of View")]
-	[SerializeField] public FieldOfView m_fov;
+	[Header("Field Of View")]
+	public FieldOfView m_fov;
 	[Serializable] public class FieldOfView
 	{
 		[Header("Values")]
@@ -60,23 +75,21 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-    [Header("Jump variables")]
-	//'Aircontrol' determines to what degree the player is able to move while in the air;
-	[Range(0f, 1f)]
-	[SerializeField] float m_airControl = 0.4f;
+#endregion
 
-	//Jump speed;
-	[SerializeField] float m_jumpSpeed = 10f;
+#region Private Variables
+    //References to attached components;
+	Transform m_trans;
+	Mover m_mover;
 
-	//Jump duration variables;
-	public float m_jumpDuration = 0.2f;
+	//Names of input axes used for horizontal and vertical input;
+	string m_horizontalInputAxis = "Horizontal";
+	string m_verticalInputAxis = "Vertical";
+
+    //Movement speed;
+    float m_currentSpeed;
 	
 	float m_currentJumpStartTime = 0f;
-
-	//'AirFriction' determines how fast the controller loses its momentum while in the air;
-	//'GroundFriction' is used instead, if the controller is grounded;
-	[SerializeField] float m_airFriction = 0.5f;
-	[SerializeField] float m_groundFriction = 100f;
 
 	//Current momentum;
 	Vector3 m_momentum = Vector3.zero;
@@ -87,35 +100,13 @@ public class PlayerController : MonoBehaviour
 	//Saved horizontal movement velocity from last frame;
 	Vector3 m_savedMovementVelocity = Vector3.zero;
 
-	//Amount of downward gravitation;
-	[SerializeField] float m_gravity = 30f;
-	//Amount of downward gravitation when sliding down a slope;
-	[SerializeField] float m_slideGravity = 30f;
-
-    bool m_isSliding = false;
-
-	//Acceptable slope angle limit;
-	[SerializeField] float m_slopeLimit = 80f;
-
-    //Enum describing in what state the PC is
-    protected enum ActionState
-    {
-        // Walk,
-        Sprint,
-        Crouch,
-        Slide,
-    }
-    // protected ActionState _currentActionState = ActionState.Walk;
-    ActionState m_currentActionState = ActionState.Sprint;
-
-    Vector3 m_slidingFwrd;
-    Vector3 m_slidingRight;
-
 	bool m_hasJump = false;
 	bool m_hasDoubleJump = false;
 	bool m_hasDash = false;
 
 	Vector3 m_playerMoveInputsDirection;
+
+    CameraController m_cameraController;
 
 #endregion
 
@@ -130,7 +121,7 @@ public class PlayerController : MonoBehaviour
 
 		m_cameraController = GetComponentInChildren<CameraController>();
 
-        m_currentSpeed = m_sprintingSpeed;
+        m_currentSpeed = m_movements.m_movementSpeed;
 	}
 
 	void OnEnable()
@@ -156,11 +147,6 @@ public class PlayerController : MonoBehaviour
 	void LateUpdate()
 	{
 		m_sM.LateUpdate();
-	}
-
-	void OnDrawGizmos()
-	{
-		
 	}
 #endregion
 
@@ -200,7 +186,7 @@ public class PlayerController : MonoBehaviour
 		float _verticalInput;
 
 		//Get input;
-		if(m_useRawInput){
+		if(m_movements.m_useRawInput){
 			_horizontalInput = Input.GetAxisRaw(m_horizontalInputAxis);
 			_verticalInput = Input.GetAxisRaw(m_verticalInputAxis);
 		} else {
@@ -211,26 +197,8 @@ public class PlayerController : MonoBehaviour
 		Vector3 _direction = Vector3.zero;
 
 		//Use camera axes to construct movement direction;
-		// _direction += cameraControls.GetFacingDirection() * _verticalInput;
-		// _direction += cameraControls.GetStrafeDirection() * _horizontalInput;
-        if(m_currentActionState != ActionState.Slide)
-        {
-		    _direction += m_cameraPivot.forward * _verticalInput;
-		    _direction += m_cameraPivot.right * _horizontalInput;
-        }
-        else
-        {
-            if (_verticalInput > 0)
-            {
-                _direction += m_slidingFwrd * _verticalInput;
-            }
-            else
-            {
-                // _currentActionState = ActionState.Walk;
-                m_currentActionState = ActionState.Sprint;
-            }
-            _direction += m_slidingRight * _horizontalInput;
-        }
+		_direction += m_references.m_cameraPivot.forward * _verticalInput;
+		_direction += m_references.m_cameraPivot.right * _horizontalInput;
 
         //Clamp movement vector to magnitude of '1f';
         if (_direction.magnitude > 1f)
@@ -254,66 +222,9 @@ public class PlayerController : MonoBehaviour
 
 		//If controller is in the air, multiply movement velocity with 'airControl';
 		if(!PlayerIsGrounded())
-			_velocity = _velocityDirection * m_currentSpeed * m_airControl;
-
-		//If controller is standing (or walking) on a slope, decrease player velocity based on the slope's angle;
-		if(m_isSliding)
-		{
-			float _factor = Mathf.InverseLerp(90f, 0f, Vector3.Angle(m_trans.up, m_mover.GetGroundNormal()));
-			_velocity *= _factor;  
-		}
+			_velocity = _velocityDirection * m_currentSpeed * m_jump.m_airControl;
 
 		return _velocity;
-	}
-
-	//Returns 'true' if the player presses the jump key;
-	public bool IsJumpKeyPressed()
-	{
-        return (Input.GetButtonDown("Jump"));
-	}
-	public bool CanJump()
-	{
-		return !m_hasJump || !m_hasDoubleJump;
-	}
-
-	public bool IsDashKeyPressed()
-	{
-        return (Input.GetButtonDown("Dash"));
-	}
-	public bool CanDash()
-	{
-		if (CalculateMovementDirection() != Vector3.zero && !m_hasDash)
-			return true;
-
-		return false;
-	}
-	
-    //Returns 'true' if the player presses the forward key;
-    bool IsForwarding()
-    {
-        // return Input.GetKey(_controlKeyBinding.forward);
-		if (Input.GetAxis(m_verticalInputAxis) > 0.1)
-		{
-			return true;
-		}
-		return false;
-    }
-
-    bool IsCrouching()
-    {
-        if (Input.GetButtonDown("Crouch"))
-        {
-            return true;
-        }
-        return false;
-    }
-	bool IsSliding()
-	{
-		if (Input.GetButtonDown("Slide"))
-		{
-			return true;
-		}
-		return false;
 	}
 
 	//Apply friction to both vertical and horizontal momentum based on 'friction' and 'gravity';
@@ -331,97 +242,27 @@ public class PlayerController : MonoBehaviour
 		}
 
         //Add gravity to vertical momentum;
-		if (m_useGravity)
-		{
-			if(m_isSliding)
-				_verticalMomentum -= m_trans.up * m_slideGravity * Time.deltaTime;
-			else
-				_verticalMomentum -= m_trans.up * m_gravity * Time.deltaTime;
-			if(PlayerIsGrounded() && !m_isSliding)
+		// if (m_useGravity)
+		// {
+			_verticalMomentum -= m_trans.up * m_physics.m_gravity * Time.deltaTime;
+			if(PlayerIsGrounded())
 				_verticalMomentum = Vector3.zero;
-		}
+		// }
 
 		//Apply friction to horizontal momentum based on whether the controller is grounded;
 		if(PlayerIsGrounded())
-			_horizontalMomentum = VectorMath.IncrementVectorLengthTowardTargetLength(_horizontalMomentum, m_groundFriction, Time.deltaTime, 0f);
+			_horizontalMomentum = VectorMath.IncrementVectorLengthTowardTargetLength(_horizontalMomentum, m_physics.m_groundFriction, Time.deltaTime, 0f);
 		else
-			_horizontalMomentum = VectorMath.IncrementVectorLengthTowardTargetLength(_horizontalMomentum, m_airFriction, Time.deltaTime, 0f); 
+			_horizontalMomentum = VectorMath.IncrementVectorLengthTowardTargetLength(_horizontalMomentum, m_physics.m_airFriction, Time.deltaTime, 0f); 
 
 		//Add horizontal and vertical momentum back together;
 		m_momentum = _horizontalMomentum + _verticalMomentum;
 
-        //Project the current momentum onto the current ground normal if the controller is sliding down a slope;
-		if(m_isSliding)
-		{
-			m_momentum = Vector3.ProjectOnPlane(m_momentum, m_mover.GetGroundNormal());
-		}
-
-		//If controller is jumping, override vertical velocity with jumpSpeed;
-		// if(m_currentControllerState == ControllerState.Jumping)
-		// {
-		// 	m_momentum = VectorMath.RemoveDotVector(m_momentum, m_trans.up);
-		// 	m_momentum += m_trans.up * m_jumpSpeed;
-		// }
-
         if(CurrentState(PlayerState.Jump))
         {
             m_momentum = VectorMath.RemoveDotVector(m_momentum, m_trans.up);
-			m_momentum += m_trans.up * m_jumpSpeed;
+			m_momentum += m_trans.up * m_jump.m_speed;
         }
-	}
-
-	//Events;
-
-	//This function is called when the player has initiated a jump;
-	public void On_JumpStart()
-	{
-		//Add jump force to momentum;
-		m_momentum += m_trans.up * m_jumpSpeed;
-
-		//Set jump start time;
-		m_currentJumpStartTime = Time.time;
-
-		//Call event;
-		if(OnJump != null)
-			OnJump(m_momentum);
-	}
-
-	//This function is called when the player has lost ground contact, i.e. is either falling or rising, or generally in the air;
-	public void On_GroundContactLost()
-	{
-		//Calculate current velocity;
-		//If velocity would exceed the controller's movement speed, decrease movement velocity appropriately;
-		//This prevents unwanted accumulation of velocity;
-		float _horizontalMomentumSpeed = VectorMath.RemoveDotVector(GetMomentum(), m_trans.up).magnitude;
-		Vector3 _currentVelocity = GetMomentum() + Vector3.ClampMagnitude(m_savedMovementVelocity, Mathf.Clamp(m_currentSpeed - _horizontalMomentumSpeed, 0f, m_currentSpeed));
-
-		//Calculate length and direction from '_currentVelocity';
-		float _length = _currentVelocity.magnitude;
-		
-		//Calculate velocity direction;
-		Vector3 _velocityDirection = Vector3.zero;
-		if(_length != 0f)
-			_velocityDirection = _currentVelocity/_length;
-
-		//Subtract from '_length', based on 'movementSpeed' and 'airControl', check for overshooting;
-		if(_length >= m_currentSpeed * m_airControl)
-			_length -= m_currentSpeed * m_airControl;
-		else
-			_length = 0f;
-
-		m_momentum = _velocityDirection * _length;
-	}
-
-	//This function is called when the player has landed on a surface after being in the air;
-	public void On_GroundContactRegained()
-	{
-		On_PlayerHasJump(false);
-		On_PlayerHasDoubleJump(false);
-		On_PlayerHasDash(false);
-
-		//Call 'OnLand' event;
-		if(OnLand != null)
-			OnLand(m_momentum);
 	}
 
 	//Helper functions;
@@ -465,11 +306,6 @@ public class PlayerController : MonoBehaviour
 		return IsFalling() && (VectorMath.GetDotProduct(GetMomentum(), m_trans.up) > 0f);
 	}
 
-    public bool PlayerIsSliding()
-	{
-		return m_isSliding = PlayerIsGrounded() && (Vector3.Angle(m_mover.GetGroundNormal(), m_trans.up) > m_slopeLimit);
-	}
-
     public bool PlayerInputIsMoving()
 	{
 		if(CalculateMovementDirection() != Vector3.zero){
@@ -511,17 +347,49 @@ public class PlayerController : MonoBehaviour
 		SetPlayerVelocity(Vector3.zero);
 	}
 
+	//Returns 'true' if the player presses the jump key;
+	public bool IsJumpKeyPressed()
+	{
+        return (Input.GetButtonDown("Jump"));
+	}
+	public bool CanJump()
+	{
+		return !m_hasJump || !m_hasDoubleJump;
+	}
+
+	public bool IsDashKeyPressed()
+	{
+        return (Input.GetButtonDown("Dash"));
+	}
+	public bool CanDash()
+	{
+		if (CalculateMovementDirection() != Vector3.zero && !m_hasDash)
+			return true;
+
+		return false;
+	}
+
+	public void On_PlayerIsRunning(bool isRunning)
+	{
+		m_references.m_playerAudio.On_Run(isRunning);
+	}
 	public void On_PlayerHasJump(bool hasJump)
 	{
 		m_hasJump = hasJump;
+		if (hasJump)
+			m_references.m_playerAudio.On_Jump();
 	}
 	public void On_PlayerHasDoubleJump(bool hasDoubleJump)
 	{
 		m_hasDoubleJump = hasDoubleJump;
+		if (hasDoubleJump)
+			m_references.m_playerAudio.On_DoubleJump();
 	}
 	public void On_PlayerHasDash(bool hasDash)
 	{
 		m_hasDash = hasDash;
+		if (hasDash)
+			m_references.m_playerAudio.On_Dash();
 	}
 
     //Get last frame's velocity;
@@ -554,6 +422,61 @@ public class PlayerController : MonoBehaviour
 	}
 
 	//Events;
+	//This function is called when the player has initiated a jump;
+	public void On_JumpStart()
+	{
+		//Add jump force to momentum;
+		m_momentum += m_trans.up * m_jump.m_speed;
+
+		//Set jump start time;
+		m_currentJumpStartTime = Time.time;
+
+		//Call event;
+		if(OnJump != null)
+			OnJump(m_momentum);
+	}
+
+	//This function is called when the player has lost ground contact, i.e. is either falling or rising, or generally in the air;
+	public void On_GroundContactLost()
+	{
+		//Calculate current velocity;
+		//If velocity would exceed the controller's movement speed, decrease movement velocity appropriately;
+		//This prevents unwanted accumulation of velocity;
+		float _horizontalMomentumSpeed = VectorMath.RemoveDotVector(GetMomentum(), m_trans.up).magnitude;
+		Vector3 _currentVelocity = GetMomentum() + Vector3.ClampMagnitude(m_savedMovementVelocity, Mathf.Clamp(m_currentSpeed - _horizontalMomentumSpeed, 0f, m_currentSpeed));
+
+		//Calculate length and direction from '_currentVelocity';
+		float _length = _currentVelocity.magnitude;
+		
+		//Calculate velocity direction;
+		Vector3 _velocityDirection = Vector3.zero;
+		if(_length != 0f)
+			_velocityDirection = _currentVelocity/_length;
+
+		//Subtract from '_length', based on 'movementSpeed' and 'airControl', check for overshooting;
+		if(_length >= m_currentSpeed * m_jump.m_airControl)
+			_length -= m_currentSpeed * m_jump.m_airControl;
+		else
+			_length = 0f;
+
+		m_momentum = _velocityDirection * _length;
+	}
+
+	//This function is called when the player has landed on a surface after being in the air;
+	public void On_GroundContactRegained()
+	{
+		On_PlayerHasJump(false);
+		On_PlayerHasDoubleJump(false);
+		On_PlayerHasDash(false);
+
+		//Call 'OnLand' event;
+		if(OnLand != null)
+			OnLand(m_momentum);
+
+		m_references.m_playerAudio.On_Land();
+	}
+
+	//Events;
 	public delegate void VectorEvent(Vector3 v);
 	public event VectorEvent OnJump;
 	public event VectorEvent OnLand;
@@ -564,5 +487,4 @@ public class PlayerController : MonoBehaviour
 	}
 
 #endregion
-    
 }

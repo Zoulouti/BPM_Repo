@@ -16,7 +16,7 @@ public class PlayerRunState : IState
 
     public void Enter()
     {
-
+        m_playerController.On_PlayerIsRunning(true);
     }
     public void FixedUpdate()
     {
@@ -26,8 +26,6 @@ public class PlayerRunState : IState
         {
             m_playerController.ChangeState(PlayerState.Fall);
         }
-
-        m_playerController.PlayerIsSliding();
 
         m_playerController.Move();
     }
@@ -55,7 +53,7 @@ public class PlayerRunState : IState
     }
     public void Exit()
     {
-
+        m_playerController.On_PlayerIsRunning(false);
     }
 
 }

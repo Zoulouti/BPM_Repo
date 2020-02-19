@@ -48,12 +48,6 @@ public class EnemyCara : MonoBehaviour
 
     public void Awake()
     {
-
-        /*#region Get Singleton
-        manager = GameManager.Instance;
-        Debug.Log(manager);
-        #endregion*/
-
         enemyArchetype.PopulateArray();
 
         #region Activate Archetype
@@ -63,12 +57,6 @@ public class EnemyCara : MonoBehaviour
             {
                 _debug.weakSpots[i].SetActive(true);
                 _debug.armorSpots[i].SetActive(false);
-                _debug.noSpot[i].SetActive(false);
-            }
-            else if(enemyArchetype.e_TypeOfSpot[i] == EnemyArchetype.TypeOfSpot.ArmorSpot)
-            {
-                _debug.weakSpots[i].SetActive(false);
-                _debug.armorSpots[i].SetActive(true);
                 _debug.noSpot[i].SetActive(false);
             }
             else if(enemyArchetype.e_TypeOfSpot[i] == EnemyArchetype.TypeOfSpot.NoSpot)
@@ -101,11 +89,6 @@ public class EnemyCara : MonoBehaviour
             case 1:
 
                 _currentLife -= damage * manager.weakSpotDamageMultiplicateur;
-
-                break;
-            case 2:
-
-                _currentLife -= damage * manager.armorSpotDamageMultiplicateur;
 
                 break;
             default:

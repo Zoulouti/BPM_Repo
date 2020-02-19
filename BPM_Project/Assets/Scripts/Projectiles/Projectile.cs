@@ -18,6 +18,14 @@ public class Projectile : MonoBehaviour
     public GameObject m_dieFX;
     [Space]
     public float m_maxLifeTime = 5;
+    [Header("DEBUG")]
+    [Space]
+    public bool useRigibody;
+    public float forceBuffer = 50f;
+    Rigidbody rb;
+    SphereCollider col;
+
+
 
     RaycastHit _hit;
     bool m_dieWhenHit = true;
@@ -43,6 +51,7 @@ public class Projectile : MonoBehaviour
     float m_speed = 25;
     int _currentDamage;
     int damage;
+    
 
     #region Get Set
     public WeaponBehaviour WeaponBehaviour { get => _WeaponBehaviour; set => _WeaponBehaviour = value; }
@@ -65,20 +74,38 @@ public class Projectile : MonoBehaviour
 
     public void Start()
     {
+        if (useRigibody)
+        {
+            rb = gameObject.AddComponent<Rigidbody>();
+            col = gameObject.AddComponent<SphereCollider>();
 
-        #region Set Starting Length
-        m_awakeDistance = transform.localPosition;
-        deltaLength = Vector3.Distance(m_distanceToReach, m_awakeDistance);
-        newLength = deltaLength;
-        #endregion
+            rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+            rb.interpolation = RigidbodyInterpolation.Extrapolate;
+            rb.constraints = RigidbodyConstraints.FreezeRotation;
+            rb.useGravity = false;
 
-        StartCoroutine(CalculateDistance());
+            col.isTrigger = true;
+            col.radius = 0.05f;
+        }
+        else
+        {
+            #region Set Starting Length
+            m_awakeDistance = transform.localPosition;
+            deltaLength = Vector3.Distance(m_distanceToReach, m_awakeDistance);
+            newLength = deltaLength;
+            #endregion
+
+            StartCoroutine(CalculateDistance());
+        }
+
+        StartCoroutine(DestroyAnyway());
 
     }
 
+    #region When using RayCast
+
     IEnumerator CalculateDistance()
     {
-
         while(newLength > 0)
         {
             transform.Translate(Vector3.forward * Speed * Time.deltaTime);
@@ -87,10 +114,10 @@ public class Projectile : MonoBehaviour
             yield return new WaitForSeconds(Time.deltaTime);
         }
 
-        DestroyProjectile();
+        OnProjectilReachingMaxDistance();
     }
 
-    void DestroyProjectile()
+    void OnProjectilReachingMaxDistance()
     {
         bool ray = Physics.Raycast(TransfoPos, TransfoDir, out _hit, Mathf.Infinity, RayCastCollision, QueryTriggerInteraction.Collide);
         if (ray)
@@ -128,9 +155,14 @@ public class Projectile : MonoBehaviour
                 if (m_dieFX != null)
                 {
                     Level.AddFX(m_dieFX, transform.position, Quaternion.identity);    //Impact FX
+                    if(_hit.collider.GetComponent<Rigidbody>() != null)
+                    {
+                        Rigidbody _rb = _hit.collider.GetComponent<Rigidbody>();
+                        _rb.AddForceAtPosition(-(_hit.normal * forceBuffer), _hit.point);
+                    }
                 }
 
-                Destroy(gameObject);
+                DestroyProj();
             }
             else //Si la cible a bougé avant que le projectile ait atteind sa cible
             {
@@ -147,5 +179,69 @@ public class Projectile : MonoBehaviour
                 StartCoroutine(CalculateDistance());
             }
         }
+    }
+
+    #endregion
+
+    #region When Using Rigibody
+
+    private void FixedUpdate()
+    {
+        if (useRigibody)
+        {
+            rb.velocity = transform.forward * Speed;
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if(col != null)
+        {
+            string tag = other.tag;
+            #region Switch For WeakSpots
+
+            switch (tag)
+            {
+                // Le tir du player touche un NoSpot
+                case "NoSpot":
+
+                    BPMGain = BPMSystem._BPM.BPMGain_OnNoSpot * CurrentBPMGain;
+
+                    other.GetComponent<ReferenceScipt>().cara.TakeDamage(CurrentDamage, 0);
+
+                    break;
+
+                // Le tir du player touche un WeakSpot
+                case "WeakSpot":
+
+                    BPMGain = BPMSystem._BPM.BPMGain_OnWeak * CurrentBPMGain;
+
+                    other.GetComponent<ReferenceScipt>().cara.TakeDamage(CurrentDamage, 1);
+
+                    break;
+            }
+
+            #endregion
+
+            BPMSystem.GainBPM(BPMGain);
+
+            if (m_dieFX != null)
+            {
+                Level.AddFX(m_dieFX, transform.position, Quaternion.identity);    ///Impact FX
+            }
+
+            DestroyProj();
+        }
+    }
+    #endregion
+
+    IEnumerator DestroyAnyway()
+    {
+        yield return new WaitForSeconds(m_maxLifeTime);
+        DestroyProj();
+    }
+
+    void DestroyProj()
+    {
+        Destroy(gameObject);
     }
 }

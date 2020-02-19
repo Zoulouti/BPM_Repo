@@ -31,7 +31,7 @@ public class PlayerDashState : IState
 
         m_playerController.ResetPlayerVelocity();
 
-        m_dashSpeed = m_playerController.m_dashDistance / m_playerController.m_timeToDash;
+        m_dashSpeed = m_playerController.m_dash.m_distance / m_playerController.m_dash.m_timeToDash;
         // Debug.Log("m_dashSpeed = " + m_dashSpeed);
 
         m_playerController.ChangeCameraFov(m_playerController.m_fov.m_dashFov, m_playerController.m_fov.m_startDash.m_timeToChangeFov, m_playerController.m_fov.m_startDash.m_changeFovCurve);
@@ -39,7 +39,7 @@ public class PlayerDashState : IState
     public void FixedUpdate()
     {
         m_dashTimer += Time.deltaTime;
-        if(m_dashTimer > m_playerController.m_timeToDash && !m_haseDash)
+        if(m_dashTimer > m_playerController.m_dash.m_timeToDash && !m_haseDash)
         {
             m_haseDash = true;
             m_playerController.ChangeState(PlayerState.Run);
