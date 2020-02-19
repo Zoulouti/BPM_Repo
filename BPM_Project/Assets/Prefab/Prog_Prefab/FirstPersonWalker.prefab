@@ -1274,7 +1274,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &3421608735032399566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1422,7 +1422,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
     m_endDash:
-      m_timeToChangeFov: 0.5
+      m_timeToChangeFov: 0.25
       m_changeFovCurve:
         serializedVersion: 2
         m_Curve:
