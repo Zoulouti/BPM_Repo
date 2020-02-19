@@ -317,7 +317,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8839480894359467125}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &1983271840447501681
 AudioSource:
@@ -1293,10 +1293,7 @@ MonoBehaviour:
     criticalLvlOfBPM: 75
     BPMGain_OnNoSpot: 10
     BPMGain_OnWeak: 20
-    BPMGain_OnArmor: 5
-    BPMGain_OnDestructableEnvironment: 5
     BPM_Gauge: {fileID: 823295479828341272}
-    Electra_Gauge: {fileID: 3451125370216641594}
   _weaponsLevel:
     firstWeaponLevel: 75
     secondWeaponLevel: 225
@@ -1510,7 +1507,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8839480894359467125}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &7968827262524799274
 AudioSource:
@@ -2132,7 +2129,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8839480894359467125}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &8570276900306928437
 AudioSource:
@@ -2256,9 +2253,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6050110779175225582}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 5837479378864761318}
   - {fileID: 4316238980045466257}
   - {fileID: 5567136614100522170}
   - {fileID: 4488750173507636894}
@@ -2279,20 +2277,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49b1066156e18cc4198630bf3959c9f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_woodStep:
-    m_audioSource: {fileID: 4801491814076992866}
-    m_sounds: []
-    m_volume: 0.75
-    m_volumeRandomizer: 0.2
-    m_pitch: 1
-    m_pitchRandomizer: 0.1
-  m_metalStep:
-    m_audioSource: {fileID: 4801491814076992866}
-    m_sounds: []
-    m_volume: 0.75
-    m_volumeRandomizer: 0.2
-    m_pitch: 1
-    m_pitchRandomizer: 0.1
+  m_steps:
+    m_footStepDistance: 0.25
+    m_footStepDistanceRandomizer: 0.025
+    m_stoneStep:
+      m_audioSource: {fileID: 4801491814076992866}
+      m_sounds:
+      - {fileID: 8300000, guid: 7341ba07f02fa6941b16a463ddd73f99, type: 3}
+      - {fileID: 8300000, guid: 3efdd4c11a4bdc54a9087ab115c1de9e, type: 3}
+      m_volume: 0.75
+      m_volumeRandomizer: 0.2
+      m_pitch: 1
+      m_pitchRandomizer: 0.1
+    m_metalStep:
+      m_audioSource: {fileID: 4801491814076992866}
+      m_sounds: []
+      m_volume: 0.75
+      m_volumeRandomizer: 0.2
+      m_pitch: 1
+      m_pitchRandomizer: 0.1
+    m_woodStep:
+      m_audioSource: {fileID: 4801491814076992866}
+      m_sounds: []
+      m_volume: 0.75
+      m_volumeRandomizer: 0.2
+      m_pitch: 1
+      m_pitchRandomizer: 0.1
   m_jump:
     m_audioSource: {fileID: 7968827262524799274}
     m_sounds:
@@ -2310,25 +2320,43 @@ MonoBehaviour:
     m_pitch: 1
     m_pitchRandomizer: 0.1
   m_land:
-    m_audioSource: {fileID: 8570276900306928437}
-    m_sounds: []
-    m_volume: 0.75
-    m_volumeRandomizer: 0.2
-    m_pitch: 1
-    m_pitchRandomizer: 0.1
+    m_stone:
+      m_audioSource: {fileID: 8570276900306928437}
+      m_sounds:
+      - {fileID: 8300000, guid: c212aa2d646dfe248b7c96b4f0e4cb27, type: 3}
+      m_volume: 0.75
+      m_volumeRandomizer: 0.2
+      m_pitch: 1
+      m_pitchRandomizer: 0.1
+    m_metal:
+      m_audioSource: {fileID: 8570276900306928437}
+      m_sounds: []
+      m_volume: 0.75
+      m_volumeRandomizer: 0.2
+      m_pitch: 1
+      m_pitchRandomizer: 0.1
+    m_wood:
+      m_audioSource: {fileID: 8570276900306928437}
+      m_sounds: []
+      m_volume: 0.75
+      m_volumeRandomizer: 0.2
+      m_pitch: 1
+      m_pitchRandomizer: 0.1
   m_dash:
     m_audioSource: {fileID: 1983271840447501681}
     m_sounds:
     - {fileID: 8300000, guid: d047a38f51f8c2648b63a55f5e82942e, type: 3}
-    m_volume: 0.75
+    m_volume: 0.5
     m_volumeRandomizer: 0.1
     m_pitch: 1
     m_pitchRandomizer: 0.25
-  m_audioSource: {fileID: 0}
-  m_footstepDistance: 0.2
-  m_audioClipVolume: 0.1
-  m_relativeRandomizedVolumeRange: 0.2
-  m_footStepSounds: []
+  m_raycastTrans: {fileID: 5837479378864761318}
+  m_raycastMaxDistance: 0.5
+  m_groundMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  m_showGizmos: 0
+  m_gizmosColor: {r: 1, g: 0, b: 1, a: 1}
 --- !u!1 &6208335568615075469
 GameObject:
   m_ObjectHideFlags: 0
@@ -2365,6 +2393,36 @@ Transform:
   m_Father: {fileID: 4410666827998708449}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -3.3880002, y: 0, z: 0}
+--- !u!1 &6280393666434591668
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5837479378864761318}
+  m_Layer: 8
+  m_Name: GroundRaycast_Trans
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5837479378864761318
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6280393666434591668}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8839480894359467125}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &7540101452284813603
 GameObject:
   m_ObjectHideFlags: 0
@@ -2394,7 +2452,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8839480894359467125}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &4801491814076992866
 AudioSource:
@@ -2594,7 +2652,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8839480894359467125}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &840400490762893126
 AudioSource:
