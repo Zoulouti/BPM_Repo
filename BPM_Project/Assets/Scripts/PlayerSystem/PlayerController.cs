@@ -107,6 +107,7 @@ public class PlayerController : MonoBehaviour
 	Vector3 m_playerMoveInputsDirection;
 
     CameraController m_cameraController;
+	WeaponPlayerBehaviour m_playerWeapon;
 
 #endregion
 
@@ -120,6 +121,7 @@ public class PlayerController : MonoBehaviour
 		m_trans = GetComponent<Transform>();
 
 		m_cameraController = GetComponentInChildren<CameraController>();
+		m_playerWeapon = GetComponent<WeaponPlayerBehaviour>();
 
         m_currentSpeed = m_movements.m_movementSpeed;
 	}
@@ -385,11 +387,15 @@ public class PlayerController : MonoBehaviour
 		if (hasDoubleJump)
 			m_references.m_playerAudio.On_DoubleJump();
 	}
+	public void On_PlayerStartDash(bool hasDash)
+	{
+		m_playerWeapon.CanShoot = !hasDash;
+		if (hasDash)
+			m_references.m_playerAudio.On_Dash();
+	}
 	public void On_PlayerHasDash(bool hasDash)
 	{
 		m_hasDash = hasDash;
-		if (hasDash)
-			m_references.m_playerAudio.On_Dash();
 	}
 
     //Get last frame's velocity;
