@@ -7,8 +7,8 @@ using UnityEngine;
 public class CameraController : MonoBehaviour {
 
 	//Names of input axes;
-	public string horizontalInputAxis = "Mouse X";
-	public string verticalInputAxis = "Mouse Y";
+	const string horizontalInputAxis = "Mouse X";
+	const string verticalInputAxis = "Mouse Y";
 
 	//Invert rotation around x- or y-axis;
 	public bool invertHorizontalInput = false;
