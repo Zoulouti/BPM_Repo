@@ -37,9 +37,13 @@ public class EnemyController : MonoBehaviour
     NavMeshAgent agent;
     Transform target;
 
+    float distanceToTarget;
+
     #region Get Set
     public NavMeshAgent Agent { get => agent; set => agent = value; }
     public Transform  Target { get => target; set => target = value; }
+
+    public float DistanceToTarget { get => distanceToTarget; set => distanceToTarget = value; }
     #endregion
 
     public void Awake()
@@ -52,11 +56,14 @@ public class EnemyController : MonoBehaviour
     {
         m_sM.Start();
         Target = PlayerController.s_instance.gameObject.transform;
+        DistanceToTarget = GetTargetDistance(Target);
+
     }
 
     private void Update()
     {
         m_sM.Update();
+        DistanceToTarget = GetTargetDistance(Target);
     }
 
     void FixedUpdate()
@@ -89,7 +96,10 @@ public class EnemyController : MonoBehaviour
     }
 
 
-
+    public float GetTargetDistance(Transform target)
+    {
+        return Vector3.Distance(Target.position, transform.position);
+    }
 
 
 

@@ -7,8 +7,12 @@ public class WeaponEnemyBehaviour : WeaponBehaviour
     [Space]
     public int nbrOfShootOnRafale;
     public float timeForEachBurst;
+    public float enemyAttackDispersement;
     [Space]
     public GameObject enemyProjectil;
+    [Space]
+    [Tooltip("Pour que l'ennemies ne tir pas dans les pieds du player")]
+    public float YOffset = 1f;
     EnemyController enemyController;
 
     public override void Awake()
@@ -19,6 +23,8 @@ public class WeaponEnemyBehaviour : WeaponBehaviour
 
 
     #region ShootingMethods
+
+
     public override IEnumerator OnShoot(int nbrOfShoot, float timeEachShoot, float recoilTimeEachBurst)
     {
         for (int i = 0; i < nbrOfShoot; ++i)
@@ -60,13 +66,29 @@ public class WeaponEnemyBehaviour : WeaponBehaviour
     {
         _SMG.firePoint.transform.LookAt(OnSearchForLookAt());
         GameObject go = Instantiate(enemyProjectil, _SMG.firePoint.transform.position, _SMG.firePoint.transform.rotation, projectilRoot);
-        go.GetComponent<Projectile>().Speed = _SMG.weaponStats._weaponLevel0.bulletSpeed;
+        InitiateProjVar(go.GetComponent<Projectile>());
         return go;
+    }
+
+
+    void InitiateProjVar(Projectile proj)
+    {
+        proj.m_colType = Projectile.TypeOfCollision.Rigibody;
+        proj.ProjectileType1 = Projectile.ProjectileType.Enemy;
+        proj.Speed = _SMG.weaponStats._weaponLevel0.bulletSpeed;
+        proj.CurrentDamage = _SMG.weaponStats._weaponLevel0.damage;
     }
 
     public override Vector3 OnSearchForLookAt()
     {
-        return enemyController.Target.position;
+        Vector2 dispersion = Random.insideUnitCircle * enemyAttackDispersement;
+        return new Vector3(enemyController.Target.position.x + dispersion.x, (enemyController.Target.position.y + YOffset) + dispersion.y, enemyController.Target.position.z ) ;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(_SMG.firePoint.transform.position, enemyAttackDispersement);
     }
     #endregion
 }

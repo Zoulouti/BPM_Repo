@@ -521,13 +521,13 @@ MonoBehaviour:
   overrideColor: 0
   overridingColor: {r: 1, g: 1, b: 1, a: 1}
   useShadow: 1
-  shadowMapRenderTexture: {fileID: 1721838916}
+  shadowMapRenderTexture: {fileID: 1668042530}
   useCookie: 1
   cookieMapRenderTexture: {fileID: 0}
   enableOutOfPhaseColor: 0
   outOfPhaseColorStrength: 0.25
   outOfPhaseColor: {r: 1, g: 0.48999998, b: 0.39999998, a: 1}
-  shadowDataRenderTexture: {fileID: 884905479}
+  shadowDataRenderTexture: {fileID: 921879952}
   customDistanceFalloffThreshold: 0.5
   customDistanceFalloffPower: 2
   customCookieDistanceFalloffStartThreshold: 0.1
@@ -611,6 +611,44 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 182417370}
   m_CullTransparentMesh: 0
+--- !u!114 &204713577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8334a49e76cafef4da22976db1613959, type: 3}
+  m_Name: Default Aura Quality Settings
+  m_EditorClassIdentifier: 
+  displayVolumetricLightingBuffer: 0
+  frustumGridResolution: {x: 160, y: 88, z: 128}
+  enableAutomaticStereoResizing: 1
+  farClipPlaneDistance: 128
+  depthBiasCoefficient: 0.35
+  enableVolumes: 1
+  enableVolumesTexture2DMask: 1
+  enableVolumesTexture3DMask: 1
+  enableVolumesNoiseMask: 1
+  enableAmbientLighting: 1
+  enableDirectionalLights: 1
+  enableDirectionalLightsShadows: 1
+  enableSpotLights: 1
+  enableSpotLightsShadows: 1
+  enablePointLights: 1
+  enablePointLightsShadows: 1
+  enableLightsCookies: 1
+  enableDithering: 1
+  texture3DFiltering: 1
+  enableDenoisingFilter: 0
+  denoisingFilterRange: 0
+  enableTemporalReprojection: 1
+  temporalReprojectionFactor: 0.95
+  enableOcclusionCulling: 1
+  occlusionCullingAccuracy: 2
+  enableLightProbes: 0
 --- !u!1001 &205270808
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1770,6 +1808,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &764328710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59306422a2ca4454aabce3daa79c3334, type: 3}
+  m_Name: New Aura Base Settings
+  m_EditorClassIdentifier: 
+  useDensity: 1
+  density: 0.25
+  useScattering: 1
+  scattering: 0.5
+  useAmbientLighting: 1
+  ambientLightingStrength: 1
+  useColor: 0
+  color: {r: 0, g: 0.5, b: 0.5, a: 0.5}
+  colorStrength: 1
+  useExtinction: 0
+  extinction: 0.75
 --- !u!1 &783426161
 GameObject:
   m_ObjectHideFlags: 0
@@ -2035,38 +2096,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 881591756}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!84 &884905479
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'Directional Light : Shadow Data Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_Width: 32
-  m_Height: 1
-  m_AntiAliasing: 1
-  m_DepthFormat: 0
-  m_ColorFormat: 11
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &908862458
 GameObject:
   m_ObjectHideFlags: 0
@@ -2175,6 +2204,38 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 908862458}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!84 &921879952
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'Directional Light : Shadow Data Render Texture'
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_Width: 32
+  m_Height: 1
+  m_AntiAliasing: 1
+  m_DepthFormat: 0
+  m_ColorFormat: 11
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &949724772
 GameObject:
   m_ObjectHideFlags: 0
@@ -2402,7 +2463,7 @@ PrefabInstance:
         type: 3}
       propertyPath: cara
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1990640638}
     - target: {fileID: 3006670858843352175, guid: 00c35a6d69442a34997ad9abb61305c9,
         type: 3}
       propertyPath: m_IsTrigger
@@ -3126,7 +3187,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponObj: {fileID: 265577630}
-  projectilRoot: {fileID: 0}
+  _SMG:
+    weaponStats: {fileID: 0}
+    typeOfFire: 0
+    firePoint: {fileID: 0}
+    fireAudio: {fileID: 0}
+    recoilCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    timeToRecoverFromRecoil: 0
+    recoilHeight: 0
 --- !u!114 &1308428465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4469,6 +4542,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FirstPersonWalker
       objectReference: {fileID: 0}
+    - target: {fileID: 3422587882778152750, guid: afa9eecb96c518548a307d2ca9de695b,
+        type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 3419739023075528986, guid: afa9eecb96c518548a307d2ca9de695b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4537,6 +4615,11 @@ PrefabInstance:
       propertyPath: frustumSettings.qualitySettings
       value: 
       objectReference: {fileID: 1931907395}
+    - target: {fileID: 3461373997355235120, guid: afa9eecb96c518548a307d2ca9de695b,
+        type: 3}
+      propertyPath: frustumSettings.qualitySettings
+      value: 
+      objectReference: {fileID: 204713577}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afa9eecb96c518548a307d2ca9de695b, type: 3}
 --- !u!1 &1645878086
@@ -4738,6 +4821,38 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1652572452}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!84 &1668042530
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'Directional Light : Shadow Map Render Texture'
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_Width: 512
+  m_Height: 512
+  m_AntiAliasing: 1
+  m_DepthFormat: 0
+  m_ColorFormat: 11
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &1674472612
 GameObject:
   m_ObjectHideFlags: 0
@@ -4830,38 +4945,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1674472612}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!84 &1721838916
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'Directional Light : Shadow Map Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_Width: 512
-  m_Height: 512
-  m_AntiAliasing: 1
-  m_DepthFormat: 0
-  m_ColorFormat: 11
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &1740121793
 GameObject:
   m_ObjectHideFlags: 0
@@ -5441,8 +5524,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9be22bce34010f43b12190b15d84b00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalInputAxis: Mouse X
-  verticalInputAxis: Mouse Y
   invertHorizontalInput: 0
   invertVerticalInput: 1
   upperVerticalLimit: 60
@@ -5562,7 +5643,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29877866b263f744abf6b2d886708104, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cara: {fileID: 0}
+  cara: {fileID: 1990640638}
 --- !u!1 &1960908678
 GameObject:
   m_ObjectHideFlags: 0
@@ -5721,6 +5802,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1977690489}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1990640638 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4187508792682329747, guid: 5c1dc1d1913ea9d4f97348aa3298b540,
+    type: 3}
+  m_PrefabInstance: {fileID: 4187508792682329722}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f8d052b8323e414d9bc13a3849f143f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2015725974
 GameObject:
   m_ObjectHideFlags: 0
@@ -6595,7 +6688,7 @@ PrefabInstance:
         type: 3}
       propertyPath: cara
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1990640638}
     - target: {fileID: 3006670858843352175, guid: 00c35a6d69442a34997ad9abb61305c9,
         type: 3}
       propertyPath: m_IsTrigger
@@ -6672,9 +6765,25 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3833438521590562171, guid: 5c1dc1d1913ea9d4f97348aa3298b540,
         type: 3}
-      propertyPath: projectilRoot
+      propertyPath: nbrOfShootOnRafale
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3833438521590562171, guid: 5c1dc1d1913ea9d4f97348aa3298b540,
+        type: 3}
+      propertyPath: timeForEachBurst
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3833438521590562171, guid: 5c1dc1d1913ea9d4f97348aa3298b540,
+        type: 3}
+      propertyPath: enemyProjectil
       value: 
-      objectReference: {fileID: 660025611}
+      objectReference: {fileID: 1451592532500230711, guid: c53459ce1f414874f9136154c77e7bd9,
+        type: 3}
+    - target: {fileID: 3833438521590562171, guid: 5c1dc1d1913ea9d4f97348aa3298b540,
+        type: 3}
+      propertyPath: enemyAttackDispersement
+      value: 1.3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c1dc1d1913ea9d4f97348aa3298b540, type: 3}
 --- !u!1001 &4950062494283081624
@@ -6743,6 +6852,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4950062494392354157, guid: 73e8eea2ebfdb5b49b5cdeaa9fc262af,
+        type: 3}
+      propertyPath: enemyAttackDispersement
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4950062494392354157, guid: 73e8eea2ebfdb5b49b5cdeaa9fc262af,
+        type: 3}
+      propertyPath: timeMeshShowingUp
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 73e8eea2ebfdb5b49b5cdeaa9fc262af, type: 3}
@@ -6891,7 +7010,7 @@ PrefabInstance:
         type: 3}
       propertyPath: cara
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1990640638}
     - target: {fileID: 8432409340521077733, guid: de3f5912776351b4d9d1eab7903fbb11,
         type: 3}
       propertyPath: m_IsTrigger

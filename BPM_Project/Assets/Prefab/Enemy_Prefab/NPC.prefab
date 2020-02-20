@@ -1719,7 +1719,49 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponObj: {fileID: 1911064427678335089}
-  projectilRoot: {fileID: 0}
+  _SMG:
+    weaponStats: {fileID: 11400000, guid: fb3e97c66800ad94ebde8f727819c49a, type: 2}
+    typeOfFire: 1
+    firePoint: {fileID: 2068807990734219183}
+    fireAudio: {fileID: 0}
+    recoilCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.16271973
+        value: 1.0023575
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    timeToRecoverFromRecoil: 0.1
+    recoilHeight: 1
+  nbrOfShootOnRafale: 0
+  timeForEachBurst: 0
+  enemyProjectil: {fileID: 0}
 --- !u!1 &1518701593319261288
 GameObject:
   m_ObjectHideFlags: 0
@@ -4947,15 +4989,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 216c4cc681b9bd241b8096c72e25910a, type: 3}
---- !u!1 &1911064427678335089 stripped
+--- !u!1 &2068807990734219183 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 2348754712471328301, guid: 216c4cc681b9bd241b8096c72e25910a,
+  m_CorrespondingSourceObject: {fileID: 2785728053202137587, guid: 216c4cc681b9bd241b8096c72e25910a,
     type: 3}
   m_PrefabInstance: {fileID: 4187508793724622428}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &1911064427677916241 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2348754712471751181, guid: 216c4cc681b9bd241b8096c72e25910a,
+    type: 3}
+  m_PrefabInstance: {fileID: 4187508793724622428}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1911064427678335089 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2348754712471328301, guid: 216c4cc681b9bd241b8096c72e25910a,
     type: 3}
   m_PrefabInstance: {fileID: 4187508793724622428}
   m_PrefabAsset: {fileID: 0}

@@ -20,7 +20,33 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    public float enemyAttackDispersement;
+    public float timeMeshShowingUp;
+
     [Header("Differents Spots Multiplicator Tweaking")]
     public float noSpotDamageMultiplicateur;
     public float weakSpotDamageMultiplicateur;
+
+
+    /*public void Start()
+    {
+        StartCoroutine(TestSpawnDispersion());
+    }
+
+    IEnumerator TestSpawnDispersion()
+    {
+        Vector2 dispersion = UnityEngine.Random.insideUnitCircle * enemyAttackDispersement;
+        Vector3 pos = transform.position;
+        pos.x = dispersion.x;
+        pos.y = dispersion.y;
+        transform.position = pos;
+        yield return new WaitForSeconds(timeMeshShowingUp);
+        StartCoroutine(TestSpawnDispersion());
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(Vector3.zero, enemyAttackDispersement);
+    }*/
 }

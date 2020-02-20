@@ -15,28 +15,22 @@ MonoBehaviour:
   _weaponLevel0:
     damage: 10
     attackCooldown: 0.08
-    timeBetweenBurst: 0.2
-    nbrOfShoot: 3
     BPMGainOnHit: 5
     BPMCost: 0
-    bulletSpeed: 20
+    bulletSpeed: 200
     bullet: {fileID: 1451592532500230711, guid: c53459ce1f414874f9136154c77e7bd9,
       type: 3}
   _weaponLevel1:
     damage: 20
     attackCooldown: 0.07
-    timeBetweenBurst: 0.175
-    nbrOfShoot: 4
     BPMGainOnHit: 5
     BPMCost: 6
-    bulletSpeed: 20
+    bulletSpeed: 200
   _weaponLevel2:
     damage: 40
     attackCooldown: 0.05
-    timeBetweenBurst: 0.1
-    nbrOfShoot: 5
     BPMGainOnHit: 5
     BPMCost: 12
-    bulletSpeed: 20
+    bulletSpeed: 300
     newBullet: {fileID: 1451592532500230711, guid: c53459ce1f414874f9136154c77e7bd9,
       type: 3}

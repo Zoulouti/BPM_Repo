@@ -171,6 +171,7 @@ public class WeaponPlayerBehaviour : WeaponBehaviour
 
             if(projVar != null)
             {
+                projVar.ProjectileType1 = Projectile.ProjectileType.Player;
                 projVar.DistanceToReach = _hit.point;
                 projVar.Col = _hit.collider;
                 projVar.BPMSystem = _BPMSystem;

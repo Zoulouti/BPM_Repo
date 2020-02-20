@@ -24,8 +24,9 @@ public class ChaseState : IState
     public void FixedUpdate()
     {
         m_enemyController.Agent.SetDestination(m_enemyController.Target.position);
-        if(GetTargetDistance(m_enemyController.Target) < m_enemyController.Agent.stoppingDistance)
+        if(m_enemyController.DistanceToTarget <= m_enemyController.Agent.stoppingDistance)
         {
+
             m_enemyController.ChangeState((int)EnemyState.Enemy_AttackState);
         }
     }
@@ -38,8 +39,5 @@ public class ChaseState : IState
     {
     }
 
-    public float GetTargetDistance(Transform target)
-    {
-        return Vector3.Distance(m_enemyController.Target.position, m_enemyController.transform.position);
-    }
+    
 }

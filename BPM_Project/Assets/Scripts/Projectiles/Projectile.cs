@@ -142,7 +142,7 @@ public class Projectile : MonoBehaviour
         bool ray = OnCastRay(TransfoPos);
         if (ray)
         {
-            string tag = _hit.collider.tag;
+            //string tag = _hit.collider.tag;
             if (Col == _hit.collider)
             {
                 StopCoroutine(CalculateDistance());
@@ -200,7 +200,6 @@ public class Projectile : MonoBehaviour
                     }
                     else
                     {
-                        string tag = _hit.collider.tag;
                         SwitchForWeakSpots(_hit.collider);
                     }
                 }
@@ -231,30 +230,45 @@ public class Projectile : MonoBehaviour
 
     void SwitchForWeakSpots(Collider collider)
     {
-        #region Switch For WeakSpots
-        switch (tag)
+        if(m_projectileType == ProjectileType.Player)
         {
-            // Le tir du player touche un NoSpot
-            case "NoSpot":
+            string tag = collider.tag;
+            #region Switch For WeakSpots
+            switch (tag)
+            {
+                // Le tir du player touche un NoSpot
+                case "NoSpot":
 
-                BPMGain = BPMSystem._BPM.BPMGain_OnNoSpot * CurrentBPMGain;
+                    BPMGain = BPMSystem._BPM.BPMGain_OnNoSpot * CurrentBPMGain;
 
-                collider.GetComponent<ReferenceScipt>().cara.TakeDamage(CurrentDamage, 0);
+                    collider.GetComponent<ReferenceScipt>().cara.TakeDamage(CurrentDamage, 0);
 
-                break;
+                    break;
 
-            // Le tir du player touche un WeakSpot
-            case "WeakSpot":
+                // Le tir du player touche un WeakSpot
+                case "WeakSpot":
 
-                BPMGain = BPMSystem._BPM.BPMGain_OnWeak * CurrentBPMGain;
+                    BPMGain = BPMSystem._BPM.BPMGain_OnWeak * CurrentBPMGain;
 
-                collider.GetComponent<ReferenceScipt>().cara.TakeDamage(CurrentDamage, 1);
+                    collider.GetComponent<ReferenceScipt>().cara.TakeDamage(CurrentDamage, 1);
 
-                break;
+                    break;
+            }
+            #endregion
+            BPMSystem.GainBPM(BPMGain);
         }
-        #endregion
+        else if(m_projectileType == ProjectileType.Enemy)
+        {
+            if (collider.CompareTag("Player"))
+            {
+                BPMSystem _BPMSystem = collider.GetComponent<BPMSystem>();
+                if(_BPMSystem != null)
+                {
+                    _BPMSystem.LoseBPM(CurrentDamage);
+                }
+            }
+        }
 
-        BPMSystem.GainBPM(BPMGain);
 
         if (m_dieFX != null)
         {
