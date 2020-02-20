@@ -7,6 +7,7 @@ public class AttackState : IState
 {
 
     EnemyController m_enemyController;
+    WeaponEnemyBehaviour m_weaponEnemyBehaviour;
 
     public AttackState(EnemyController enemyController)
     {
@@ -16,6 +17,8 @@ public class AttackState : IState
 
     public void Enter()
     {
+        m_weaponEnemyBehaviour = m_enemyController.GetComponent<WeaponEnemyBehaviour>();
+        m_weaponEnemyBehaviour.OnShoot(m_weaponEnemyBehaviour.nbrOfShootOnRafale, m_weaponEnemyBehaviour._SMG.weaponStats._weaponLevel0.attackCooldown, m_weaponEnemyBehaviour.timeForEachBurst);
     }
 
     public void Exit()

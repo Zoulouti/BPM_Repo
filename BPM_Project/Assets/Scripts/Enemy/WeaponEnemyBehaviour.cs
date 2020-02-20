@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class WeaponEnemyBehaviour : WeaponBehaviour
 {
-
+    [Space]
+    public int nbrOfShootOnRafale;
+    public float timeForEachBurst;
     [Space]
     public GameObject enemyProjectil;
     EnemyController enemyController;
@@ -19,12 +21,9 @@ public class WeaponEnemyBehaviour : WeaponBehaviour
     #region ShootingMethods
     public override IEnumerator OnShoot(int nbrOfShoot, float timeEachShoot, float recoilTimeEachBurst)
     {
-        CanShoot = false;
-
         for (int i = 0; i < nbrOfShoot; ++i)
         {
             StartCoroutine(RecoilCurve());
-
 
             InstatiateProj();
 
@@ -32,8 +31,6 @@ public class WeaponEnemyBehaviour : WeaponBehaviour
 
         }
         yield return new WaitForSeconds(recoilTimeEachBurst);
-
-        CanShoot = true;
     }
 
     public override IEnumerator RecoilCurve()
@@ -41,7 +38,6 @@ public class WeaponEnemyBehaviour : WeaponBehaviour
         _currentTimeToRecoverFromRecoil = 0;
         while (_currentTimeToRecoverFromRecoil / _SMG.timeToRecoverFromRecoil <= 1)
         {
-            yield return new WaitForSeconds(0.01f);
             _currentTimeToRecoverFromRecoil += Time.deltaTime;
 
             float recoil = _SMG.recoilCurve.Evaluate(_currentTimeToRecoverFromRecoil / _SMG.timeToRecoverFromRecoil);
@@ -52,6 +48,7 @@ public class WeaponEnemyBehaviour : WeaponBehaviour
             rotationTemp.x = rotationX;
 
             weaponObj.transform.localEulerAngles = rotationTemp;
+            yield return null;
         }
         _currentTimeToRecoverFromRecoil = 0;
     }
@@ -63,7 +60,7 @@ public class WeaponEnemyBehaviour : WeaponBehaviour
     {
         _SMG.firePoint.transform.LookAt(OnSearchForLookAt());
         GameObject go = Instantiate(enemyProjectil, _SMG.firePoint.transform.position, _SMG.firePoint.transform.rotation, projectilRoot);
-        go.GetComponent<Projectile>().Speed = _currentProjectilSpeed;
+        go.GetComponent<Projectile>().Speed = _SMG.weaponStats._weaponLevel0.bulletSpeed;
         return go;
     }
 
