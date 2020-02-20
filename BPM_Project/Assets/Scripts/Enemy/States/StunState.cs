@@ -5,6 +5,14 @@ using EnemyStateEnum;
 
 public class StunState : IState
 {
+
+    EnemyController m_enemyController;
+
+    public StunState(EnemyController enemyController)
+    {
+        m_enemyController = enemyController;
+    }
+
     public void Enter()
     {
     }

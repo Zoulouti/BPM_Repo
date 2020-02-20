@@ -5,6 +5,15 @@ using EnemyStateEnum;
 
 public class AttackState : IState
 {
+
+    EnemyController m_enemyController;
+
+    public AttackState(EnemyController enemyController)
+    {
+        m_enemyController = enemyController;
+    }
+
+
     public void Enter()
     {
     }

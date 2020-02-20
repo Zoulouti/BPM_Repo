@@ -5,6 +5,13 @@ using EnemyStateEnum;
 
 public class DieState : IState
 {
+    EnemyController m_enemyController;
+
+    public DieState(EnemyController enemyController)
+    {
+        m_enemyController = enemyController;
+    }
+
     public void Enter()
     {
     }

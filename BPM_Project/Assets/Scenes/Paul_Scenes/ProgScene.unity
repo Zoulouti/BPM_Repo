@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -111,7 +111,7 @@ NavMeshSettings:
     accuratePlacement: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: df9fd1b689f95234c9a2b02524383988, type: 2}
 --- !u!1 &35259500
 GameObject:
   m_ObjectHideFlags: 0
@@ -296,27 +296,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 52617226}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &77106915 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3422404171733034980, guid: afa9eecb96c518548a307d2ca9de695b,
-    type: 3}
-  m_PrefabInstance: {fileID: 1636016149}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &77106917
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 77106915}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdcd06815c47d30489f70df42db56a48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  frustumSettings:
-    baseSettings: {fileID: 1023468684}
-    qualitySettings: {fileID: 1931907395}
 --- !u!1 &102873529
 GameObject:
   m_ObjectHideFlags: 0
@@ -542,13 +521,13 @@ MonoBehaviour:
   overrideColor: 0
   overridingColor: {r: 1, g: 1, b: 1, a: 1}
   useShadow: 1
-  shadowMapRenderTexture: {fileID: 305363823}
+  shadowMapRenderTexture: {fileID: 1721838916}
   useCookie: 1
   cookieMapRenderTexture: {fileID: 0}
   enableOutOfPhaseColor: 0
   outOfPhaseColorStrength: 0.25
   outOfPhaseColor: {r: 1, g: 0.48999998, b: 0.39999998, a: 1}
-  shadowDataRenderTexture: {fileID: 1677090185}
+  shadowDataRenderTexture: {fileID: 884905479}
   customDistanceFalloffThreshold: 0.5
   customDistanceFalloffPower: 2
   customCookieDistanceFalloffStartThreshold: 0.1
@@ -1004,38 +983,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!84 &305363823
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'Directional Light : Shadow Map Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_Width: 512
-  m_Height: 512
-  m_AntiAliasing: 1
-  m_DepthFormat: 0
-  m_ColorFormat: 11
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &345584677
 GameObject:
   m_ObjectHideFlags: 0
@@ -1711,18 +1658,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 580986773}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &586278370 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5853757113297574281, guid: 5c1dc1d1913ea9d4f97348aa3298b540,
-    type: 3}
-  m_PrefabInstance: {fileID: 4187508792682329722}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f8d052b8323e414d9bc13a3849f143f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &619849708
 GameObject:
   m_ObjectHideFlags: 0
@@ -2100,6 +2035,38 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 881591756}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!84 &884905479
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'Directional Light : Shadow Data Render Texture'
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_Width: 32
+  m_Height: 1
+  m_AntiAliasing: 1
+  m_DepthFormat: 0
+  m_ColorFormat: 11
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &908862458
 GameObject:
   m_ObjectHideFlags: 0
@@ -2435,7 +2402,7 @@ PrefabInstance:
         type: 3}
       propertyPath: cara
       value: 
-      objectReference: {fileID: 586278370}
+      objectReference: {fileID: 0}
     - target: {fileID: 3006670858843352175, guid: 00c35a6d69442a34997ad9abb61305c9,
         type: 3}
       propertyPath: m_IsTrigger
@@ -4559,54 +4526,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8798216646479647648, guid: afa9eecb96c518548a307d2ca9de695b,
         type: 3}
-      propertyPath: _SMG.typeOfFire
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8798216646479647648, guid: afa9eecb96c518548a307d2ca9de695b,
-        type: 3}
       propertyPath: projectilRoot
       value: 
       objectReference: {fileID: 660025611}
-    - target: {fileID: 3381882690652885512, guid: afa9eecb96c518548a307d2ca9de695b,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3421608735032399566, guid: afa9eecb96c518548a307d2ca9de695b,
-        type: 3}
-      propertyPath: _BPM.BPMGain_OnNoSpot
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3421608735032399566, guid: afa9eecb96c518548a307d2ca9de695b,
-        type: 3}
-      propertyPath: _BPM.BPMGain_OnWeak
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3421608734633095822, guid: afa9eecb96c518548a307d2ca9de695b,
-        type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3421608734633095822, guid: afa9eecb96c518548a307d2ca9de695b,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3421608734633095822, guid: afa9eecb96c518548a307d2ca9de695b,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3421608734633095822, guid: afa9eecb96c518548a307d2ca9de695b,
-        type: 3}
-      propertyPath: m_Sprite
+    - target: {fileID: 77106917, guid: afa9eecb96c518548a307d2ca9de695b, type: 3}
+      propertyPath: frustumSettings.baseSettings
       value: 
-      objectReference: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-    - target: {fileID: 3381466140209346092, guid: afa9eecb96c518548a307d2ca9de695b,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1023468684}
+    - target: {fileID: 77106917, guid: afa9eecb96c518548a307d2ca9de695b, type: 3}
+      propertyPath: frustumSettings.qualitySettings
+      value: 
+      objectReference: {fileID: 1931907395}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afa9eecb96c518548a307d2ca9de695b, type: 3}
 --- !u!1 &1645878086
@@ -4900,20 +4830,20 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1674472612}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!84 &1677090185
+--- !u!84 &1721838916
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: 'Directional Light : Shadow Data Render Texture'
+  m_Name: 'Directional Light : Shadow Map Render Texture'
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
   m_ForcedFallbackFormat: 4
   m_DownscaleFallback: 0
-  m_Width: 32
-  m_Height: 1
+  m_Width: 512
+  m_Height: 512
   m_AntiAliasing: 1
   m_DepthFormat: 0
   m_ColorFormat: 11
@@ -5168,7 +5098,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1859133288
 Transform:
@@ -5632,7 +5562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29877866b263f744abf6b2d886708104, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cara: {fileID: 586278370}
+  cara: {fileID: 0}
 --- !u!1 &1960908678
 GameObject:
   m_ObjectHideFlags: 0
@@ -6665,7 +6595,7 @@ PrefabInstance:
         type: 3}
       propertyPath: cara
       value: 
-      objectReference: {fileID: 586278370}
+      objectReference: {fileID: 0}
     - target: {fileID: 3006670858843352175, guid: 00c35a6d69442a34997ad9abb61305c9,
         type: 3}
       propertyPath: m_IsTrigger
@@ -6688,7 +6618,7 @@ PrefabInstance:
     - target: {fileID: 1518701593319102534, guid: 5c1dc1d1913ea9d4f97348aa3298b540,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.40315628
+      value: 2.25
       objectReference: {fileID: 0}
     - target: {fileID: 1518701593319102534, guid: 5c1dc1d1913ea9d4f97348aa3298b540,
         type: 3}
@@ -6698,7 +6628,7 @@ PrefabInstance:
     - target: {fileID: 1518701593319102534, guid: 5c1dc1d1913ea9d4f97348aa3298b540,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.7810397
+      value: 36.05
       objectReference: {fileID: 0}
     - target: {fileID: 1518701593319102534, guid: 5c1dc1d1913ea9d4f97348aa3298b540,
         type: 3}
@@ -6740,6 +6670,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3833438521590562171, guid: 5c1dc1d1913ea9d4f97348aa3298b540,
+        type: 3}
+      propertyPath: projectilRoot
+      value: 
+      objectReference: {fileID: 660025611}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c1dc1d1913ea9d4f97348aa3298b540, type: 3}
 --- !u!1001 &4950062494283081624
@@ -6956,7 +6891,7 @@ PrefabInstance:
         type: 3}
       propertyPath: cara
       value: 
-      objectReference: {fileID: 586278370}
+      objectReference: {fileID: 0}
     - target: {fileID: 8432409340521077733, guid: de3f5912776351b4d9d1eab7903fbb11,
         type: 3}
       propertyPath: m_IsTrigger

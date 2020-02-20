@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using TypeOfFireEnum;
 
 public class WeaponPlayerBehaviour : WeaponBehaviour
 {
@@ -16,28 +17,7 @@ public class WeaponPlayerBehaviour : WeaponBehaviour
     public Camera playerCamera;
     public LayerMask rayCastCollision;
 
-    public enum TypeOfFire
-    {
-        OnClick,
-        Rafale,
-        Auto
     
-    }
-
-    public SMG _SMG = new SMG();
-    [Serializable]
-    public class SMG
-    {
-        public Weapon weaponStats;
-        [Space]
-        public TypeOfFire typeOfFire;
-        public GameObject firePoint;
-        public GameObject fireAudio;
-        [Space]
-        public AnimationCurve recoilCurve;
-        public float timeToRecoverFromRecoil;
-        public float recoilHeight;
-    }
 
     int defaultDistance = 500;
 
@@ -65,7 +45,7 @@ public class WeaponPlayerBehaviour : WeaponBehaviour
                 break;
             case TypeOfFire.Rafale:
 
-                if (Input.GetKeyDown(KeyCode.Mouse0) && canShoot)
+                if (Input.GetKeyDown(KeyCode.Mouse0) && CanShoot)
                 {
                     StartCoroutine(OnShoot(_currentnbrOfShoot, _currentAttackSpeed, _currentTimeBetweenEachBurst));
                 }
@@ -73,7 +53,7 @@ public class WeaponPlayerBehaviour : WeaponBehaviour
                 break;
             case TypeOfFire.Auto:
 
-                if (Input.GetKey(KeyCode.Mouse0) && canShoot)
+                if (Input.GetKey(KeyCode.Mouse0) && CanShoot)
                 {
                     StartCoroutine(OnShoot(1, _currentAttackSpeed, 0));
                 }
@@ -119,7 +99,7 @@ public class WeaponPlayerBehaviour : WeaponBehaviour
     #region ShootingMethods
     public override IEnumerator OnShoot(int nbrOfShoot, float timeEachShoot, float recoilTimeEachBurst)
     {
-        canShoot = false;
+        CanShoot = false;
 
         for (int i = 0; i < nbrOfShoot; ++i)
         {
@@ -134,7 +114,7 @@ public class WeaponPlayerBehaviour : WeaponBehaviour
         }
         yield return new WaitForSeconds(recoilTimeEachBurst);
 
-        canShoot = true;
+        CanShoot = true;
     }
 
     public override IEnumerator RecoilCurve()

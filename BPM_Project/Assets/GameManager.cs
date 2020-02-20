@@ -20,30 +20,7 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    [Space]
-    [Header("Enemy Stats Tweaking")]
-    public Move _move = new Move();
-    [Serializable]
-    public class Move
-    {
-        public float moveSpeed;
-    }
-    public Attack _attack = new Attack();
-    [Serializable]
-    public class Attack
-    {
-        public int damage;
-        public float timeBetweenShots;
-        public float reloadTime;
-    }
-    public Health _health = new Health();
-    [Serializable]
-    public class Health
-    {
-        public float maxHealth;
-    }
     [Header("Differents Spots Multiplicator Tweaking")]
     public float noSpotDamageMultiplicateur;
     public float weakSpotDamageMultiplicateur;
-    public float armorSpotDamageMultiplicateur;
 }

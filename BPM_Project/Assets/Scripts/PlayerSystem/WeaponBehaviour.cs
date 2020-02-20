@@ -6,10 +6,12 @@ using System;
 public class WeaponBehaviour : MonoBehaviour
 {
     public GameObject weaponObj;
-    public Transform projectilRoot;
+
+    public SMG _SMG = new SMG();
+
+    protected Transform projectilRoot;
 
     protected float _originalWeaponXRotation;
-    protected bool canShoot = true;
     protected int _currentDamage;
     protected int _currentnbrOfShoot;
     protected float _currentTimeToRecoverFromRecoil;
@@ -17,9 +19,14 @@ public class WeaponBehaviour : MonoBehaviour
     protected float _currentTimeBetweenEachBurst;
     protected float _currentProjectilSpeed;
 
+    bool canShoot = true;
+
+    public bool CanShoot { get => canShoot; set => canShoot = value; }
+
     public virtual void Awake()
     {
         _originalWeaponXRotation = weaponObj.transform.localRotation.eulerAngles.x;
+        projectilRoot = GameManager.Instance.transform;
     }
 
     public virtual void Update()
