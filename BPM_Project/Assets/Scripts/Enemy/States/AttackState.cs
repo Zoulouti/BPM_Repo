@@ -29,6 +29,7 @@ public class AttackState : IState
 
     public void FixedUpdate()
     {
+
     }
 
     public void LateUpdate()

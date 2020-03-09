@@ -115,6 +115,11 @@ public class Projectile : MonoBehaviour
                 deltaLength = Vector3.Distance(m_distanceToReach, m_awakeDistance);
                 newLength = deltaLength;
 
+                if(_hit.distance - (Speed * Time.deltaTime) < 0)
+                {
+
+                }
+
                 break;
         }
 
@@ -173,7 +178,7 @@ public class Projectile : MonoBehaviour
 
     #endregion
 
-    #region When Using Rigibody or UpdateRayCasts
+    #region When Using Rigibody
 
     private void FixedUpdate()
     {
@@ -181,19 +186,35 @@ public class Projectile : MonoBehaviour
         {
             rb.velocity = transform.forward * Speed;
         }
-        else if (m_colType == TypeOfCollision.UpdateRaycasts)
+
+        
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (col != null)
+        {
+            SwitchForWeakSpots(other);
+        }
+    }
+    #endregion
+
+    #region When Using UpdateRayCast
+
+    private void LateUpdate()
+    {
+        if (m_colType == TypeOfCollision.UpdateRaycasts)
         {
             if (OnCastRay(transform.position))
             {
                 //m_awakeDistance = transform.localPosition;
-                if(Col == _hit.collider)
+                if (Col == _hit.collider)
                 {
-                    newLength = _hit.distance - (Speed * Time.deltaTime);
+                        newLength = _hit.distance - (Speed * Time.deltaTime);
 
                     if (newLength > 0)
                     {
-                        transform.Translate(Vector3.forward * Speed * Time.deltaTime);
                         //m_distanceToReach = _hit.point;
+                        transform.Translate(Vector3.forward * Speed * Time.deltaTime);
                         m_currentDistance = transform.localPosition;
 
                         //Debug.DrawLine(m_currentDistance, m_distanceToReach, Color.red);
@@ -218,13 +239,8 @@ public class Projectile : MonoBehaviour
             }
         }
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (col != null)
-        {
-            SwitchForWeakSpots(other);
-        }
-    }
+
+
     #endregion
 
 
@@ -234,6 +250,7 @@ public class Projectile : MonoBehaviour
         {
             string tag = collider.tag;
             #region Switch For WeakSpots
+            ReferenceScipt refScript = collider.GetComponent<ReferenceScipt>();
             switch (tag)
             {
                 // Le tir du player touche un NoSpot
@@ -241,7 +258,16 @@ public class Projectile : MonoBehaviour
 
                     BPMGain = BPMSystem._BPM.BPMGain_OnNoSpot * CurrentBPMGain;
 
-                    collider.GetComponent<ReferenceScipt>().cara.TakeDamage(CurrentDamage, 0);
+                    if(collider != null)
+                    {
+                        if(refScript != null)
+                        {
+                            if(refScript.cara != null)
+                            {
+                                refScript.cara.TakeDamage(CurrentDamage, 0);
+                            }
+                        }
+                    }
 
                     break;
 
@@ -250,7 +276,16 @@ public class Projectile : MonoBehaviour
 
                     BPMGain = BPMSystem._BPM.BPMGain_OnWeak * CurrentBPMGain;
 
-                    collider.GetComponent<ReferenceScipt>().cara.TakeDamage(CurrentDamage, 1);
+                    if (collider != null)
+                    {
+                        if (refScript != null)
+                        {
+                            if (refScript.cara != null)
+                            {
+                                refScript.cara.TakeDamage(CurrentDamage, 1);
+                            }
+                        }
+                    }
 
                     break;
             }
@@ -272,7 +307,7 @@ public class Projectile : MonoBehaviour
 
         if (m_dieFX != null)
         {
-            Level.AddFX(m_dieFX, transform.position, Quaternion.identity);    //Impact FX
+            Level.AddFX(m_dieFX, _hit.point, Quaternion.identity);    //Impact FX
             if (collider.GetComponent<Rigidbody>() != null)
             {
                 Rigidbody _rb = collider.GetComponent<Rigidbody>();

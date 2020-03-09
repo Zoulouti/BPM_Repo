@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EnemyStateEnum;
 
 public class WeaponEnemyBehaviour : WeaponBehaviour
 {
@@ -37,6 +38,7 @@ public class WeaponEnemyBehaviour : WeaponBehaviour
 
         }
         yield return new WaitForSeconds(recoilTimeEachBurst);
+        enemyController.ChangeState((int)EnemyState.Enemy_ChaseState);
     }
 
     public override IEnumerator RecoilCurve()
