@@ -1024,7 +1024,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3422318631904904596}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.73, z: 0}
+  m_LocalPosition: {x: 0, y: 1.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3419517854720143996}
@@ -1200,9 +1200,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.375
-  m_Height: 1.4
+  m_Height: 1.5
   m_Direction: 1
-  m_Center: {x: 0, y: 1.3, z: 0}
+  m_Center: {x: 0, y: 1.25, z: 0}
 --- !u!114 &3381299478746224664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1216,7 +1216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slopeLimit: 70
-  stepHeight: 0.3
+  stepHeight: 0.25
   colliderHeight: 2
   colliderThickness: 0.75
   colliderOffset: {x: 0, y: 0.5, z: 0}
@@ -1347,22 +1347,22 @@ MonoBehaviour:
     m_cameraPivot: {fileID: 8087587520425720305}
     m_playerAudio: {fileID: 4882480380523661751}
   m_movements:
-    m_useRawInput: 0
-    m_movementSpeed: 10
+    m_useRawInput: 1
+    m_movementSpeed: 12
   m_physics:
-    m_airFriction: 3
-    m_groundFriction: 100
-    m_gravity: 35
+    m_airFriction: 1
+    m_groundFriction: 1
+    m_gravity: 29
   m_jump:
-    m_airControl: 0.4
-    m_speed: 10
-    m_duration: 0.2
+    m_airControl: 0.8
+    m_speed: 7.25
+    m_duration: 0.3
   m_dash:
-    m_distance: 10
-    m_timeToDash: 0.25
+    m_distance: 7.5
+    m_timeToDash: 0.2
   m_fov:
-    m_normalFov: 70
-    m_dashFov: 75
+    m_normalFov: 90
+    m_dashFov: 100
     m_startDash:
       m_timeToChangeFov: 0.125
       m_changeFovCurve:
@@ -1390,15 +1390,15 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
     m_endDash:
-      m_timeToChangeFov: 0.25
+      m_timeToChangeFov: 0.2
       m_changeFovCurve:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
           time: 0
           value: 0
-          inSlope: 0
-          outSlope: 0
+          inSlope: 2
+          outSlope: 2
           tangentMode: 0
           weightedMode: 0
           inWeight: 0
@@ -1406,8 +1406,8 @@ MonoBehaviour:
         - serializedVersion: 3
           time: 1
           value: 1
-          inSlope: 2
-          outSlope: 2
+          inSlope: 0
+          outSlope: 0
           tangentMode: 0
           weightedMode: 0
           inWeight: 0
@@ -2328,6 +2328,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3731035606191745393, guid: f60187228616aba43b8dd53151dd7d4d,
+        type: 3}
+      propertyPath: field of view
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 8524224392641188280, guid: f60187228616aba43b8dd53151dd7d4d,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f60187228616aba43b8dd53151dd7d4d, type: 3}
 --- !u!4 &7890890399748769831 stripped
@@ -2343,14 +2353,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3419531255567379398}
     m_Modifications:
+    - target: {fileID: 1427200434, guid: 6b0a1a6ab700f824ca9eb2598130b4a1, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 1319036927077971515, guid: 6b0a1a6ab700f824ca9eb2598130b4a1,
         type: 3}
       propertyPath: m_Name
       value: Gun
       objectReference: {fileID: 0}
-    - target: {fileID: 1427200434, guid: 6b0a1a6ab700f824ca9eb2598130b4a1, type: 3}
-      propertyPath: m_Layer
-      value: 13
+    - target: {fileID: 1427200435, guid: 6b0a1a6ab700f824ca9eb2598130b4a1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1427200435, guid: 6b0a1a6ab700f824ca9eb2598130b4a1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.572
       objectReference: {fileID: 0}
     - target: {fileID: 1319036927077971514, guid: 6b0a1a6ab700f824ca9eb2598130b4a1,
         type: 3}
@@ -2407,15 +2425,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0.23200001
       objectReference: {fileID: 0}
-    - target: {fileID: 1427200435, guid: 6b0a1a6ab700f824ca9eb2598130b4a1, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1427200435, guid: 6b0a1a6ab700f824ca9eb2598130b4a1, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.572
-      objectReference: {fileID: 0}
-    - target: {fileID: 8742488850868591190, guid: 6b0a1a6ab700f824ca9eb2598130b4a1,
+    - target: {fileID: 1319036928034616673, guid: 6b0a1a6ab700f824ca9eb2598130b4a1,
         type: 3}
       propertyPath: m_Layer
       value: 13
@@ -2425,17 +2435,7 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 13
       objectReference: {fileID: 0}
-    - target: {fileID: 1319036928034616673, guid: 6b0a1a6ab700f824ca9eb2598130b4a1,
-        type: 3}
-      propertyPath: m_Layer
-      value: 13
-      objectReference: {fileID: 0}
-    - target: {fileID: 1319036926125117201, guid: 6b0a1a6ab700f824ca9eb2598130b4a1,
-        type: 3}
-      propertyPath: m_Layer
-      value: 13
-      objectReference: {fileID: 0}
-    - target: {fileID: 1319036927013185836, guid: 6b0a1a6ab700f824ca9eb2598130b4a1,
+    - target: {fileID: 1319036926718803581, guid: 6b0a1a6ab700f824ca9eb2598130b4a1,
         type: 3}
       propertyPath: m_Layer
       value: 13
@@ -2445,7 +2445,17 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 13
       objectReference: {fileID: 0}
-    - target: {fileID: 1319036926718803581, guid: 6b0a1a6ab700f824ca9eb2598130b4a1,
+    - target: {fileID: 1319036927013185836, guid: 6b0a1a6ab700f824ca9eb2598130b4a1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 1319036926125117201, guid: 6b0a1a6ab700f824ca9eb2598130b4a1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 8742488850868591190, guid: 6b0a1a6ab700f824ca9eb2598130b4a1,
         type: 3}
       propertyPath: m_Layer
       value: 13
