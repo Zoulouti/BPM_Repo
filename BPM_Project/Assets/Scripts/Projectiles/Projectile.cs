@@ -269,7 +269,7 @@ public class Projectile : MonoBehaviour
                         {
                             if(refScript.cara != null)
                             {
-                                refScript.cara.TakeDamage(CurrentDamage, 0, HasToStun);
+                                refScript.cara.TakeDamage(CurrentDamage, 0, HasToStun, TimeForElectricalStun);
                             }
                         }
                     }
@@ -287,7 +287,7 @@ public class Projectile : MonoBehaviour
                         {
                             if (refScript.cara != null)
                             {
-                                refScript.cara.TakeDamage(CurrentDamage, 1, HasToStun);
+                                refScript.cara.TakeDamage(CurrentDamage, 1, HasToStun, TimeForElectricalStun);
                             }
                         }
                     }

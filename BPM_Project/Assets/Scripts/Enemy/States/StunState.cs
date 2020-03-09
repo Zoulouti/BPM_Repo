@@ -15,11 +15,13 @@ public class StunState : IState
 
     public void Enter()
     {
+        m_enemyController.Agent.isStopped = true;
         m_enemyController.StartCoroutine(m_enemyController.IsStun());
     }
 
     public void Exit()
     {
+        m_enemyController.Agent.isStopped = false;
     }
 
     public void FixedUpdate()

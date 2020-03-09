@@ -14,6 +14,7 @@ public class DieState : IState
 
     public void Enter()
     {
+        m_enemyController.Agent.isStopped = true;
         m_enemyController.DestroyObj(5f);   //Send back to pool
     }
 

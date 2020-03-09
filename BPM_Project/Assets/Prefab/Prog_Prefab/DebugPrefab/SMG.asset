@@ -32,5 +32,6 @@ MonoBehaviour:
     BPMGainOnHit: 5
     BPMCost: 12
     bulletSpeed: 300
+    timeOfElectricalStun: 20
     newBullet: {fileID: 1451592532500230711, guid: c53459ce1f414874f9136154c77e7bd9,
       type: 3}
