@@ -15,6 +15,7 @@ public class StunState : IState
 
     public void Enter()
     {
+        m_enemyController.StartCoroutine(m_enemyController.IsStun());
     }
 
     public void Exit()
@@ -32,4 +33,7 @@ public class StunState : IState
     public void Update()
     {
     }
+
+    
+
 }

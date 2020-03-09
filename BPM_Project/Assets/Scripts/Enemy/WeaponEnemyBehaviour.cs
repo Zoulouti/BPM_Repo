@@ -2,13 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 using EnemyStateEnum;
+using System;
 
 public class WeaponEnemyBehaviour : WeaponBehaviour
 {
     [Space]
-    public int nbrOfShootOnRafale;
-    public float timeForEachBurst;
-    public float enemyAttackDispersement;
+    public Attack _attack = new Attack();
+    [Serializable]
+    public class Attack
+    {
+        public int damage;
+        public float bulletSpeed;
+        public float timeBetweenEachBullet;
+        public int nbrOfShootOnRafale;
+        public float timeBetweenEachBurst;
+        [Space]
+        [Range(0,1)]
+        public float _debugGizmos;
+        public float enemyAttackDispersement;
+    }
     [Space]
     public GameObject enemyProjectil;
     [Space]
@@ -26,19 +38,24 @@ public class WeaponEnemyBehaviour : WeaponBehaviour
     #region ShootingMethods
 
 
-    public override IEnumerator OnShoot(int nbrOfShoot, float timeEachShoot, float recoilTimeEachBurst)
+    public IEnumerator OnEnemyShoot(int nbrOfShoot, float timeEachShoot, float recoilTimeEachBurst)
     {
         for (int i = 0; i < nbrOfShoot; ++i)
         {
-            StartCoroutine(RecoilCurve());
+            if (!enemyController.EnemyCantShoot)
+            {
+                StartCoroutine(RecoilCurve());
 
-            InstatiateProj();
-
+                InstatiateProj();
+            }
             yield return new WaitForSeconds(timeEachShoot);
 
         }
         yield return new WaitForSeconds(recoilTimeEachBurst);
-        enemyController.ChangeState((int)EnemyState.Enemy_ChaseState);
+        if (!enemyController.Cara.IsDead && !enemyController.EnemyCantShoot)
+        {
+            enemyController.ChangeState((int)EnemyState.Enemy_ChaseState);
+        }
     }
 
     public override IEnumerator RecoilCurve()
@@ -77,20 +94,15 @@ public class WeaponEnemyBehaviour : WeaponBehaviour
     {
         proj.m_colType = Projectile.TypeOfCollision.Rigibody;
         proj.ProjectileType1 = Projectile.ProjectileType.Enemy;
-        proj.Speed = _SMG.weaponStats._weaponLevel0.bulletSpeed;
-        proj.CurrentDamage = _SMG.weaponStats._weaponLevel0.damage;
+        proj.Speed = _attack.bulletSpeed;
+        proj.CurrentDamage = _attack.damage;
     }
 
     public override Vector3 OnSearchForLookAt()
     {
-        Vector2 dispersion = Random.insideUnitCircle * enemyAttackDispersement;
+        Vector2 dispersion = UnityEngine.Random.insideUnitCircle * _attack.enemyAttackDispersement;
         return new Vector3(enemyController.Target.position.x + dispersion.x, (enemyController.Target.position.y + YOffset) + dispersion.y, enemyController.Target.position.z ) ;
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(_SMG.firePoint.transform.position, enemyAttackDispersement);
-    }
     #endregion
 }

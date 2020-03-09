@@ -12,7 +12,8 @@ public class EnemyController : MonoBehaviour
     [Serializable] public class DEBUG
     {
         public bool useGizmos;
-        public Text m_text;
+        public Text m_stateText;
+        public Text m_lifeText;
     }
 
     #region State Machine
@@ -36,29 +37,38 @@ public class EnemyController : MonoBehaviour
 
     #endregion
 
+    EnemyCara cara;
+    WeaponEnemyBehaviour weaponBehavior;
     NavMeshAgent agent;
     Transform target;
 
     float distanceToTarget;
+    bool _enemyCanShoot;
 
     #region Get Set
     public NavMeshAgent Agent { get => agent; set => agent = value; }
     public Transform  Target { get => target; set => target = value; }
 
     public float DistanceToTarget { get => distanceToTarget; set => distanceToTarget = value; }
+    public EnemyCara Cara { get => cara; set => cara = value; }
+    public bool EnemyCantShoot { get => _enemyCanShoot; set => _enemyCanShoot = value; }
     #endregion
+
 
     public void Awake()
     {
-        agent = GetComponent<NavMeshAgent>();
         SetupStateMachine();
     }
 
     private void Start()
     {
         m_sM.Start();
+        agent = GetComponent<NavMeshAgent>();
+        cara = GetComponent<EnemyCara>();
+        weaponBehavior = GetComponent<WeaponEnemyBehaviour>();
         Target = PlayerController.s_instance.gameObject.transform;
         DistanceToTarget = GetTargetDistance(Target);
+        EnemyCantShoot = Cara.IsDead;
 
     }
 
@@ -67,9 +77,11 @@ public class EnemyController : MonoBehaviour
         m_sM.Update();
         if (_debug.useGizmos)
         {
-            _debug.m_text.text = string.Format("{0}", m_sM.m_currentStateString);
+            _debug.m_stateText.text = string.Format("{0}", m_sM.m_currentStateString);
+            _debug.m_lifeText.text = string.Format("{0}", cara.CurrentLife);
         }
-        _debug.m_text.gameObject.SetActive(_debug.useGizmos);
+        _debug.m_stateText.gameObject.SetActive(_debug.useGizmos);
+        _debug.m_lifeText.gameObject.SetActive(_debug.useGizmos);
         DistanceToTarget = GetTargetDistance(Target);
     }
 
@@ -108,23 +120,35 @@ public class EnemyController : MonoBehaviour
         return Vector3.Distance(Target.position, transform.position);
     }
 
+    public IEnumerator IsStun()
+    {
+        EnemyCantShoot = true;
+        yield return new WaitForSeconds(Cara.CurrentTimeForElectricalStun);
+        EnemyCantShoot = false;
+        ChangeState((int)EnemyState.Enemy_ChaseState);
+    }
 
-
-
-
+    public void DestroyObj(float time)
+    {
+        EnemyCantShoot = Cara.IsDead;
+        Destroy(gameObject, time);
+    }
 
     private void OnDrawGizmosSelected()
     {
         if (_debug.useGizmos)
         { 
-            if(agent != null)
+            if(agent != null && weaponBehavior != null)
             {
                 Gizmos.color = Color.red;
                 Gizmos.DrawWireSphere(transform.position, agent.stoppingDistance);
+                Gizmos.color = Color.green;
+                Gizmos.DrawWireSphere(new Vector3(weaponBehavior._SMG.firePoint.transform.position.x, weaponBehavior._SMG.firePoint.transform.position.y, weaponBehavior._SMG.firePoint.transform.position.z + (agent.stoppingDistance - weaponBehavior._attack.enemyAttackDispersement*2)* weaponBehavior._attack._debugGizmos), weaponBehavior._attack.enemyAttackDispersement);
             }
             else
             {
                 agent = GetComponent<NavMeshAgent>();
+                weaponBehavior = GetComponent<WeaponEnemyBehaviour>();
             }
         }
     }

@@ -52,6 +52,7 @@ public class Weapon : ScriptableObject
         [Space]
         [Header("Level 2 bullet stats")]
         public float bulletSpeed;
+        public float timeOfElectricalStun;
         public GameObject newBullet;
 
     }

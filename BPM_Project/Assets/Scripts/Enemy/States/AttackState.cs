@@ -18,13 +18,13 @@ public class AttackState : IState
     public void Enter()
     {
         m_weaponEnemyBehaviour = m_enemyController.GetComponent<WeaponEnemyBehaviour>();
-        m_weaponEnemyBehaviour.StartCoroutine(m_weaponEnemyBehaviour.OnShoot(m_weaponEnemyBehaviour.nbrOfShootOnRafale, m_weaponEnemyBehaviour._SMG.weaponStats._weaponLevel0.attackCooldown, m_weaponEnemyBehaviour.timeForEachBurst));
+        m_weaponEnemyBehaviour.StartCoroutine(m_weaponEnemyBehaviour.OnEnemyShoot(m_weaponEnemyBehaviour._attack.nbrOfShootOnRafale, m_weaponEnemyBehaviour._attack.timeBetweenEachBullet, m_weaponEnemyBehaviour._attack.timeBetweenEachBurst));
 
     }
 
     public void Exit()
     {
-        m_weaponEnemyBehaviour.StopCoroutine(m_weaponEnemyBehaviour.OnShoot(m_weaponEnemyBehaviour.nbrOfShootOnRafale, m_weaponEnemyBehaviour._SMG.weaponStats._weaponLevel0.attackCooldown, m_weaponEnemyBehaviour.timeForEachBurst));
+        m_weaponEnemyBehaviour.StopCoroutine(m_weaponEnemyBehaviour.OnEnemyShoot(m_weaponEnemyBehaviour._attack.nbrOfShootOnRafale, m_weaponEnemyBehaviour._attack.timeBetweenEachBullet, m_weaponEnemyBehaviour._attack.timeBetweenEachBurst));
     }
 
     public void FixedUpdate()
@@ -42,6 +42,7 @@ public class AttackState : IState
         {
             m_enemyController.ChangeState((int)EnemyState.Enemy_ChaseState);
         }
+        m_enemyController.gameObject.transform.LookAt(m_enemyController.Target);
     }
 
 }

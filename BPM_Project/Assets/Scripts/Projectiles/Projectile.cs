@@ -57,6 +57,9 @@ public class Projectile : MonoBehaviour
     int _currentDamage;
     int damage;
 
+    bool _hasToStun;
+    float _timeForElectricalStun;
+
 
     #region Get Set
     public WeaponBehaviour WeaponBehaviour { get => _WeaponBehaviour; set => _WeaponBehaviour = value; }
@@ -75,6 +78,8 @@ public class Projectile : MonoBehaviour
     public Vector3 DistanceToReach { get => m_distanceToReach; set => m_distanceToReach = value; }
 
     public ProjectileType ProjectileType1 { get => m_projectileType; set => m_projectileType = value; }
+    public bool HasToStun { get => _hasToStun; set => _hasToStun = value; }
+    public float TimeForElectricalStun { get => _timeForElectricalStun; set => _timeForElectricalStun = value; }
     #endregion
 
     public void Start()
@@ -264,7 +269,7 @@ public class Projectile : MonoBehaviour
                         {
                             if(refScript.cara != null)
                             {
-                                refScript.cara.TakeDamage(CurrentDamage, 0);
+                                refScript.cara.TakeDamage(CurrentDamage, 0, HasToStun);
                             }
                         }
                     }
@@ -282,7 +287,7 @@ public class Projectile : MonoBehaviour
                         {
                             if (refScript.cara != null)
                             {
-                                refScript.cara.TakeDamage(CurrentDamage, 1);
+                                refScript.cara.TakeDamage(CurrentDamage, 1, HasToStun);
                             }
                         }
                     }

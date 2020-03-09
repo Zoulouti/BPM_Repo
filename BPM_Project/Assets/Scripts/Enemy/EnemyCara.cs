@@ -25,14 +25,14 @@ public class EnemyCara : MonoBehaviour
         {
             public float moveSpeed;
         }
-        public Attack _attack = new Attack();
-        [Serializable]
-        public class Attack
-        {
-            public int damage;
-            public float timeBetweenShots;
-            public float reloadTime;
-        }
+        //public Attack _attack = new Attack();
+        //[Serializable]
+        //public class Attack
+        //{
+        //    public int damage;
+        //    public float timeBetweenShots;
+        //    public float reloadTime;
+        //}
         public Health _health = new Health();
         [Serializable]
         public class Health
@@ -41,10 +41,31 @@ public class EnemyCara : MonoBehaviour
             public int damageMultiplicatorOnWeakSpot = 1;
             public int damageMultiplicatorOnNoSpot = 1;
         }
+        public StunResistance _stunResistance = new StunResistance();
+        [Serializable]
+        public class StunResistance
+        {
+            public float timeForStunResistance;
+        }
     }
     EnemyController controller;
     float _currentLife;
     int _currentDamage;
+    bool _isDead;
+    float _currentTimeForElectricalStun;
+    float _currentTimeForStunResistance;
+
+    #region Get Set
+    public float CurrentLife { get => _currentLife; set => _currentLife = value; }
+    public bool IsDead { get => _isDead; set => _isDead = value; }
+    public float CurrentTimeForElectricalStun { get => _currentTimeForElectricalStun; set => _currentTimeForElectricalStun = value; }
+    #endregion
+
+    public void OnEnable()
+    {
+        _isDead = false;
+    }
+
 
     public void Awake()
     {
@@ -72,7 +93,19 @@ public class EnemyCara : MonoBehaviour
         InitializeEnemyStats();
     }
 
-    public void TakeDamage(float damage, int i)
+    private void Update()
+    {
+        if(_currentTimeForStunResistance != 0)
+        {
+            _currentTimeForStunResistance -= Time.deltaTime;
+            if(_currentTimeForStunResistance <= 0)
+            {
+                _currentTimeForStunResistance = 0;
+            }
+        }
+    }
+
+    public void TakeDamage(float damage, int i, bool hasToBeStun, float timeForElectricalStun)
     {
         switch (i)
         {
@@ -90,15 +123,29 @@ public class EnemyCara : MonoBehaviour
                 break;
         }
 
-        if(_currentLife <= 0)
+        if (hasToBeStun && !controller.m_sM.CompareState((int)EnemyState.Enemy_StunState) && _currentTimeForStunResistance == 0f)
         {
-            controller.m_sM.ChangeState((int)EnemyState.Enemy_DieState);
+            _currentTimeForElectricalStun = timeForElectricalStun;
+            _currentTimeForStunResistance = _enemyCaractéristique._stunResistance.timeForStunResistance;
+            controller.m_sM.ChangeState((int)EnemyState.Enemy_StunState);
         }
 
+        CheckIfDead();
+
     }
+
+    void CheckIfDead()
+    {
+        if (_currentLife <= 0)
+        {
+            _isDead = true;
+            controller.m_sM.ChangeState((int)EnemyState.Enemy_DieState);
+        }
+    }
+
     void InitializeEnemyStats()
     {
         _currentLife = _enemyCaractéristique._health.maxHealth;
-        _currentDamage = _enemyCaractéristique._attack.damage;
+        //_currentDamage = _enemyCaractéristique._attack.damage;
     }
 }

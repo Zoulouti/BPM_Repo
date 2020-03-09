@@ -7,8 +7,7 @@ using TypeOfFireEnum;
 [Serializable]
 public class SMG
 {
-    public Weapon weaponStats;
-    [Space]
+    
     public TypeOfFire typeOfFire;
     public GameObject firePoint;
     public GameObject fireAudio;
