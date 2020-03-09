@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using EnemyStateEnum;
 using System;
+using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class EnemyController : MonoBehaviour
     [Serializable] public class DEBUG
     {
         public bool useGizmos;
+        public Text m_text;
     }
 
     #region State Machine
@@ -63,6 +65,11 @@ public class EnemyController : MonoBehaviour
     private void Update()
     {
         m_sM.Update();
+        if (_debug.useGizmos)
+        {
+            _debug.m_text.text = string.Format("{0}", m_sM.m_currentStateString);
+        }
+        _debug.m_text.gameObject.SetActive(_debug.useGizmos);
         DistanceToTarget = GetTargetDistance(Target);
     }
 

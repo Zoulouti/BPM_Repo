@@ -4,7 +4,7 @@ using UnityEngine;
 [System.Serializable]
 public class StateMachine
 {
-    [SerializeField] string m_currentStateString;
+    [SerializeField]public string m_currentStateString;
 
     List<IState> m_states = null;
     public List<IState> States{

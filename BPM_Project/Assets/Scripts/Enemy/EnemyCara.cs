@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using EnemyStateEnum;
 
 public class EnemyCara : MonoBehaviour
 {
@@ -41,11 +42,13 @@ public class EnemyCara : MonoBehaviour
             public int damageMultiplicatorOnNoSpot = 1;
         }
     }
+    EnemyController controller;
     float _currentLife;
     int _currentDamage;
 
     public void Awake()
     {
+        controller = GetComponent<EnemyController>();
         enemyArchetype.PopulateArray();
 
         #region Activate Archetype
@@ -86,6 +89,12 @@ public class EnemyCara : MonoBehaviour
             default:
                 break;
         }
+
+        if(_currentLife <= 0)
+        {
+            controller.m_sM.ChangeState((int)EnemyState.Enemy_DieState);
+        }
+
     }
     void InitializeEnemyStats()
     {
