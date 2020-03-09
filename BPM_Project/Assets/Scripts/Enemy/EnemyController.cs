@@ -5,6 +5,7 @@ using UnityEngine.AI;
 using EnemyStateEnum;
 using System;
 using UnityEngine.UI;
+using PoolTypes;
 
 public class EnemyController : MonoBehaviour
 {
@@ -22,6 +23,9 @@ public class EnemyController : MonoBehaviour
 
     public virtual void OnEnable()
     {
+        
+        DistanceToTarget = GetTargetDistance(Target);
+        EnemyCantShoot = false;
         ChangeState((int)EnemyState.Enemy_ChaseState);
     }
 
@@ -58,18 +62,15 @@ public class EnemyController : MonoBehaviour
     public void Awake()
     {
         SetupStateMachine();
+        agent = GetComponent<NavMeshAgent>();
+        cara = GetComponent<EnemyCara>();
+        weaponBehavior = GetComponent<WeaponEnemyBehaviour>();
+        Target = PlayerController.s_instance.gameObject.transform;
     }
 
     private void Start()
     {
         m_sM.Start();
-        agent = GetComponent<NavMeshAgent>();
-        cara = GetComponent<EnemyCara>();
-        weaponBehavior = GetComponent<WeaponEnemyBehaviour>();
-        Target = PlayerController.s_instance.gameObject.transform;
-        DistanceToTarget = GetTargetDistance(Target);
-        EnemyCantShoot = Cara.IsDead;
-
     }
 
     private void Update()
@@ -128,10 +129,30 @@ public class EnemyController : MonoBehaviour
         ChangeState((int)EnemyState.Enemy_ChaseState);
     }
 
-    public void DestroyObj(float time)
+    public void KillNPC(float time)
     {
         EnemyCantShoot = Cara.IsDead;
-        Destroy(gameObject, time);
+        StartCoroutine(OnWaitForAnimToEnd(time));
+    }
+
+
+    IEnumerator OnWaitForAnimToEnd(float time)
+    {
+        cara.enabled = false;
+        agent.enabled = false;
+        yield return new WaitForSeconds(time);    //Animation time
+        Spawned_Tracker spawnTracker = GetComponent<Spawned_Tracker>();
+        if (spawnTracker != null)
+        {
+            spawnTracker.CallDead();
+            Destroy(spawnTracker);
+        }
+        PoolTracker poolTracker = GetComponent<PoolTracker>();
+        if (poolTracker != null)
+        {
+            Destroy(poolTracker);
+        }
+        ObjectPooler.Instance.ReturnEnemyToPool(EnemyType.EnemyBase, gameObject);
     }
 
     private void OnDrawGizmosSelected()

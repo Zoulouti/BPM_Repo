@@ -36,6 +36,7 @@ public class WeaponPlayerBehaviour : WeaponBehaviour
 
     public override void Update()
     {
+
         switch (_SMG.typeOfFire)
         {
             case TypeOfFire.OnClick:
@@ -105,7 +106,7 @@ public class WeaponPlayerBehaviour : WeaponBehaviour
     #region ShootingMethods
     public override IEnumerator OnShoot(int nbrOfShoot, float timeEachShoot, float recoilTimeEachBurst)
     {
-        CanShoot = false;
+        //CanShoot = false;
 
         for (int i = 0; i < nbrOfShoot; ++i)
         {
@@ -120,7 +121,7 @@ public class WeaponPlayerBehaviour : WeaponBehaviour
         }
         yield return new WaitForSeconds(recoilTimeEachBurst);
 
-        CanShoot = true;
+        //CanShoot = true;
     }
 
     public override IEnumerator RecoilCurve()

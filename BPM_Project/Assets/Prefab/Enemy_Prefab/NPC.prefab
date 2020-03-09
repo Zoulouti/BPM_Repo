@@ -1760,14 +1760,12 @@ MonoBehaviour:
   "_enemyCaract\xE9ristique":
     _move:
       moveSpeed: 10
-    _attack:
-      damage: 10
-      timeBetweenShots: 0.5
-      reloadTime: 1
     _health:
-      maxHealth: 100
+      maxHealth: 1000
       damageMultiplicatorOnWeakSpot: 1
       damageMultiplicatorOnNoSpot: 1
+    _stunResistance:
+      timeForStunResistance: 30
 --- !u!114 &4187508792682329746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1800,7 +1798,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponObj: {fileID: 1911064427678335089}
   _SMG:
-    weaponStats: {fileID: 11400000, guid: fb3e97c66800ad94ebde8f727819c49a, type: 2}
     typeOfFire: 1
     firePoint: {fileID: 2068807990734219183}
     fireAudio: {fileID: 0}
@@ -1839,9 +1836,14 @@ MonoBehaviour:
       m_RotationOrder: 4
     timeToRecoverFromRecoil: 0.1
     recoilHeight: 1
-  nbrOfShootOnRafale: 5
-  timeForEachBurst: 3
-  enemyAttackDispersement: 0.64
+  _attack:
+    damage: 10
+    bulletSpeed: 50
+    timeBetweenEachBullet: 0.08
+    nbrOfShootOnRafale: 10
+    timeBetweenEachBurst: 1
+    _debugGizmos: 1
+    enemyAttackDispersement: 0.2
   enemyProjectil: {fileID: 1451592532500230711, guid: c53459ce1f414874f9136154c77e7bd9,
     type: 3}
   YOffset: 1

@@ -64,24 +64,17 @@ public class EnemyCara : MonoBehaviour
     public void OnEnable()
     {
         _isDead = false;
-    }
-
-
-    public void Awake()
-    {
-        controller = GetComponent<EnemyController>();
-        enemyArchetype.PopulateArray();
 
         #region Activate Archetype
-        for (int i = 0, l= enemyArchetype.e_TypeOfSpot.Length; i < l; ++i)
+        for (int i = 0, l = enemyArchetype.e_TypeOfSpot.Length; i < l; ++i)
         {
-            if(enemyArchetype.e_TypeOfSpot[i] == EnemyArchetype.TypeOfSpot.WeakSpot)
+            if (enemyArchetype.e_TypeOfSpot[i] == EnemyArchetype.TypeOfSpot.WeakSpot)
             {
                 _debug.weakSpots[i].SetActive(true);
                 _debug.armorSpots[i].SetActive(false);
                 _debug.noSpot[i].SetActive(false);
             }
-            else if(enemyArchetype.e_TypeOfSpot[i] == EnemyArchetype.TypeOfSpot.NoSpot)
+            else if (enemyArchetype.e_TypeOfSpot[i] == EnemyArchetype.TypeOfSpot.NoSpot)
             {
                 _debug.weakSpots[i].SetActive(false);
                 _debug.armorSpots[i].SetActive(false);
@@ -91,6 +84,13 @@ public class EnemyCara : MonoBehaviour
         #endregion
 
         InitializeEnemyStats();
+    }
+
+
+    public void Awake()
+    {
+        enemyArchetype.PopulateArray();
+        controller = GetComponent<EnemyController>();
     }
 
     private void Update()
@@ -123,7 +123,7 @@ public class EnemyCara : MonoBehaviour
                 break;
         }
 
-        if (hasToBeStun && !controller.m_sM.CompareState((int)EnemyState.Enemy_StunState) && _currentTimeForStunResistance == 0f)
+        if (hasToBeStun && !controller.m_sM.CompareState((int)EnemyState.Enemy_StunState) && _currentTimeForStunResistance == 0f && !controller.m_sM.CompareState((int)EnemyState.Enemy_DieState))
         {
             _currentTimeForElectricalStun = timeForElectricalStun;
             _currentTimeForStunResistance = _enemyCaractéristique._stunResistance.timeForStunResistance;
