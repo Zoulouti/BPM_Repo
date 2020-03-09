@@ -26,7 +26,6 @@ public class ChaseState : IState
         m_enemyController.Agent.SetDestination(m_enemyController.Target.position);
         if(m_enemyController.DistanceToTarget <= m_enemyController.Agent.stoppingDistance)
         {
-
             m_enemyController.ChangeState((int)EnemyState.Enemy_AttackState);
         }
     }
