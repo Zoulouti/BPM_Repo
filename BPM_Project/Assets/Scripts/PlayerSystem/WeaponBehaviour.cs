@@ -26,6 +26,10 @@ public class WeaponBehaviour : MonoBehaviour
     public virtual void Awake()
     {
         _originalWeaponXRotation = weaponObj.transform.localRotation.eulerAngles.x;
+    }
+
+    public virtual void Start()
+    {
         projectilRoot = GameManager.Instance.transform;
     }
 
