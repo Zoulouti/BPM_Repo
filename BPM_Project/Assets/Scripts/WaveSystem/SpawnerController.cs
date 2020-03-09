@@ -26,7 +26,7 @@ public class SpawnerController : MonoBehaviour
     }
 
 
-    public IEnumerator WaveSpawner(int i, int wave, WaveController controller)
+    public IEnumerator WaveSpawner(int wave, WaveController controller)
     {
         for (int a = 0, f = _nbrOfWaves[wave].m_enemyToSummon.Length; a < f; ++a)
         {

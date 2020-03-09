@@ -139,8 +139,8 @@ public class EnemyController : MonoBehaviour
     IEnumerator OnWaitForAnimToEnd(float time)
     {
         cara.enabled = false;
-        agent.enabled = false;
         yield return new WaitForSeconds(time);    //Animation time
+        agent.enabled = false;
         Spawned_Tracker spawnTracker = GetComponent<Spawned_Tracker>();
         if (spawnTracker != null)
         {
