@@ -10,7 +10,7 @@ public class CameraWalkerController : BasicWalkerController {
 	//Reference to camera controls;
 	CameraController cameraControls;
 
-	[SerializeField] Transform m_cameraRotation;
+	[SerializeField] Transform m_cameraPivot;
 
 	protected override void Setup()
 	{
@@ -40,8 +40,8 @@ public class CameraWalkerController : BasicWalkerController {
 		// _direction += cameraControls.GetStrafeDirection() * _horizontalInput;
         if(_currentActionState != ActionState.Slide)
         {
-		    _direction += m_cameraRotation.forward * _verticalInput;
-		    _direction += m_cameraRotation.right * _horizontalInput;
+		    _direction += m_cameraPivot.forward * _verticalInput;
+		    _direction += m_cameraPivot.right * _horizontalInput;
         }
         else
         {
@@ -51,7 +51,8 @@ public class CameraWalkerController : BasicWalkerController {
             }
             else
             {
-                _currentActionState = ActionState.Walk;
+                // _currentActionState = ActionState.Walk;
+                _currentActionState = ActionState.Sprint;
             }
             _direction += slidingRight * _horizontalInput;
         }

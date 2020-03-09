@@ -18,12 +18,12 @@ TagManager:
   - UI
   - 
   - 
-  - Weapon
+  - Player
   - Projectile
-  - 
-  - 
-  - 
-  - 
+  - Enemy
+  - Environment
+  - PostProcessing
+  - PlayerWeapon
   - 
   - 
   - 

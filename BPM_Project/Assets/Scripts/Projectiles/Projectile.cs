@@ -12,149 +12,320 @@ public class Projectile : MonoBehaviour
         Enemy
     }
     #endregion Projectile Type
-
-    int damage;
-    public float m_speed = 25;
+    public enum TypeOfCollision
+    {
+        Rigibody,
+        DoubleRaycasts,
+        UpdateRaycasts
+    }
     [Space]
     [Header("FX")]
     public GameObject m_dieFX;
     [Space]
+    public float m_maxLifeTime = 5;
+    [Header("DEBUG")]
+    [Space]
+    public TypeOfCollision m_colType = TypeOfCollision.DoubleRaycasts;
+    public float forceBuffer = 50f;
+    Rigidbody rb;
+    SphereCollider col;
+
+
+
+    RaycastHit _hit;
     bool m_dieWhenHit = true;
 
-    public float m_maxLifeTime = 5;
+    float deltaLength;
+    float newLength;
+    Vector3 m_awakeDistance;
+    Vector3 m_currentDistance;
 
-    Rigidbody m_rBody;
+
     WeaponBehaviour _WeaponBehaviour;
     BPMSystem m_BPMSystem;
+    LayerMask m_rayCastCollision;
+
+    Collider m_col;
+
+    Vector3 m_distanceToReach;
+    Vector3 m_transfoPos;
+    Vector3 m_transfoDir;
+
+    float m_BPMGain;
+    float _currentBPMGain;
+    float m_speed = 25;
+    int _currentDamage;
+    int damage;
+
 
     #region Get Set
-    public Rigidbody RBody
-    {
-        get
-        {
-            return m_rBody;
-        }
-
-        set
-        {
-            m_rBody = value;
-        }
-    }
-
-    public int Damage { get => damage; set => damage = value; }
     public WeaponBehaviour WeaponBehaviour { get => _WeaponBehaviour; set => _WeaponBehaviour = value; }
-    public ProjectileType ProjectileType1 { get => m_projectileType; set => m_projectileType = value; }
+    public LayerMask RayCastCollision { get => m_rayCastCollision; set => m_rayCastCollision = value; }
     public BPMSystem BPMSystem { get => m_BPMSystem; set => m_BPMSystem = value; }
+
+    public int CurrentDamage { get => _currentDamage; set => _currentDamage = value; }
+    public float CurrentBPMGain { get => _currentBPMGain; set => _currentBPMGain = value; }
+    public int Damage { get => damage; set => damage = value; }
+    public float BPMGain { get => m_BPMGain; set => m_BPMGain = value; }
+    public float Speed { get => m_speed; set => m_speed = value; }
+
+    public Vector3 TransfoPos { get => m_transfoPos; set => m_transfoPos = value; }
+    public Vector3 TransfoDir { get => m_transfoDir; set => m_transfoDir = value; }
+    public Collider Col { get => m_col; set => m_col = value; }
+    public Vector3 DistanceToReach { get => m_distanceToReach; set => m_distanceToReach = value; }
+
+    public ProjectileType ProjectileType1 { get => m_projectileType; set => m_projectileType = value; }
     #endregion
 
     public void Start()
     {
-        RBody = GetComponent<Rigidbody>();
-    }
-
-    public void FixedUpdate()
-    {
-        RBody.velocity = transform.forward * m_speed;
-    }
-
-    void OnTriggerEnter(Collider col)
-    {
-        string tag = col.tag;
-
-        if (col.CompareTag("Untagged"))
+        switch (m_colType)
         {
-            if (m_dieWhenHit)
+            case TypeOfCollision.Rigibody:
+
+                rb = gameObject.AddComponent<Rigidbody>();
+                col = gameObject.AddComponent<SphereCollider>();
+
+                rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+                rb.interpolation = RigidbodyInterpolation.Extrapolate;
+                rb.constraints = RigidbodyConstraints.FreezeRotation;
+                rb.useGravity = false;
+
+                col.isTrigger = true;
+                col.radius = 0.05f;
+
+
+                break;
+            case TypeOfCollision.DoubleRaycasts:
+
+                #region Set Starting Length
+
+                m_awakeDistance = transform.localPosition;
+                deltaLength = Vector3.Distance(m_distanceToReach, m_awakeDistance);
+                newLength = deltaLength;
+
+                #endregion
+
+                StartCoroutine(CalculateDistance());
+
+                break;
+            case TypeOfCollision.UpdateRaycasts:
+
+                m_awakeDistance = transform.localPosition;
+                deltaLength = Vector3.Distance(m_distanceToReach, m_awakeDistance);
+                newLength = deltaLength;
+
+                if(_hit.distance - (Speed * Time.deltaTime) < 0)
+                {
+
+                }
+
+                break;
+        }
+
+        StartCoroutine(DestroyAnyway());
+
+    }
+
+    #region When using RayCast
+
+    IEnumerator CalculateDistance()
+    {
+        while (newLength > 0)
+        {
+            transform.Translate(Vector3.forward * Speed * Time.deltaTime);
+            m_currentDistance = transform.localPosition;
+            newLength = deltaLength - Vector3.Distance(m_currentDistance, m_awakeDistance);
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+
+        OnProjectilReachingMaxDistance();
+    }
+
+    void OnProjectilReachingMaxDistance()
+    {
+        bool ray = OnCastRay(TransfoPos);
+        if (ray)
+        {
+            //string tag = _hit.collider.tag;
+            if (Col == _hit.collider)
             {
-                DestroyProjectile();
+                StopCoroutine(CalculateDistance());
+
+                SwitchForWeakSpots(_hit.collider);
+            }
+            else //Si la cible a bougé avant que le projectile ait atteind sa cible
+            {
+                #region Set New Length
+                m_awakeDistance = m_currentDistance = transform.localPosition;
+                m_distanceToReach = _hit.point;
+
+                deltaLength = newLength = Vector3.Distance(m_distanceToReach, m_awakeDistance);
+                TransfoPos = m_awakeDistance;
+                TransfoDir = transform.forward;
+                Col = _hit.collider;
+                #endregion
+
+                StartCoroutine(CalculateDistance());
             }
         }
-                // Le tir d'un enemy touche le player
-        else if (ProjectileType1 == ProjectileType.Enemy)
+    }
+
+    bool OnCastRay(Vector3 start)
+    {
+        return Physics.Raycast(start, TransfoDir, out _hit, Mathf.Infinity, RayCastCollision, QueryTriggerInteraction.Collide);
+    }
+
+    #endregion
+
+    #region When Using Rigibody
+
+    private void FixedUpdate()
+    {
+        if (m_colType == TypeOfCollision.Rigibody)
         {
-            if (col.CompareTag("Player"))
+            rb.velocity = transform.forward * Speed;
+        }
+
+        
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (col != null)
+        {
+            SwitchForWeakSpots(other);
+        }
+    }
+    #endregion
+
+    #region When Using UpdateRayCast
+
+    private void LateUpdate()
+    {
+        if (m_colType == TypeOfCollision.UpdateRaycasts)
+        {
+            if (OnCastRay(transform.position))
             {
-                if (m_dieWhenHit)
+                //m_awakeDistance = transform.localPosition;
+                if (Col == _hit.collider)
                 {
-                    DestroyProjectile();
+                        newLength = _hit.distance - (Speed * Time.deltaTime);
+
+                    if (newLength > 0)
+                    {
+                        //m_distanceToReach = _hit.point;
+                        transform.Translate(Vector3.forward * Speed * Time.deltaTime);
+                        m_currentDistance = transform.localPosition;
+
+                        //Debug.DrawLine(m_currentDistance, m_distanceToReach, Color.red);
+                    }
+                    else
+                    {
+                        SwitchForWeakSpots(_hit.collider);
+                    }
+                }
+                else
+                {
+                    #region Set New Length
+                    m_awakeDistance = m_currentDistance = transform.localPosition;
+                    m_distanceToReach = _hit.point;
+
+                    deltaLength = newLength = Vector3.Distance(m_distanceToReach, m_awakeDistance);
+                    TransfoPos = m_awakeDistance;
+                    TransfoDir = transform.forward;
+                    Col = _hit.collider;
+                    #endregion
                 }
             }
         }
-        else if (ProjectileType1 == ProjectileType.Player)
+    }
+
+
+    #endregion
+
+
+    void SwitchForWeakSpots(Collider collider)
+    {
+        if(m_projectileType == ProjectileType.Player)
         {
+            string tag = collider.tag;
+            #region Switch For WeakSpots
+            ReferenceScipt refScript = collider.GetComponent<ReferenceScipt>();
             switch (tag)
             {
                 // Le tir du player touche un NoSpot
                 case "NoSpot":
 
-                    BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnNoSpot);
-                    col.GetComponent<ReferenceScipt>().cara.TakeDamage(Damage, 0);
-                    Debug.Log(tag);
+                    BPMGain = BPMSystem._BPM.BPMGain_OnNoSpot * CurrentBPMGain;
+
+                    if(collider != null)
+                    {
+                        if(refScript != null)
+                        {
+                            if(refScript.cara != null)
+                            {
+                                refScript.cara.TakeDamage(CurrentDamage, 0);
+                            }
+                        }
+                    }
 
                     break;
 
                 // Le tir du player touche un WeakSpot
                 case "WeakSpot":
 
-                    BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnWeak);
-                    col.GetComponent<ReferenceScipt>().cara.TakeDamage(Damage, 1);
-                    Debug.Log(tag);
+                    BPMGain = BPMSystem._BPM.BPMGain_OnWeak * CurrentBPMGain;
+
+                    if (collider != null)
+                    {
+                        if (refScript != null)
+                        {
+                            if (refScript.cara != null)
+                            {
+                                refScript.cara.TakeDamage(CurrentDamage, 1);
+                            }
+                        }
+                    }
 
                     break;
-                // Le tir du player touche un ArmorSpot
-                case "ArmorSpot":
-
-                    BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnArmor);
-                    col.GetComponent<ReferenceScipt>().cara.TakeDamage(Damage, 2);
-                    Debug.Log(tag);
-
-                    break;
-                // Le tir du player touche un DestroyableObject
-                case "DestroyableObject":
-
-                    BPMSystem.GainBPM(BPMSystem._BPM.BPMGain_OnDestructableEnvironment);
-                    Debug.Log(tag);
-
-                    break;
-                default:
-                    break;
+            }
+            #endregion
+            BPMSystem.GainBPM(BPMGain);
+        }
+        else if(m_projectileType == ProjectileType.Enemy)
+        {
+            if (collider.CompareTag("Player"))
+            {
+                BPMSystem _BPMSystem = collider.GetComponent<BPMSystem>();
+                if(_BPMSystem != null)
+                {
+                    _BPMSystem.LoseBPM(CurrentDamage);
+                }
             }
         }
 
-        DestroyProjectile();
-    }
-
-    void OnProjectilHits()
-    {
-
-    }
-
-
-    void DestroyProjectile()
-    {
-        Destroy(gameObject);
 
         if (m_dieFX != null)
         {
-            Level.AddFX(m_dieFX, transform.position, Quaternion.identity);    //Impact FX
+            Level.AddFX(m_dieFX, _hit.point, Quaternion.identity);    //Impact FX
+            if (collider.GetComponent<Rigidbody>() != null)
+            {
+                Rigidbody _rb = collider.GetComponent<Rigidbody>();
+                _rb.AddForceAtPosition(-(_hit.normal * forceBuffer), _hit.point);
+            }
         }
+
+        DestroyProj();
     }
 
-
-    public void SetTargetPos(Vector3 targetPos)
+    IEnumerator DestroyAnyway()
     {
-        Vector3 projectileToMouse = targetPos - transform.position;
-        projectileToMouse.y = 0f;
-        Quaternion newRotation = Quaternion.LookRotation(projectileToMouse);
-        transform.rotation = newRotation;
+        yield return new WaitForSeconds(m_maxLifeTime);
+        DestroyProj();
     }
 
-    /*public void SetTargetPosWithGamepad(Vector3 targetPos)
+    void DestroyProj()
     {
-        Vector3 projectileToMouse = targetPos - transform.position;
-        projectileToMouse.y = 0f;
-        Quaternion newRotation = Quaternion.LookRotation(projectileToMouse);
-        newRotation.eulerAngles = new Vector3(newRotation.eulerAngles.x, newRotation.eulerAngles.y, newRotation.eulerAngles.z);
-        transform.rotation = newRotation;
-    }*/
-
+        Destroy(gameObject);
+    }
 }

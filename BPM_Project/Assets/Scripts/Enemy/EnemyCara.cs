@@ -10,63 +10,7 @@ public class EnemyCara : MonoBehaviour
     {
         public GameObject[] weakSpots;
         public GameObject[] armorSpots;
-
-        /*public Head _head = new Head();
-        [Serializable]
-        public class Head
-        {
-            public GameObject WeakSpot;
-            public GameObject ArmoredSpot;
-
-        }
-        [Space]
-        public RightShoulder _rightShoulder = new RightShoulder();
-        [Serializable]
-        public class RightShoulder
-        {
-            public GameObject WeakSpot;
-            public GameObject ArmoredSpot;
-        }
-        [Space]
-        public LeftShoulder _leftShoulder = new LeftShoulder();
-        [Serializable]
-        public class LeftShoulder
-        {
-            public GameObject WeakSpot;
-            public GameObject ArmoredSpot;
-        }
-        [Space]
-        public Torso _torso = new Torso();
-        [Serializable]
-        public class Torso
-        {
-            public GameObject WeakSpot;
-            public GameObject ArmoredSpot;
-        }
-        [Space]
-        public Backo _backo = new Backo();
-        [Serializable]
-        public class Backo
-        {
-            public GameObject WeakSpot;
-            public GameObject ArmoredSpot;
-        }
-        [Space]
-        public RightKnee _rightKnee = new RightKnee();
-        [Serializable]
-        public class RightKnee
-        {
-            public GameObject WeakSpot;
-            public GameObject ArmoredSpot;
-        }
-        [Space]
-        public LeftKnee _leftKnee = new LeftKnee();
-        [Serializable]
-        public class LeftKnee
-        {
-            public GameObject WeakSpot;
-            public GameObject ArmoredSpot;
-        }*/
+        public GameObject[] noSpot;
     }
     [Space]
     public EnemyArchetype enemyArchetype;
@@ -74,38 +18,55 @@ public class EnemyCara : MonoBehaviour
     public EnemyCaractéristique _enemyCaractéristique = new EnemyCaractéristique();
     [Serializable] public class EnemyCaractéristique
     {
-        public float maxLife;
-        [Space]
-        public float noSpotDamageMultiplicateur;
-        public float weakSpotDamageMultiplicateur;
-        public float armorSpotDamageMultiplicateur;
+        public Move _move = new Move();
+        [Serializable]
+        public class Move
+        {
+            public float moveSpeed;
+        }
+        public Attack _attack = new Attack();
+        [Serializable]
+        public class Attack
+        {
+            public int damage;
+            public float timeBetweenShots;
+            public float reloadTime;
+        }
+        public Health _health = new Health();
+        [Serializable]
+        public class Health
+        {
+            public float maxHealth;
+            public int damageMultiplicatorOnWeakSpot = 1;
+            public int damageMultiplicatorOnNoSpot = 1;
+        }
     }
     float _currentLife;
-
+    int _currentDamage;
 
     public void Awake()
     {
         enemyArchetype.PopulateArray();
+
+        #region Activate Archetype
         for (int i = 0, l= enemyArchetype.e_TypeOfSpot.Length; i < l; ++i)
         {
             if(enemyArchetype.e_TypeOfSpot[i] == EnemyArchetype.TypeOfSpot.WeakSpot)
             {
                 _debug.weakSpots[i].SetActive(true);
                 _debug.armorSpots[i].SetActive(false);
-            }
-            else if(enemyArchetype.e_TypeOfSpot[i] == EnemyArchetype.TypeOfSpot.ArmorSpot)
-            {
-                _debug.weakSpots[i].SetActive(false);
-                _debug.armorSpots[i].SetActive(true);
+                _debug.noSpot[i].SetActive(false);
             }
             else if(enemyArchetype.e_TypeOfSpot[i] == EnemyArchetype.TypeOfSpot.NoSpot)
             {
                 _debug.weakSpots[i].SetActive(false);
                 _debug.armorSpots[i].SetActive(false);
+                _debug.noSpot[i].SetActive(true);
             }
         }
+        #endregion
 
-        _currentLife = _enemyCaractéristique.maxLife;
+        InitializeEnemyStats();
     }
 
     public void TakeDamage(float damage, int i)
@@ -114,23 +75,21 @@ public class EnemyCara : MonoBehaviour
         {
             case 0:
 
-                _currentLife -= damage * _enemyCaractéristique.noSpotDamageMultiplicateur;
+                _currentLife -= damage * _enemyCaractéristique._health.damageMultiplicatorOnNoSpot;
 
                 break;
             case 1:
 
-                _currentLife -= damage * _enemyCaractéristique.weakSpotDamageMultiplicateur;
-
-                break;
-            case 2:
-
-                _currentLife -= damage * _enemyCaractéristique.armorSpotDamageMultiplicateur;
+                _currentLife -= damage * _enemyCaractéristique._health.damageMultiplicatorOnWeakSpot;
 
                 break;
             default:
                 break;
         }
-        Debug.Log(_currentLife);
     }
-
+    void InitializeEnemyStats()
+    {
+        _currentLife = _enemyCaractéristique._health.maxHealth;
+        _currentDamage = _enemyCaractéristique._attack.damage;
+    }
 }

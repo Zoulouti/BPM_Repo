@@ -15,9 +15,7 @@ public class GroundEditor : Editor
         Camera cam = camera.GetComponentInChildren<Camera>();
         GUILayout.Space(15f);
         GUILayout.Label("Can be change in editor");
-        cam.fieldOfView = EditorGUILayout.Slider("Camera FOV", cam.fieldOfView, 70f, 110f);
-
-        camera.SetFOV(cam.fieldOfView);
-
+        cam.fieldOfView = EditorGUILayout.Slider("Camera FOV", cam.fieldOfView, 50f, 110f);
+        cam.fieldOfView = cam.fieldOfView;
     }
 }

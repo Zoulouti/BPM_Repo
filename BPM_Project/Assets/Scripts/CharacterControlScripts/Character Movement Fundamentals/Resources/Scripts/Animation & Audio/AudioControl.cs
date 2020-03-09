@@ -6,7 +6,7 @@ using UnityEngine;
 public class AudioControl : MonoBehaviour {
 
 	//References to components;
-	BasicWalkerController controller;
+	PlayerController controller;
 	Animator animator;
 	Mover mover;
 	Transform tr;
@@ -37,7 +37,7 @@ public class AudioControl : MonoBehaviour {
 	//Setup;
 	void Start () {
 		//Get component references;
-		controller = GetComponent<BasicWalkerController>();
+		controller = GetComponent<PlayerController>();
 		animator = GetComponentInChildren<Animator>();
 		mover = GetComponent<Mover>();
 		tr = transform;
