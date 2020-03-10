@@ -30,12 +30,8 @@ Category {
 			#pragma shader_feature VertLight_OFF VertLight4_ON
 			#pragma shader_feature FrameBlend_OFF FrameBlend_ON
 			#pragma shader_feature SoftParticles_OFF SoftParticles_ON
-			#pragma shader_feature Clip_OFF Clip_ON Clip_ON_Alpha
-			#pragma shader_feature FresnelFade_OFF FresnelFade_ON
-			#pragma shader_feature _MOBILEDEPTH_ON
-#pragma target 3.0
-			
-			#include "UnityCG.cginc"
+			#include "UnityCG.cginc"
+ float4 _DepthPyramidScale;
 
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
@@ -50,15 +46,15 @@ Category {
 				half4 color : COLOR;
 #ifdef FrameBlend_OFF
 				float2 texcoord : TEXCOORD0;
-#else
+
 #if UNITY_VERSION == 600
 				float4 texcoords : TEXCOORD0;
 				float texcoordBlend : TEXCOORD1;
-#else
+
 				float2 texcoord : TEXCOORD0;
 				float4 texcoordBlendFrame : TEXCOORD1;
-#endif
-#endif
+
+
 			};
 
 			struct v2f {
@@ -66,17 +62,16 @@ Category {
 				half4 color : COLOR;
 #ifdef FrameBlend_OFF
 				float2 texcoord : TEXCOORD0;
-#else
+
 				float4 texcoord : TEXCOORD0;
 				fixed blend : TEXCOORD1;
-#endif
+
 				UNITY_FOG_COORDS(2)
-				//#ifdef SOFTPARTICLES_ON
 				float4 projPos : TEXCOORD3;
-				//#endif
+				//
 #ifdef FresnelFade_ON
 				float fresnel : TEXCOORD4;
-#endif
+
 
 			};
 
@@ -100,7 +95,7 @@ Category {
 				float3 light = 1;
 				#ifdef VertLight4_ON
 					light = VertexLight4(vert);
-				#endif
+				
 				return light;
 			}
 
@@ -109,10 +104,10 @@ Category {
 			{
 				v2f o;
 				o.vertex = UnityObjectToClipPos(v.vertex);
-			//#ifdef SOFTPARTICLES_ON
-				o.projPos = ComputeScreenPos (o.vertex);
+				o.projPos = ComputeScreenPos (o.vertex);
+				o.projPos.xy *= _DepthPyramidScale.xy;
 				COMPUTE_EYEDEPTH(o.projPos.z);
-			//#endif
+			//
 				o.color = v.color;
 				o.color.rgb *= ComputeVertexLight(v.vertex, v.normal);
 
@@ -140,25 +135,22 @@ Category {
 			float _InvFade;
 			
 			half4 frag (v2f i) : SV_Target
-			{
-			#ifdef SoftParticles_ON
-				#if defined (SOFTPARTICLES_ON) || defined (_MOBILEDEPTH_ON)
 					float z = tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.projPos)).r;
 					float sceneZ = LinearEyeDepth (UNITY_SAMPLE_DEPTH(z));
 					float partZ = i.projPos.z;
 					float fade = saturate (_InvFade * (sceneZ-partZ));
 					i.color.a *= fade;
-				#else 
-				#endif
-			#endif
+				 
+				
+			
 			#ifdef FrameBlend_OFF
 				half4 tex = tex2D(_MainTex, i.texcoord);
-			#else
+			
 				//half4 tex = Tex2DInterpolated(_MainTex, i.texcoord, _Tiling);
 				half4 tex1 = tex2D(_MainTex, i.texcoord.xy);
 				half4 tex2 = tex2D(_MainTex, i.texcoord.zw);
 				half4 tex = lerp(tex1, tex2, i.blend);
-			#endif
+			
 
 				half4 res = 2 * tex * _TintColor;
 
