@@ -30,11 +30,6 @@ Category {
 			#pragma shader_feature VertLight_OFF VertLight4_ON
 			#pragma shader_feature FrameBlend_OFF FrameBlend_ON
 			#pragma shader_feature SoftParticles_OFF SoftParticles_ON
-			#include "UnityCG.cginc"
- float4 _DepthPyramidScale;
-
-			sampler2D _MainTex;
-			float4 _MainTex_ST;
 			float4 _TintColor;
 			float _Cutout;
 			half _FresnelStr;
@@ -113,21 +108,21 @@ Category {
 
 #ifdef FrameBlend_OFF
 				o.texcoord = TRANSFORM_TEX(v.texcoord,_MainTex);
-#else
+
 #if UNITY_VERSION == 600
 				o.texcoord.xy = TRANSFORM_TEX(v.texcoords.xy, _MainTex);
 				o.texcoord.zw = TRANSFORM_TEX(v.texcoords.zw, _MainTex);
 				o.blend = v.texcoordBlend;
-#else
+
 				o.texcoord.xy = TRANSFORM_TEX(v.texcoord, _MainTex);
 				o.texcoord.zw = TRANSFORM_TEX(v.texcoordBlendFrame.xy, _MainTex);
 				o.blend = v.texcoordBlendFrame.z;
-#endif
-#endif
+
+
 #ifdef FresnelFade_ON
 				o.fresnel = abs(dot(normalize(v.normal), normalize(ObjSpaceViewDir(v.vertex))));
 				o.fresnel = saturate((pow(o.fresnel, _FresnelStr)) * 2);
-#endif
+
 				UNITY_TRANSFER_FOG(o,o.vertex);
 				return o;
 			}
@@ -156,7 +151,7 @@ Category {
 
 			#ifdef Clip_ON
 				res.a = step(_Cutout, tex.a) * res.a;
-			#endif	
+				
 
 			#ifdef Clip_ON_Alpha
 				res.a = step(1-i.color.a + _Cutout, tex.a);

@@ -38,14 +38,17 @@ public class PlayerController : MonoBehaviour
 
 		//Amount of downward gravitation;
 		public float m_gravity = 35f;
+
+		public float m_timeToFallWhenNotGrounded = 0.1f;
 	}
 
 	[Header("Jump variables")]
+	//'Aircontrol' determines to what degree the player is able to move while in the air;
+	[SerializeField, Range(0f, 1f)] float m_airControl = 0.8f;
 	public Jump m_jump;
+	public Jump m_doubleJump;
 	[Serializable] public class Jump{
-		//'Aircontrol' determines to what degree the player is able to move while in the air;
-		[Range(0f, 1f)] public float m_airControl = 0.4f;
-		public float m_speed = 10f;
+		public float m_height = 2.5f;
 		public float m_duration = 0.2f;
 	}
 
@@ -54,6 +57,7 @@ public class PlayerController : MonoBehaviour
 	[Serializable] public class Dash{
 		public float m_distance = 10;
 		public float m_timeToDash = 0.25f;
+		public float m_dashCooldown = 0.5f;
 	}
 
 	[Header("Field Of View")]
@@ -89,7 +93,12 @@ public class PlayerController : MonoBehaviour
     //Movement speed;
     float m_currentSpeed;
 	
+	float m_jumpSpeed;
+	float m_doubleJumpSpeed;
 	float m_currentJumpStartTime = 0f;
+
+	float m_currentTimeToFallWhenNotGrounded = 0;
+	bool m_hasToFall = false;
 
 	//Current momentum;
 	Vector3 m_momentum = Vector3.zero;
@@ -102,7 +111,9 @@ public class PlayerController : MonoBehaviour
 
 	bool m_hasJump = false;
 	bool m_hasDoubleJump = false;
+
 	bool m_hasDash = false;
+	IEnumerator m_dashCooldownCorout;
 
 	Vector3 m_playerMoveInputsDirection;
 
@@ -124,6 +135,9 @@ public class PlayerController : MonoBehaviour
 		m_playerWeapon = GetComponent<WeaponPlayerBehaviour>();
 
         m_currentSpeed = m_movements.m_movementSpeed;
+
+		m_jumpSpeed = m_jump.m_height / m_jump.m_duration;
+		m_doubleJumpSpeed = m_doubleJump.m_height / m_doubleJump.m_duration;
 	}
 
 	void OnEnable()
@@ -223,8 +237,8 @@ public class PlayerController : MonoBehaviour
 		_velocity *= m_currentSpeed;
 
 		//If controller is in the air, multiply movement velocity with 'airControl';
-		if(!PlayerIsGrounded())
-			_velocity = _velocityDirection * m_currentSpeed * m_jump.m_airControl;
+		if(!PlayerIsGrounded() && m_hasToFall)
+			_velocity = _velocityDirection * m_currentSpeed * m_airControl;
 
 		return _velocity;
 	}
@@ -247,12 +261,12 @@ public class PlayerController : MonoBehaviour
 		// if (m_useGravity)
 		// {
 			_verticalMomentum -= m_trans.up * m_physics.m_gravity * Time.deltaTime;
-			if(PlayerIsGrounded())
+			if(PlayerIsGrounded() || !m_hasToFall)
 				_verticalMomentum = Vector3.zero;
 		// }
 
 		//Apply friction to horizontal momentum based on whether the controller is grounded;
-		if(PlayerIsGrounded())
+		if(PlayerIsGrounded() && !m_hasToFall)
 			_horizontalMomentum = VectorMath.IncrementVectorLengthTowardTargetLength(_horizontalMomentum, m_physics.m_groundFriction, Time.deltaTime, 0f);
 		else
 			_horizontalMomentum = VectorMath.IncrementVectorLengthTowardTargetLength(_horizontalMomentum, m_physics.m_airFriction, Time.deltaTime, 0f); 
@@ -263,8 +277,17 @@ public class PlayerController : MonoBehaviour
         if(CurrentState(PlayerState.Jump))
         {
             m_momentum = VectorMath.RemoveDotVector(m_momentum, m_trans.up);
-			m_momentum += m_trans.up * m_jump.m_speed;
+
+			AddJumpMomentum();
         }
+	}
+
+	void AddJumpMomentum()
+	{
+		if (m_hasJump && !m_hasDoubleJump)
+			m_momentum += m_trans.up * m_jumpSpeed;
+		if (m_hasDoubleJump)
+			m_momentum += m_trans.up * m_doubleJumpSpeed;
 	}
 
 	//Helper functions;
@@ -283,6 +306,11 @@ public class PlayerController : MonoBehaviour
 		return(_verticalMomentum.magnitude > _limit);
 	}
 
+	IEnumerator StartDashCooldownCorout()
+	{
+        yield return new WaitForSeconds(m_dash.m_dashCooldown);
+        On_PlayerHasDash(false);
+	}
 #endregion
 
 #region Public Functions
@@ -293,6 +321,10 @@ public class PlayerController : MonoBehaviour
     {
         return m_sM.CurrentStateIndex == (int)playerState;
     }
+	public bool LastState(PlayerState playerState)
+    {
+        return m_sM.LastStateIndex == (int)playerState;
+    }
 
     public void CheckForGround()
 	{
@@ -300,6 +332,8 @@ public class PlayerController : MonoBehaviour
 	}
     public bool PlayerIsGrounded()
 	{
+		if (m_mover.IsGrounded())
+			m_hasToFall = false;
 		return m_mover.IsGrounded();
 	}
 
@@ -367,7 +401,6 @@ public class PlayerController : MonoBehaviour
 	{
 		if (CalculateMovementDirection() != Vector3.zero && !m_hasDash)
 			return true;
-
 		return false;
 	}
 
@@ -396,6 +429,13 @@ public class PlayerController : MonoBehaviour
 	public void On_PlayerHasDash(bool hasDash)
 	{
 		m_hasDash = hasDash;
+	}
+	public void StartDashCooldown()
+	{
+        if (m_dashCooldownCorout != null)
+            StopCoroutine(m_dashCooldownCorout);
+        m_dashCooldownCorout = StartDashCooldownCorout();
+        StartCoroutine(m_dashCooldownCorout);
 	}
 
     //Get last frame's velocity;
@@ -432,7 +472,7 @@ public class PlayerController : MonoBehaviour
 	public void On_JumpStart()
 	{
 		//Add jump force to momentum;
-		m_momentum += m_trans.up * m_jump.m_speed;
+		AddJumpMomentum();
 
 		//Set jump start time;
 		m_currentJumpStartTime = Time.time;
@@ -460,8 +500,8 @@ public class PlayerController : MonoBehaviour
 			_velocityDirection = _currentVelocity/_length;
 
 		//Subtract from '_length', based on 'movementSpeed' and 'airControl', check for overshooting;
-		if(_length >= m_currentSpeed * m_jump.m_airControl)
-			_length -= m_currentSpeed * m_jump.m_airControl;
+		if(_length >= m_currentSpeed * m_airControl)
+			_length -= m_currentSpeed * m_airControl;
 		else
 			_length = 0f;
 
@@ -480,6 +520,30 @@ public class PlayerController : MonoBehaviour
 			OnLand(m_momentum);
 
 		m_references.m_playerAudio.On_Land();
+	}
+
+	public bool PlayerHasToFall()
+	{
+		if(!PlayerIsGrounded() || PlayerIsFalling())
+        {
+			m_currentTimeToFallWhenNotGrounded += Time.deltaTime;
+			if (m_currentTimeToFallWhenNotGrounded > m_physics.m_timeToFallWhenNotGrounded)
+			{
+				m_currentTimeToFallWhenNotGrounded = 0;
+				m_hasToFall = true;
+				return true;
+			}
+        }
+		else
+		{
+			if (m_currentTimeToFallWhenNotGrounded != 0)
+				m_currentTimeToFallWhenNotGrounded = 0;
+		}
+		return false;
+	}
+	public void HasToFall()
+	{
+		m_hasToFall = true;
 	}
 
 	//Events;

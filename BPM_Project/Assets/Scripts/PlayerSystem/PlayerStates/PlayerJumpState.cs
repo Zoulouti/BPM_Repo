@@ -24,6 +24,11 @@ public class PlayerJumpState : IState
 
         m_playerController.On_GroundContactLost();
         m_playerController.On_JumpStart();
+
+        if (m_playerController.LastState(PlayerState.Idle) || m_playerController.LastState(PlayerState.Run))
+        {
+		    m_playerController.On_PlayerHasDash(false);
+        }
     }
     public void FixedUpdate()
     {

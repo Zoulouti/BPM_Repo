@@ -44,10 +44,6 @@ Category {
 			#pragma shader_feature VertLight_OFF VertLight4_ON
 			#pragma shader_feature FrameBlend_OFF FrameBlend_ON
 			#pragma shader_feature SoftParticles_OFF SoftParticles_ON
-			#pragma shader_feature _ USE_CLIPPING_MASK
-			#pragma shader_feature _ CAST_UI_CULLING_TO_SCREEN_SPACE
-			#pragma shader_feature _ SOFT_COLLISION_MODE
-			#pragma shader_feature CLIPPINGMODE_INSIDE CLIPPINGMODE_OUTSIDE
 			#define IS_UI_3D_RENDERER
 			#include "UnityCG.cginc"
 			#include "Assets/Plugins/UI3DSystem/Shaders/UIDepthLib.cginc"
@@ -139,21 +135,21 @@ Category {
 
 #ifdef FrameBlend_OFF
 				o.texcoord = TRANSFORM_TEX(v.texcoord,_MainTex);
-#else
+
 #if UNITY_VERSION == 600
 				o.texcoord.xy = TRANSFORM_TEX(v.texcoords.xy, _MainTex);
 				o.texcoord.zw = TRANSFORM_TEX(v.texcoords.zw, _MainTex);
 				o.blend = v.texcoordBlend;
-#else
+
 				o.texcoord.xy = TRANSFORM_TEX(v.texcoord, _MainTex);
 				o.texcoord.zw = TRANSFORM_TEX(v.texcoordBlendFrame.xy, _MainTex);
 				o.blend = v.texcoordBlendFrame.z;
-#endif
-#endif
+
+
 #ifdef FresnelFade_ON
 				o.fresnel = abs(dot(normalize(v.normal), normalize(ObjSpaceViewDir(v.vertex))));
 				o.fresnel = saturate((pow(o.fresnel, _FresnelStr)) * 2);
-#endif
+
 				UNITY_TRANSFER_FOG(o,o.vertex);
 				
 				float3 wPos = mul(unity_ObjectToWorld, v.vertex).xyz;
@@ -177,12 +173,12 @@ Category {
 			
 			#ifdef FrameBlend_OFF
 				half4 tex = tex2D(_MainTex, i.texcoord);
-			#else
+			
 				//half4 tex = Tex2DInterpolated(_MainTex, i.texcoord, _Tiling);
 				half4 tex1 = tex2D(_MainTex, i.texcoord.xy);
 				half4 tex2 = tex2D(_MainTex, i.texcoord.zw);
 				half4 tex = lerp(tex1, tex2, i.blend);
-			#endif
+			
 
 				half4 res = 2 * tex * _TintColor;
 
