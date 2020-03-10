@@ -47,9 +47,8 @@ Category {
 				half4 color : COLOR;
 				float2 texcoord : TEXCOORD0;
 				UNITY_FOG_COORDS(1)
-				#ifdef SOFTPARTICLES_ON
 				float4 projPos : TEXCOORD2;
-				#endif
+				
 				float height : TEXCOORD3;
 			};
 			
@@ -79,11 +78,9 @@ Category {
 				o.height = height;
 
 				o.vertex = UnityObjectToClipPos(v.vertex);
-
-				#ifdef SOFTPARTICLES_ON
 				o.projPos = ComputeScreenPos (o.vertex);
 				COMPUTE_EYEDEPTH(o.projPos.z);
-				#endif
+				
 				o.color = v.color;
 				o.texcoord = TRANSFORM_TEX(v.texcoord,_MainTex);
 				UNITY_TRANSFER_FOG(o,o.vertex);

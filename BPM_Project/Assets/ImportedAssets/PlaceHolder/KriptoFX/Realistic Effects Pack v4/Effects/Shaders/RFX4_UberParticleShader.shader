@@ -92,7 +92,8 @@ Shader "KriptoFX/RFX4/Particle"
 #pragma shader_feature _BLENDMODE_BLEND
 
 
-#include "UnityCG.cginc"
+#include "UnityCG.cginc"
+ float4 _DepthPyramidScale;
 
 		sampler2D _MainTex;
 	sampler2D _NoiseTex;
@@ -172,9 +173,8 @@ Shader "KriptoFX/RFX4/Particle"
 		UNITY_FOG_COORDS(4)
 
 #ifdef _FADING_ON
-	#ifdef SOFTPARTICLES_ON
 			float4 projPos : TEXCOORD5;
-	#endif
+	
 #endif
 
 #if defined (USE_FRESNEL_FADING) || defined (USE_FRESNEL)
@@ -199,10 +199,10 @@ Shader "KriptoFX/RFX4/Particle"
 
 		o.vertex = UnityObjectToClipPos(v.vertex);
 #ifdef _FADING_ON
-	#ifdef SOFTPARTICLES_ON
-		o.projPos = ComputeScreenPos(o.vertex);
+		o.projPos = ComputeScreenPos(o.vertex);
+		o.projPos.xy *= _DepthPyramidScale.xy;
 		COMPUTE_EYEDEPTH(o.projPos.z);
-	#endif
+	
 #endif
 		o.color = v.color;
 
@@ -255,14 +255,13 @@ Shader "KriptoFX/RFX4/Particle"
 		UNITY_SETUP_INSTANCE_ID(i);
 
 #ifdef _FADING_ON
-	#ifdef SOFTPARTICLES_ON
 		float z = tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.projPos)).r;
 		float sceneZ = LinearEyeDepth(UNITY_SAMPLE_DEPTH(z));
 		float partZ = i.projPos.z;
 		float fade = saturate(_InvFade * (sceneZ - partZ));
 		fade = lerp(fade, 1 - fade, _SoftInverted);
 		i.color.a *= fade;
-	#endif
+	
 #endif
 
 #ifdef USE_NOISE_DISTORTION

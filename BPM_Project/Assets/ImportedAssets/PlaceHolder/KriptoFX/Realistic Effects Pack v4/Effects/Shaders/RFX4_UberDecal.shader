@@ -76,7 +76,8 @@ Shader "KriptoFX/RFX4/Decal"
 
 #pragma multi_compile _BLENDMODE_ADD _BLENDMODE_BLEND _BLENDMODE_MUL
 
-#include "UnityCG.cginc"
+#include "UnityCG.cginc"
+ float4 _DepthPyramidScale;
 
 		sampler2D _MainTex;
 	sampler2D _NoiseTex;
@@ -152,7 +153,8 @@ Shader "KriptoFX/RFX4/Decal"
 		o.color = v.color;
 
 		o.ray = UnityObjectToViewPos(v.vertex) * float3(-1, -1, 1);
-		o.screenUV = ComputeScreenPos(o.vertex);
+		o.screenUV = ComputeScreenPos(o.vertex);
+		o.screenUV.xy *= _DepthPyramidScale.xy;
 
 #if USE_QUAD_DECAL
 	#ifdef USE_WORLD_SPACE_UV

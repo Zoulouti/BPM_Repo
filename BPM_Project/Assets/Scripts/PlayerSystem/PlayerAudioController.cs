@@ -15,7 +15,6 @@ public class PlayerAudioController : AudioController
         public float m_footStepDistance = 0.25f;
         public float m_footStepDistanceRandomizer = 0.025f;
         public Sounds m_stoneStep;
-        public Sounds m_metalStep;
         public Sounds m_woodStep;
     }
 
@@ -90,9 +89,6 @@ public class PlayerAudioController : AudioController
             case GroundTypeEnum.Stone:
                 StartSoundFromArray(m_steps.m_stoneStep.m_audioSource, m_steps.m_stoneStep.m_sounds, m_steps.m_stoneStep.m_volume, m_steps.m_stoneStep.m_volumeRandomizer, m_steps.m_stoneStep.m_pitch, m_steps.m_stoneStep.m_pitchRandomizer);
             break;
-            case GroundTypeEnum.Metal:
-                StartSoundFromArray(m_steps.m_metalStep.m_audioSource, m_steps.m_metalStep.m_sounds, m_steps.m_metalStep.m_volume, m_steps.m_metalStep.m_volumeRandomizer, m_steps.m_metalStep.m_pitch, m_steps.m_metalStep.m_pitchRandomizer);
-            break;
             case GroundTypeEnum.Wood:
                 StartSoundFromArray(m_steps.m_woodStep.m_audioSource, m_steps.m_woodStep.m_sounds, m_steps.m_woodStep.m_volume, m_steps.m_woodStep.m_volumeRandomizer, m_steps.m_woodStep.m_pitch, m_steps.m_woodStep.m_pitchRandomizer);
             break;
@@ -107,7 +103,7 @@ public class PlayerAudioController : AudioController
             if (hitGround != null)
                 return hitGround.GroundType;
         }
-        return GroundTypeEnum.Metal;
+        return GroundTypeEnum.Stone;
     }
     void SetTargetedFootStepDistance()
     {
@@ -139,9 +135,6 @@ public class PlayerAudioController : AudioController
         {
             case GroundTypeEnum.Stone:
                 StartSoundFromArray(m_land.m_stone.m_audioSource, m_land.m_stone.m_sounds, m_land.m_stone.m_volume, m_land.m_stone.m_volumeRandomizer, m_land.m_stone.m_pitch, m_land.m_stone.m_pitchRandomizer);
-            break;
-            case GroundTypeEnum.Metal:
-                StartSoundFromArray(m_land.m_metal.m_audioSource, m_land.m_metal.m_sounds, m_land.m_metal.m_volume, m_land.m_metal.m_volumeRandomizer, m_land.m_metal.m_pitch, m_land.m_metal.m_pitchRandomizer);
             break;
             case GroundTypeEnum.Wood:
                 StartSoundFromArray(m_land.m_wood.m_audioSource, m_land.m_wood.m_sounds, m_land.m_wood.m_volume, m_land.m_wood.m_volumeRandomizer, m_land.m_wood.m_pitch, m_land.m_wood.m_pitchRandomizer);

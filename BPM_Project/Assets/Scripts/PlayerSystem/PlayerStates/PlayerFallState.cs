@@ -17,9 +17,16 @@ public class PlayerFallState : IState
     public void Enter()
     {
         m_playerController.On_GroundContactLost();
+
+        if (m_playerController.LastState(PlayerState.Idle) || m_playerController.LastState(PlayerState.Run))
+        {
+		    m_playerController.On_PlayerHasDash(false);
+        }
     }
     public void FixedUpdate()
     {
+        m_playerController.HasToFall();
+
         m_playerController.CheckForGround();
 
         if(m_playerController.PlayerIsGrounded())
