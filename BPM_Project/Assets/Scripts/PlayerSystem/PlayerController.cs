@@ -58,6 +58,10 @@ public class PlayerController : MonoBehaviour
 		public float m_distance = 10;
 		public float m_timeToDash = 0.25f;
 		public float m_dashCooldown = 0.5f;
+
+		[Header("After Dash")]
+		public bool m_useRawInput = false;
+		public float m_timeToStopUseRawInput = 1;
 	}
 
 	[Header("Field Of View")]
@@ -109,11 +113,14 @@ public class PlayerController : MonoBehaviour
 	//Saved horizontal movement velocity from last frame;
 	Vector3 m_savedMovementVelocity = Vector3.zero;
 
+	bool m_currentUseRawInput;
+
 	bool m_hasJump = false;
 	bool m_hasDoubleJump = false;
 
 	bool m_hasDash = false;
 	IEnumerator m_dashCooldownCorout;
+	IEnumerator m_rawInputAfterDash;
 
 	Vector3 m_playerMoveInputsDirection;
 
@@ -138,6 +145,8 @@ public class PlayerController : MonoBehaviour
 
 		m_jumpSpeed = m_jump.m_height / m_jump.m_duration;
 		m_doubleJumpSpeed = m_doubleJump.m_height / m_doubleJump.m_duration;
+
+		m_currentUseRawInput = m_movements.m_useRawInput;
 	}
 
 	void OnEnable()
@@ -202,7 +211,7 @@ public class PlayerController : MonoBehaviour
 		float _verticalInput;
 
 		//Get input;
-		if(m_movements.m_useRawInput){
+		if(m_currentUseRawInput){
 			_horizontalInput = Input.GetAxisRaw(m_horizontalInputAxis);
 			_verticalInput = Input.GetAxisRaw(m_verticalInputAxis);
 		} else {
@@ -310,6 +319,12 @@ public class PlayerController : MonoBehaviour
 	{
         yield return new WaitForSeconds(m_dash.m_dashCooldown);
         On_PlayerHasDash(false);
+	}
+	IEnumerator StartRawInputCooldownAfterDash()
+	{
+		m_currentUseRawInput = m_dash.m_useRawInput;
+        yield return new WaitForSeconds(m_dash.m_timeToStopUseRawInput);
+		m_currentUseRawInput = m_movements.m_useRawInput;
 	}
 #endregion
 
@@ -436,6 +451,13 @@ public class PlayerController : MonoBehaviour
             StopCoroutine(m_dashCooldownCorout);
         m_dashCooldownCorout = StartDashCooldownCorout();
         StartCoroutine(m_dashCooldownCorout);
+	}
+	public void StartRawInputAfterDash()
+	{
+        if (m_rawInputAfterDash != null)
+            StopCoroutine(m_rawInputAfterDash);
+        m_rawInputAfterDash = StartRawInputCooldownAfterDash();
+        StartCoroutine(m_rawInputAfterDash);
 	}
 
     //Get last frame's velocity;

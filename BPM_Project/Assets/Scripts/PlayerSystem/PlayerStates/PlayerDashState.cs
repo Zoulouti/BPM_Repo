@@ -42,8 +42,7 @@ public class PlayerDashState : IState
         if(m_dashTimer > m_playerController.m_dash.m_timeToDash && !m_haseDash)
         {
             m_haseDash = true;
-            m_playerController.ChangeState(PlayerState.Run);
-            // Check si on touche le sol ou pas pour passer en RunState, FallState ou IdleState si on bouge pas
+            ExitStateAfterDash();
         }
 
         m_playerController.SetPlayerVelocity(m_dashDirection * m_dashSpeed);
@@ -66,8 +65,30 @@ public class PlayerDashState : IState
 
         if (m_playerController.PlayerIsGrounded())
         {
-		    // m_playerController.On_PlayerHasDash(false);
             m_playerController.StartDashCooldown();
+        }
+
+        m_playerController.StartRawInputAfterDash();
+    }
+
+    void ExitStateAfterDash()
+    {
+        m_playerController.CheckForGround();
+
+        if (m_playerController.PlayerIsGrounded())
+        {
+            if(!m_playerController.PlayerInputIsMoving())
+            {
+                m_playerController.ChangeState(PlayerState.Idle);
+            }
+            else
+            {
+                m_playerController.ChangeState(PlayerState.Run);
+            }
+        }
+        else
+        {
+            m_playerController.ChangeState(PlayerState.Fall);
         }
     }
 

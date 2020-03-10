@@ -44,10 +44,6 @@ Category {
 			#pragma shader_feature VertLight_OFF VertLight4_ON
 			#pragma shader_feature FrameBlend_OFF FrameBlend_ON
 			#pragma shader_feature SoftParticles_OFF SoftParticles_ON
- float4 _DepthPyramidScale;
-
-			#pragma target 3.0
-			
 
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
@@ -196,15 +192,15 @@ Category {
 				//res *= i.color;
 			#ifdef FresnelFade_ON
 				res.a *= i.fresnel;
-			#endif
+			
 				
 
 			#ifdef BlendAdd
 				UNITY_APPLY_FOG_COLOR(i.fogCoord, res, half4(0,0,0,0)); 
-			#endif
+			
 			#ifdef BlendAlpha
 				UNITY_APPLY_FOG(i.fogCoord, res);
-			#endif
+			
 			#ifdef BlendMul
 				res = lerp(half4(1,1,1,1), res, res.a);
 				UNITY_APPLY_FOG_COLOR(i.fogCoord, res, half4(1,1,1,1)); // fog towards white due to our blend mode
