@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using EnemyStateEnum;
 
 public class EnemyCara : MonoBehaviour
 {
@@ -18,48 +19,62 @@ public class EnemyCara : MonoBehaviour
     public EnemyCaractéristique _enemyCaractéristique = new EnemyCaractéristique();
     [Serializable] public class EnemyCaractéristique
     {
-        [Tooltip("Override the stats in the GameManager")]
-        public bool useCustomTweaking;
-        [Space]
         public Move _move = new Move();
         [Serializable]
         public class Move
         {
             public float moveSpeed;
         }
-        public Attack _attack = new Attack();
-        [Serializable]
-        public class Attack
-        {
-            public int damage;
-            public float timeBetweenShots;
-            public float reloadTime;
-        }
+        //public Attack _attack = new Attack();
+        //[Serializable]
+        //public class Attack
+        //{
+        //    public int damage;
+        //    public float timeBetweenShots;
+        //    public float reloadTime;
+        //}
         public Health _health = new Health();
         [Serializable]
         public class Health
         {
             public float maxHealth;
+            public int damageMultiplicatorOnWeakSpot = 1;
+            public int damageMultiplicatorOnNoSpot = 1;
+        }
+        public StunResistance _stunResistance = new StunResistance();
+        [Serializable]
+        public class StunResistance
+        {
+            public float timeForStunResistance;
         }
     }
+    EnemyController controller;
     float _currentLife;
     int _currentDamage;
-    GameManager manager;
+    bool _isDead;
+    float _currentTimeForElectricalStun;
+    float _currentTimeForStunResistance;
 
-    public void Awake()
+    #region Get Set
+    public float CurrentLife { get => _currentLife; set => _currentLife = value; }
+    public bool IsDead { get => _isDead; set => _isDead = value; }
+    public float CurrentTimeForElectricalStun { get => _currentTimeForElectricalStun; set => _currentTimeForElectricalStun = value; }
+    #endregion
+
+    public void OnEnable()
     {
-        enemyArchetype.PopulateArray();
+        _isDead = false;
 
         #region Activate Archetype
-        for (int i = 0, l= enemyArchetype.e_TypeOfSpot.Length; i < l; ++i)
+        for (int i = 0, l = enemyArchetype.e_TypeOfSpot.Length; i < l; ++i)
         {
-            if(enemyArchetype.e_TypeOfSpot[i] == EnemyArchetype.TypeOfSpot.WeakSpot)
+            if (enemyArchetype.e_TypeOfSpot[i] == EnemyArchetype.TypeOfSpot.WeakSpot)
             {
                 _debug.weakSpots[i].SetActive(true);
                 _debug.armorSpots[i].SetActive(false);
                 _debug.noSpot[i].SetActive(false);
             }
-            else if(enemyArchetype.e_TypeOfSpot[i] == EnemyArchetype.TypeOfSpot.NoSpot)
+            else if (enemyArchetype.e_TypeOfSpot[i] == EnemyArchetype.TypeOfSpot.NoSpot)
             {
                 _debug.weakSpots[i].SetActive(false);
                 _debug.armorSpots[i].SetActive(false);
@@ -68,48 +83,69 @@ public class EnemyCara : MonoBehaviour
         }
         #endregion
 
-        InitializeEnemyStats(_enemyCaractéristique.useCustomTweaking);
-    }
-    private void Start()
-    {
-        #region Get Singleton
-        manager = GameManager.Instance;
-        #endregion
+        InitializeEnemyStats();
     }
 
-    public void TakeDamage(float damage, int i)
+
+    public void Awake()
+    {
+        enemyArchetype.PopulateArray();
+        controller = GetComponent<EnemyController>();
+    }
+
+    private void Update()
+    {
+        if(_currentTimeForStunResistance != 0)
+        {
+            _currentTimeForStunResistance -= Time.deltaTime;
+            if(_currentTimeForStunResistance <= 0)
+            {
+                _currentTimeForStunResistance = 0;
+            }
+        }
+    }
+
+    public void TakeDamage(float damage, int i, bool hasToBeStun, float timeForElectricalStun)
     {
         switch (i)
         {
             case 0:
 
-                _currentLife -= damage * manager.noSpotDamageMultiplicateur;
+                _currentLife -= damage * _enemyCaractéristique._health.damageMultiplicatorOnNoSpot;
 
                 break;
             case 1:
 
-                _currentLife -= damage * manager.weakSpotDamageMultiplicateur;
+                _currentLife -= damage * _enemyCaractéristique._health.damageMultiplicatorOnWeakSpot;
 
                 break;
             default:
                 break;
         }
+
+        if (hasToBeStun && !controller.m_sM.CompareState((int)EnemyState.Enemy_StunState) && _currentTimeForStunResistance == 0f && !controller.m_sM.CompareState((int)EnemyState.Enemy_DieState))
+        {
+            _currentTimeForElectricalStun = timeForElectricalStun;
+            _currentTimeForStunResistance = _enemyCaractéristique._stunResistance.timeForStunResistance;
+            controller.m_sM.ChangeState((int)EnemyState.Enemy_StunState);
+        }
+
+        CheckIfDead();
+
     }
 
-
-    void InitializeEnemyStats(bool overRide)
+    void CheckIfDead()
     {
-        if (overRide)
+        if (_currentLife <= 0)
         {
-            _currentLife = _enemyCaractéristique._health.maxHealth;
-            _currentDamage = _enemyCaractéristique._attack.damage;
-        }
-        else
-        {
-            _currentLife = manager._health.maxHealth;
-            _currentLife = manager._attack.damage;
+            _isDead = true;
+            controller.m_sM.ChangeState((int)EnemyState.Enemy_DieState);
         }
     }
 
-
+    void InitializeEnemyStats()
+    {
+        _currentLife = _enemyCaractéristique._health.maxHealth;
+        //_currentDamage = _enemyCaractéristique._attack.damage;
+    }
 }

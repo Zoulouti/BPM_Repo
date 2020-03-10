@@ -2,15 +2,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GroundType;
 
 public class PlayerAudioController : AudioController
 {
 
 #region SerializeField Functions
     [Header("Steps")]
-	[SerializeField] float m_footStepDistance = 0.2f;
-    [SerializeField] Sounds m_woodStep;
-    [SerializeField] Sounds m_metalStep;
+    [SerializeField] Steps m_steps;
+    [System.Serializable] class Steps
+    {
+        public float m_footStepDistance = 0.25f;
+        public float m_footStepDistanceRandomizer = 0.025f;
+        public Sounds m_stoneStep;
+        public Sounds m_metalStep;
+        public Sounds m_woodStep;
+    }
 
     [Header("Jump")]
     [SerializeField] Sounds m_jump;
@@ -19,85 +26,104 @@ public class PlayerAudioController : AudioController
     [SerializeField] Sounds m_doubleJump;
 
     [Header("Land")]
-    [SerializeField] Sounds m_land;
+    [SerializeField] Land m_land;
+    [System.Serializable] class Land
+    {
+        public Sounds m_stone;
+        public Sounds m_metal;
+        public Sounds m_wood;
+    }
 
     [Header("Dash")]
     [SerializeField] Sounds m_dash;
-    
-    [System.Serializable] class Sounds
-    {
-        [Header("References")]
-        public AudioSource m_audioSource;
 
-        [Header("Sounds")]
-        public AudioClip[] m_sounds;
+    [Header("Steps & Land Raycast")]
+    [SerializeField] Transform m_raycastTrans;
+    [SerializeField] float m_raycastMaxDistance = 0.25f;
+    [SerializeField] LayerMask m_groundMask;
 
-        [Header("Volume")]
-        [Range(0, 1)] public float m_volume = 0.75f;
-        [Range(0, 0.5f)] public float m_volumeRandomizer = 0.2f;
-
-        [Header("Pitch")]
-        [Range(-3, 3)] public float m_pitch = 1;
-        [Range(0, 1.5f)] public float m_pitchRandomizer = 0.1f;
-    }
+    [Header("Gizmos")]
+    [SerializeField] bool m_showGizmos = false;
+    [SerializeField] Color m_gizmosColor = Color.magenta;
 #endregion
 
 #region Private Variables
     bool m_isRunning = false;
-    float m_currentFootstepDistance = 0f;
-	float m_currentFootStepValue = 0f;
-    float m_footSpeedThreshold = 0.05f;
+    float m_targetedFootStepDistance;
+	float m_currentFootStepDistance = 0f;
 #endregion
 
 #region Event Functions
+    void Start()
+    {
+        SetTargetedFootStepDistance();
+    }
 	void Update () {
         if (m_isRunning)
             CheckFootSteps();
 	}
+    void OnDrawGizmos()
+    {
+        if (!m_showGizmos)
+            return;
+        
+        Gizmos.color = m_gizmosColor;
+        Gizmos.DrawLine(m_raycastTrans.position, m_raycastTrans.position + m_raycastTrans.forward * m_raycastMaxDistance);
+    }
 #endregion
 	
 #region Private Functions
     void CheckFootSteps()
     {
-
-        PlayFootStepSound();
+        m_currentFootStepDistance += Time.deltaTime;
+        if (m_currentFootStepDistance > m_targetedFootStepDistance)
+        {
+            PlayFootStepSound();
+            m_currentFootStepDistance = 0;
+            SetTargetedFootStepDistance();
+        }
     }
     void PlayFootStepSound()
 	{
-		// int _footStepClipIndex = Random.Range(0, m_footStepSounds.Length);
-		// m_audioSource.PlayOneShot(m_footStepSounds[_footStepClipIndex], m_audioClipVolume + m_audioClipVolume * Random.Range(-m_relativeRandomizedVolumeRange, m_relativeRandomizedVolumeRange));
-
-        // WOOD
-        // StartSoundFromArray(m_woodStep.m_audioSource, m_woodStep.m_sounds, m_woodStep.m_volume, m_woodStep.m_volumeRandomizer, m_woodStep.m_pitch, m_woodStep.m_pitchRandomizer);
-        // Metal
-        // StartSoundFromArray(m_metalStep.m_audioSource, m_metalStep.m_sounds, m_metalStep.m_volume, m_metalStep.m_volumeRandomizer, m_metalStep.m_pitch, m_metalStep.m_pitchRandomizer);
+        switch (CheckPlayerGround())
+        {
+            case GroundTypeEnum.Stone:
+                StartSoundFromArray(m_steps.m_stoneStep.m_audioSource, m_steps.m_stoneStep.m_sounds, m_steps.m_stoneStep.m_volume, m_steps.m_stoneStep.m_volumeRandomizer, m_steps.m_stoneStep.m_pitch, m_steps.m_stoneStep.m_pitchRandomizer);
+            break;
+            case GroundTypeEnum.Metal:
+                StartSoundFromArray(m_steps.m_metalStep.m_audioSource, m_steps.m_metalStep.m_sounds, m_steps.m_metalStep.m_volume, m_steps.m_metalStep.m_volumeRandomizer, m_steps.m_metalStep.m_pitch, m_steps.m_metalStep.m_pitchRandomizer);
+            break;
+            case GroundTypeEnum.Wood:
+                StartSoundFromArray(m_steps.m_woodStep.m_audioSource, m_steps.m_woodStep.m_sounds, m_steps.m_woodStep.m_volume, m_steps.m_woodStep.m_volumeRandomizer, m_steps.m_woodStep.m_pitch, m_steps.m_woodStep.m_pitchRandomizer);
+            break;
+        }
     }
-    void CheckPlayerGround()
+    GroundTypeEnum CheckPlayerGround()
     {
-
+        RaycastHit hit;
+        if (Physics.Raycast(m_raycastTrans.position, m_raycastTrans.forward, out hit, m_raycastMaxDistance, m_groundMask))
+        {
+            Ground hitGround = hit.collider.GetComponent<Ground>();
+            if (hitGround != null)
+                return hitGround.GroundType;
+        }
+        return GroundTypeEnum.Metal;
     }
-
-    void FootStepUpdate(float _movementSpeed)
-	{
-		// float _speedThreshold = 0.05f;
-
-        // m_currentFootstepDistance += Time.deltaTime * _movementSpeed;
-
-        // //Play foot step audio clip if a certain distance has been traveled;
-        // if(m_currentFootstepDistance > m_footstepDistance)
-        // {
-        //     //Only play footstep sound if mover is grounded and movement speed is above the threshold;
-        //     if(m_mover.IsGrounded() && _movementSpeed > _speedThreshold)
-        //         PlayFootstepSound();
-        //     m_currentFootstepDistance = 0f;
-        // }
-	}
+    void SetTargetedFootStepDistance()
+    {
+        m_targetedFootStepDistance = GetRandomValue(m_steps.m_footStepDistance, m_steps.m_footStepDistanceRandomizer);
+    }
 #endregion
 
 #region Public Functions
     public void On_Run(bool isRunning)
     {
         m_isRunning = isRunning;
+        if (m_isRunning)
+        {
+            m_currentFootStepDistance = 0;
+            SetTargetedFootStepDistance();
+        }
     }
     public void On_Jump()
     {
@@ -109,7 +135,18 @@ public class PlayerAudioController : AudioController
     }
     public void On_Land()
     {
-        StartSoundFromArray(m_land.m_audioSource, m_land.m_sounds, m_land.m_volume, m_land.m_volumeRandomizer, m_land.m_pitch, m_land.m_pitchRandomizer);
+        switch (CheckPlayerGround())
+        {
+            case GroundTypeEnum.Stone:
+                StartSoundFromArray(m_land.m_stone.m_audioSource, m_land.m_stone.m_sounds, m_land.m_stone.m_volume, m_land.m_stone.m_volumeRandomizer, m_land.m_stone.m_pitch, m_land.m_stone.m_pitchRandomizer);
+            break;
+            case GroundTypeEnum.Metal:
+                StartSoundFromArray(m_land.m_metal.m_audioSource, m_land.m_metal.m_sounds, m_land.m_metal.m_volume, m_land.m_metal.m_volumeRandomizer, m_land.m_metal.m_pitch, m_land.m_metal.m_pitchRandomizer);
+            break;
+            case GroundTypeEnum.Wood:
+                StartSoundFromArray(m_land.m_wood.m_audioSource, m_land.m_wood.m_sounds, m_land.m_wood.m_volume, m_land.m_wood.m_volumeRandomizer, m_land.m_wood.m_pitch, m_land.m_wood.m_pitchRandomizer);
+            break;
+        }
     }
     public void On_Dash()
     {

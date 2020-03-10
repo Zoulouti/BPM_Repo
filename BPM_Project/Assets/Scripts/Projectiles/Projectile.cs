@@ -12,7 +12,12 @@ public class Projectile : MonoBehaviour
         Enemy
     }
     #endregion Projectile Type
-
+    public enum TypeOfCollision
+    {
+        Rigibody,
+        DoubleRaycasts,
+        UpdateRaycasts
+    }
     [Space]
     [Header("FX")]
     public GameObject m_dieFX;
@@ -20,7 +25,7 @@ public class Projectile : MonoBehaviour
     public float m_maxLifeTime = 5;
     [Header("DEBUG")]
     [Space]
-    public bool useRigibody;
+    public TypeOfCollision m_colType = TypeOfCollision.DoubleRaycasts;
     public float forceBuffer = 50f;
     Rigidbody rb;
     SphereCollider col;
@@ -51,7 +56,10 @@ public class Projectile : MonoBehaviour
     float m_speed = 25;
     int _currentDamage;
     int damage;
-    
+
+    bool _hasToStun;
+    float _timeForElectricalStun;
+
 
     #region Get Set
     public WeaponBehaviour WeaponBehaviour { get => _WeaponBehaviour; set => _WeaponBehaviour = value; }
@@ -70,32 +78,54 @@ public class Projectile : MonoBehaviour
     public Vector3 DistanceToReach { get => m_distanceToReach; set => m_distanceToReach = value; }
 
     public ProjectileType ProjectileType1 { get => m_projectileType; set => m_projectileType = value; }
+    public bool HasToStun { get => _hasToStun; set => _hasToStun = value; }
+    public float TimeForElectricalStun { get => _timeForElectricalStun; set => _timeForElectricalStun = value; }
     #endregion
 
     public void Start()
     {
-        if (useRigibody)
+        switch (m_colType)
         {
-            rb = gameObject.AddComponent<Rigidbody>();
-            col = gameObject.AddComponent<SphereCollider>();
+            case TypeOfCollision.Rigibody:
 
-            rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
-            rb.interpolation = RigidbodyInterpolation.Extrapolate;
-            rb.constraints = RigidbodyConstraints.FreezeRotation;
-            rb.useGravity = false;
+                rb = gameObject.AddComponent<Rigidbody>();
+                col = gameObject.AddComponent<SphereCollider>();
 
-            col.isTrigger = true;
-            col.radius = 0.05f;
-        }
-        else
-        {
-            #region Set Starting Length
-            m_awakeDistance = transform.localPosition;
-            deltaLength = Vector3.Distance(m_distanceToReach, m_awakeDistance);
-            newLength = deltaLength;
-            #endregion
+                rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+                rb.interpolation = RigidbodyInterpolation.Extrapolate;
+                rb.constraints = RigidbodyConstraints.FreezeRotation;
+                rb.useGravity = false;
 
-            StartCoroutine(CalculateDistance());
+                col.isTrigger = true;
+                col.radius = 0.05f;
+
+
+                break;
+            case TypeOfCollision.DoubleRaycasts:
+
+                #region Set Starting Length
+
+                m_awakeDistance = transform.localPosition;
+                deltaLength = Vector3.Distance(m_distanceToReach, m_awakeDistance);
+                newLength = deltaLength;
+
+                #endregion
+
+                StartCoroutine(CalculateDistance());
+
+                break;
+            case TypeOfCollision.UpdateRaycasts:
+
+                m_awakeDistance = transform.localPosition;
+                deltaLength = Vector3.Distance(m_distanceToReach, m_awakeDistance);
+                newLength = deltaLength;
+
+                if(_hit.distance - (Speed * Time.deltaTime) < 0)
+                {
+
+                }
+
+                break;
         }
 
         StartCoroutine(DestroyAnyway());
@@ -106,7 +136,7 @@ public class Projectile : MonoBehaviour
 
     IEnumerator CalculateDistance()
     {
-        while(newLength > 0)
+        while (newLength > 0)
         {
             transform.Translate(Vector3.forward * Speed * Time.deltaTime);
             m_currentDistance = transform.localPosition;
@@ -119,50 +149,15 @@ public class Projectile : MonoBehaviour
 
     void OnProjectilReachingMaxDistance()
     {
-        bool ray = Physics.Raycast(TransfoPos, TransfoDir, out _hit, Mathf.Infinity, RayCastCollision, QueryTriggerInteraction.Collide);
+        bool ray = OnCastRay(TransfoPos);
         if (ray)
         {
-            string tag = _hit.collider.tag;
-            if(Col == _hit.collider)
+            //string tag = _hit.collider.tag;
+            if (Col == _hit.collider)
             {
                 StopCoroutine(CalculateDistance());
 
-                #region Switch For WeakSpots
-                switch (tag)
-                {
-                    // Le tir du player touche un NoSpot
-                    case "NoSpot":
-
-                        BPMGain = BPMSystem._BPM.BPMGain_OnNoSpot * CurrentBPMGain;
-
-                        _hit.collider.GetComponent<ReferenceScipt>().cara.TakeDamage(CurrentDamage, 0);
-
-                        break;
-
-                    // Le tir du player touche un WeakSpot
-                    case "WeakSpot":
-
-                        BPMGain = BPMSystem._BPM.BPMGain_OnWeak * CurrentBPMGain;
-
-                        _hit.collider.GetComponent<ReferenceScipt>().cara.TakeDamage(CurrentDamage, 1);
-
-                        break;
-                }
-                #endregion
-
-                BPMSystem.GainBPM(BPMGain);
-
-                if (m_dieFX != null)
-                {
-                    Level.AddFX(m_dieFX, transform.position, Quaternion.identity);    //Impact FX
-                    if(_hit.collider.GetComponent<Rigidbody>() != null)
-                    {
-                        Rigidbody _rb = _hit.collider.GetComponent<Rigidbody>();
-                        _rb.AddForceAtPosition(-(_hit.normal * forceBuffer), _hit.point);
-                    }
-                }
-
-                DestroyProj();
+                SwitchForWeakSpots(_hit.collider);
             }
             else //Si la cible a bougé avant que le projectile ait atteind sa cible
             {
@@ -181,24 +176,86 @@ public class Projectile : MonoBehaviour
         }
     }
 
+    bool OnCastRay(Vector3 start)
+    {
+        return Physics.Raycast(start, TransfoDir, out _hit, Mathf.Infinity, RayCastCollision, QueryTriggerInteraction.Collide);
+    }
+
     #endregion
 
     #region When Using Rigibody
 
     private void FixedUpdate()
     {
-        if (useRigibody)
+        if (m_colType == TypeOfCollision.Rigibody)
         {
             rb.velocity = transform.forward * Speed;
         }
+
+        
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(col != null)
+        if (col != null)
         {
-            string tag = other.tag;
-            #region Switch For WeakSpots
+            SwitchForWeakSpots(other);
+        }
+    }
+    #endregion
 
+    #region When Using UpdateRayCast
+
+    private void LateUpdate()
+    {
+        if (m_colType == TypeOfCollision.UpdateRaycasts)
+        {
+            if (OnCastRay(transform.position))
+            {
+                //m_awakeDistance = transform.localPosition;
+                if (Col == _hit.collider)
+                {
+                        newLength = _hit.distance - (Speed * Time.deltaTime);
+
+                    if (newLength > 0)
+                    {
+                        //m_distanceToReach = _hit.point;
+                        transform.Translate(Vector3.forward * Speed * Time.deltaTime);
+                        m_currentDistance = transform.localPosition;
+
+                        //Debug.DrawLine(m_currentDistance, m_distanceToReach, Color.red);
+                    }
+                    else
+                    {
+                        SwitchForWeakSpots(_hit.collider);
+                    }
+                }
+                else
+                {
+                    #region Set New Length
+                    m_awakeDistance = m_currentDistance = transform.localPosition;
+                    m_distanceToReach = _hit.point;
+
+                    deltaLength = newLength = Vector3.Distance(m_distanceToReach, m_awakeDistance);
+                    TransfoPos = m_awakeDistance;
+                    TransfoDir = transform.forward;
+                    Col = _hit.collider;
+                    #endregion
+                }
+            }
+        }
+    }
+
+
+    #endregion
+
+
+    void SwitchForWeakSpots(Collider collider)
+    {
+        if(m_projectileType == ProjectileType.Player)
+        {
+            string tag = collider.tag;
+            #region Switch For WeakSpots
+            ReferenceScipt refScript = collider.GetComponent<ReferenceScipt>();
             switch (tag)
             {
                 // Le tir du player touche un NoSpot
@@ -206,7 +263,16 @@ public class Projectile : MonoBehaviour
 
                     BPMGain = BPMSystem._BPM.BPMGain_OnNoSpot * CurrentBPMGain;
 
-                    other.GetComponent<ReferenceScipt>().cara.TakeDamage(CurrentDamage, 0);
+                    if(collider != null)
+                    {
+                        if(refScript != null)
+                        {
+                            if(refScript.cara != null)
+                            {
+                                refScript.cara.TakeDamage(CurrentDamage, 0, HasToStun, TimeForElectricalStun);
+                            }
+                        }
+                    }
 
                     break;
 
@@ -215,24 +281,47 @@ public class Projectile : MonoBehaviour
 
                     BPMGain = BPMSystem._BPM.BPMGain_OnWeak * CurrentBPMGain;
 
-                    other.GetComponent<ReferenceScipt>().cara.TakeDamage(CurrentDamage, 1);
+                    if (collider != null)
+                    {
+                        if (refScript != null)
+                        {
+                            if (refScript.cara != null)
+                            {
+                                refScript.cara.TakeDamage(CurrentDamage, 1, HasToStun, TimeForElectricalStun);
+                            }
+                        }
+                    }
 
                     break;
             }
-
             #endregion
-
             BPMSystem.GainBPM(BPMGain);
-
-            if (m_dieFX != null)
-            {
-                Level.AddFX(m_dieFX, transform.position, Quaternion.identity);    ///Impact FX
-            }
-
-            DestroyProj();
         }
+        else if(m_projectileType == ProjectileType.Enemy)
+        {
+            if (collider.CompareTag("Player"))
+            {
+                BPMSystem _BPMSystem = collider.GetComponent<BPMSystem>();
+                if(_BPMSystem != null)
+                {
+                    _BPMSystem.LoseBPM(CurrentDamage);
+                }
+            }
+        }
+
+
+        if (m_dieFX != null)
+        {
+            Level.AddFX(m_dieFX, _hit.point, Quaternion.identity);    //Impact FX
+            if (collider.GetComponent<Rigidbody>() != null)
+            {
+                Rigidbody _rb = collider.GetComponent<Rigidbody>();
+                _rb.AddForceAtPosition(-(_hit.normal * forceBuffer), _hit.point);
+            }
+        }
+
+        DestroyProj();
     }
-    #endregion
 
     IEnumerator DestroyAnyway()
     {

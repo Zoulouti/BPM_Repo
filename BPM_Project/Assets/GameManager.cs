@@ -20,30 +20,33 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    [Space]
-    [Header("Enemy Stats Tweaking")]
-    public Move _move = new Move();
-    [Serializable]
-    public class Move
-    {
-        public float moveSpeed;
-    }
-    public Attack _attack = new Attack();
-    [Serializable]
-    public class Attack
-    {
-        public int damage;
-        public float timeBetweenShots;
-        public float reloadTime;
-    }
-    public Health _health = new Health();
-    [Serializable]
-    public class Health
-    {
-        public float maxHealth;
-    }
+    public float enemyAttackDispersement;
+    public float timeMeshShowingUp;
+
     [Header("Differents Spots Multiplicator Tweaking")]
     public float noSpotDamageMultiplicateur;
     public float weakSpotDamageMultiplicateur;
-    public float armorSpotDamageMultiplicateur;
+
+
+    /*public void Start()
+    {
+        StartCoroutine(TestSpawnDispersion());
+    }
+
+    IEnumerator TestSpawnDispersion()
+    {
+        Vector2 dispersion = UnityEngine.Random.insideUnitCircle * enemyAttackDispersement;
+        Vector3 pos = transform.position;
+        pos.x = dispersion.x;
+        pos.y = dispersion.y;
+        transform.position = pos;
+        yield return new WaitForSeconds(timeMeshShowingUp);
+        StartCoroutine(TestSpawnDispersion());
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(Vector3.zero, enemyAttackDispersement);
+    }*/
 }
