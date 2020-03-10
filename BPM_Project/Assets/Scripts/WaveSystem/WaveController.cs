@@ -44,4 +44,11 @@ public class WaveController : MonoBehaviour
             StartCoroutine(spawners[i].WaveSpawner(waveNbr, this));
         }
     }
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(transform.position, new Vector3(4f,1f,1f));
+    }
 }
