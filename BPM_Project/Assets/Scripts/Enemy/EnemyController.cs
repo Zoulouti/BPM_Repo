@@ -23,8 +23,11 @@ public class EnemyController : MonoBehaviour
 
     public virtual void OnEnable()
     {
-        
-        DistanceToTarget = GetTargetDistance(Target);
+        if(Target != null)
+        {
+            DistanceToTarget = GetTargetDistance(Target);
+        }
+
         EnemyCantShoot = false;
         ChangeState((int)EnemyState.Enemy_ChaseState);
     }
@@ -65,11 +68,12 @@ public class EnemyController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         cara = GetComponent<EnemyCara>();
         weaponBehavior = GetComponent<WeaponEnemyBehaviour>();
-        Target = PlayerController.s_instance.gameObject.transform;
     }
 
     private void Start()
     {
+        Target = PlayerController.s_instance.gameObject.transform;
+        DistanceToTarget = GetTargetDistance(Target);
         m_sM.Start();
     }
 

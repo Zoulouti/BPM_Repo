@@ -20,7 +20,7 @@ public class WaveController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            ActivateAllSpawner(_nbrOfWave);
+            StartCoroutine(spawners[0].WaveSpawner(_nbrOfWave, this));
         }
     }
 
@@ -29,9 +29,13 @@ public class WaveController : MonoBehaviour
         if (NbrOfDeadEnemy != 0 && NbrOfDeadEnemy == NbrOfEnemy)
         {
             _nbrOfWave++;
-            if(_nbrOfWave < spawners[0]._nbrOfWaves.Length)
+            for (int i = 0, l = spawners.Length; i < l; i++)
             {
-                ActivateAllSpawner(_nbrOfWave);
+                if (spawners[i].waveManager.ContainsKey(i))
+                {
+                    StartCoroutine(spawners[i].WaveSpawner(_nbrOfWave, this));
+                    //ActivateAllSpawner(_nbrOfWave);
+                }
             }
             //End of Wave
         }
@@ -41,7 +45,6 @@ public class WaveController : MonoBehaviour
     {
         for (int i = 0, l = spawners.Length; i < l; ++i)
         {
-            StartCoroutine(spawners[i].WaveSpawner(waveNbr, this));
         }
     }
 

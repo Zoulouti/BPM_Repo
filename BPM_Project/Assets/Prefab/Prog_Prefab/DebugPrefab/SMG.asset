@@ -18,7 +18,7 @@ MonoBehaviour:
     BPMGainOnHit: 5
     BPMCost: 0
     bulletSpeed: 200
-    bullet: {fileID: 1451592532500230711, guid: c53459ce1f414874f9136154c77e7bd9,
+    bullet: {fileID: 8129173191346671849, guid: 3a70a0991be4a6641ac4a9238603934f,
       type: 3}
   _weaponLevel1:
     damage: 20
@@ -33,5 +33,5 @@ MonoBehaviour:
     BPMCost: 12
     bulletSpeed: 300
     timeOfElectricalStun: 5
-    newBullet: {fileID: 1451592532500230711, guid: c53459ce1f414874f9136154c77e7bd9,
+    newBullet: {fileID: 8129173191346671849, guid: 3a70a0991be4a6641ac4a9238603934f,
       type: 3}
