@@ -101,7 +101,7 @@ public class WeaponEnemyBehaviour : WeaponBehaviour
     public override Vector3 OnSearchForLookAt()
     {
         Vector2 dispersion = UnityEngine.Random.insideUnitCircle * _attack.enemyAttackDispersement;
-        return new Vector3(enemyController.Target.position.x + dispersion.x, (enemyController.Target.position.y + YOffset) + dispersion.y, enemyController.Target.position.z ) ;
+        return new Vector3(enemyController.Player.position.x + dispersion.x, (enemyController.Player.position.y + YOffset) + dispersion.y, enemyController.Player.position.z ) ;
     }
 
     #endregion

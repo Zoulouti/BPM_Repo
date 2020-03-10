@@ -24,14 +24,12 @@ public class EnemyCara : MonoBehaviour
         {
             public float moveSpeed;
         }
-        //public Attack _attack = new Attack();
-        //[Serializable]
-        //public class Attack
-        //{
-        //    public int damage;
-        //    public float timeBetweenShots;
-        //    public float reloadTime;
-        //}
+        public Attack _attack = new Attack();
+        [Serializable]
+        public class Attack
+        {
+            public float rangeRadius;
+        }
         public Health _health = new Health();
         [Serializable]
         public class Health
@@ -67,15 +65,6 @@ public class EnemyCara : MonoBehaviour
 
 
         #region Activate Archetype
-
-        //foreach (TypeOfSpot flagToCheck in Enum.GetValues(typeof(TypeOfSpot)))
-        //{
-        //    if (typeOfSpot.HasFlag(flagToCheck))
-        //    {
-        //        Debug.Log("Enum has " + flagToCheck);
-        //    }
-        //}
-        
 
         #endregion
 

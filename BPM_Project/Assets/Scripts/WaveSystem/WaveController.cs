@@ -10,6 +10,7 @@ public class WaveController : MonoBehaviour
     int _nbrOfEnemy;
     int _nbrOfDeadEnemy;
     int _nbrOfWave;
+    bool hasStarted;
 
     #region Get Set
     public int NbrOfEnemy { get => _nbrOfEnemy; set => _nbrOfEnemy = value; }
@@ -18,9 +19,11 @@ public class WaveController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !hasStarted)
         {
+
             StartCoroutine(spawners[0].WaveSpawner(_nbrOfWave, this));
+            hasStarted = true;
         }
     }
 

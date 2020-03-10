@@ -6,9 +6,9 @@ TagManager:
   tags:
   - Undefined
   - NoSpot
-  - ArmorSpot
   - WeakSpot
   - DestroyableObject
+  - Cover
   layers:
   - Default
   - TransparentFX

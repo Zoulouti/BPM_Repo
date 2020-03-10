@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using PoolTypes;
 using Sirenix.OdinInspector;
+using EnemyStateEnum;
 
 public class SpawnerController : SerializedMonoBehaviour
 {
@@ -51,6 +52,9 @@ public class SpawnerController : SerializedMonoBehaviour
 
                 EnemyCara cara = go.GetComponent<EnemyCara>();
                 cara.EnemyArchetype = waveManager[wave].GetValue(a) as EnemyArchetype;
+
+                EnemyController enemyController = go.GetComponent<EnemyController>();
+                enemyController.ChangeState((int)EnemyState.Enemy_ChaseState);
 
                 Spawned_Tracker tracker = go.AddComponent<Spawned_Tracker>();
                 tracker.Controller = controller;
