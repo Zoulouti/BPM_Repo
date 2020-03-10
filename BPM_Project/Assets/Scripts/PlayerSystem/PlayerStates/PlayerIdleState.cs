@@ -22,10 +22,6 @@ public class PlayerIdleState : IState
     {
         m_playerController.CheckForGround();
 
-        // if(!m_playerController.PlayerIsGrounded() || m_playerController.PlayerIsFalling())
-        // {
-        //     m_playerController.ChangeState(PlayerState.Fall);
-        // }
         if (m_playerController.PlayerHasToFall())
         {
             m_playerController.ChangeState(PlayerState.Fall);

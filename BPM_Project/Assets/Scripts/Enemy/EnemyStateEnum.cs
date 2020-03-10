@@ -1,8 +1,8 @@
 ﻿namespace EnemyStateEnum {
 	[System.Serializable] public enum EnemyState {
 
-		//Enemy_IdleState,                // Numéro 0 (Lowest Priority)
         Enemy_ChaseState,               // Numéro 1
+		Enemy_IdleState,                // Numéro 0 (Lowest Priority)
         Enemy_AttackState,              // Numéro 2
 
         //Enemy_AgressiveState,           // Numéro 3 (Lowest Priority)

@@ -10,11 +10,10 @@ public class EnemyCara : MonoBehaviour
     [Serializable] public class DebugOuvreSurtoutPas
     {
         public GameObject[] weakSpots;
-        public GameObject[] armorSpots;
         public GameObject[] noSpot;
     }
     [Space]
-    public EnemyArchetype enemyArchetype;
+    private EnemyArchetype enemyArchetype;
     [Space]
     public EnemyCaractéristique _enemyCaractéristique = new EnemyCaractéristique();
     [Serializable] public class EnemyCaractéristique
@@ -25,14 +24,12 @@ public class EnemyCara : MonoBehaviour
         {
             public float moveSpeed;
         }
-        //public Attack _attack = new Attack();
-        //[Serializable]
-        //public class Attack
-        //{
-        //    public int damage;
-        //    public float timeBetweenShots;
-        //    public float reloadTime;
-        //}
+        public Attack _attack = new Attack();
+        [Serializable]
+        public class Attack
+        {
+            public float rangeRadius;
+        }
         public Health _health = new Health();
         [Serializable]
         public class Health
@@ -59,28 +56,16 @@ public class EnemyCara : MonoBehaviour
     public float CurrentLife { get => _currentLife; set => _currentLife = value; }
     public bool IsDead { get => _isDead; set => _isDead = value; }
     public float CurrentTimeForElectricalStun { get => _currentTimeForElectricalStun; set => _currentTimeForElectricalStun = value; }
+    public EnemyArchetype EnemyArchetype { get => enemyArchetype; set => enemyArchetype = value; }
     #endregion
 
     public void OnEnable()
     {
         _isDead = false;
 
+
         #region Activate Archetype
-        for (int i = 0, l = enemyArchetype.e_TypeOfSpot.Length; i < l; ++i)
-        {
-            if (enemyArchetype.e_TypeOfSpot[i] == EnemyArchetype.TypeOfSpot.WeakSpot)
-            {
-                _debug.weakSpots[i].SetActive(true);
-                _debug.armorSpots[i].SetActive(false);
-                _debug.noSpot[i].SetActive(false);
-            }
-            else if (enemyArchetype.e_TypeOfSpot[i] == EnemyArchetype.TypeOfSpot.NoSpot)
-            {
-                _debug.weakSpots[i].SetActive(false);
-                _debug.armorSpots[i].SetActive(false);
-                _debug.noSpot[i].SetActive(true);
-            }
-        }
+
         #endregion
 
         InitializeEnemyStats();
@@ -89,8 +74,23 @@ public class EnemyCara : MonoBehaviour
 
     public void Awake()
     {
-        enemyArchetype.PopulateArray();
         controller = GetComponent<EnemyController>();
+    }
+
+    private void Start()
+    {
+        if (enemyArchetype != null)
+        {
+            enemyArchetype.PopulateArray();
+            if (EnemyArchetype.Spots.Count > 0)
+            {
+                for (int i = 0, l = EnemyArchetype.Spots.Count; i < l; ++i)
+                {
+                    _debug.weakSpots[i].SetActive(EnemyArchetype.Spots[i]);
+                    _debug.noSpot[i].SetActive(!EnemyArchetype.Spots[i]);
+                }
+            }
+        }
     }
 
     private void Update()

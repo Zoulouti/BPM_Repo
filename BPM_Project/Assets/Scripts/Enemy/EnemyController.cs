@@ -13,8 +13,11 @@ public class EnemyController : MonoBehaviour
     [Serializable] public class DEBUG
     {
         public bool useGizmos;
+
         public Text m_stateText;
         public Text m_lifeText;
+
+        public GameObject m_destinationImage;
     }
 
     #region State Machine
@@ -23,10 +26,13 @@ public class EnemyController : MonoBehaviour
 
     public virtual void OnEnable()
     {
-        
-        DistanceToTarget = GetTargetDistance(Target);
+        if(Player != null)
+        {
+            DistanceToTarget = GetTargetDistance(currentTarget);
+        }
+
         EnemyCantShoot = false;
-        ChangeState((int)EnemyState.Enemy_ChaseState);
+        //ChangeState((int)EnemyState.Enemy_ChaseState);
     }
 
     public void ChangeState(int i)
@@ -45,17 +51,19 @@ public class EnemyController : MonoBehaviour
     WeaponEnemyBehaviour weaponBehavior;
     NavMeshAgent agent;
     Transform target;
+    Vector3 currentTarget;
 
     float distanceToTarget;
     bool _enemyCanShoot;
 
     #region Get Set
     public NavMeshAgent Agent { get => agent; set => agent = value; }
-    public Transform  Target { get => target; set => target = value; }
+    public Transform  Player { get => target; set => target = value; }
 
     public float DistanceToTarget { get => distanceToTarget; set => distanceToTarget = value; }
     public EnemyCara Cara { get => cara; set => cara = value; }
     public bool EnemyCantShoot { get => _enemyCanShoot; set => _enemyCanShoot = value; }
+    public Vector3 CurrentTarget { get => currentTarget; set => currentTarget = value; }
     #endregion
 
 
@@ -65,17 +73,43 @@ public class EnemyController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         cara = GetComponent<EnemyCara>();
         weaponBehavior = GetComponent<WeaponEnemyBehaviour>();
-        Target = PlayerController.s_instance.gameObject.transform;
+    }
+
+    void SetupStateMachine()
+    {
+        m_sM.AddStates(new List<IState> { 
+            new ChaseState(this),				// 0 = Chase
+            new IdleState(this),				// 1 = Idle
+			new AttackState(this),				// 2 = Attack
+			new StunState(this),				// 6 = Stun
+			new DieState(this),				    // 7 = Die
+		});
+
+        string[] playerStateNames = System.Enum.GetNames(typeof(EnemyState));
+        if (m_sM.States.Count != playerStateNames.Length)
+        {
+            Debug.LogError("You need to have the same number of State in PlayerController and PlayerStateEnum");
+        }
+
+        ChangeState((int)EnemyState.Enemy_IdleState);
     }
 
     private void Start()
     {
-        m_sM.Start();
+        //currentTarget = transform;
+        Player = PlayerController.s_instance.gameObject.transform;
+
+        currentTarget = FindBestSpotsInRangeOfTarget(Player);
+
+        DistanceToTarget = GetTargetDistance(currentTarget);
     }
 
     private void Update()
     {
         m_sM.Update();
+
+        #region DEBUG
+        #if UNITY_EDITOR
         if (_debug.useGizmos)
         {
             _debug.m_stateText.text = string.Format("{0}", m_sM.m_currentStateString);
@@ -83,7 +117,10 @@ public class EnemyController : MonoBehaviour
         }
         _debug.m_stateText.gameObject.SetActive(_debug.useGizmos);
         _debug.m_lifeText.gameObject.SetActive(_debug.useGizmos);
-        DistanceToTarget = GetTargetDistance(Target);
+        #endif
+        #endregion
+
+        DistanceToTarget = GetTargetDistance(currentTarget);
     }
 
     void FixedUpdate()
@@ -96,30 +133,41 @@ public class EnemyController : MonoBehaviour
         m_sM.LateUpdate();
     }
 
-
-    void SetupStateMachine()
+    public float GetTargetDistance(Vector3 target)
     {
-        m_sM.AddStates(new List<IState> { 
-            new ChaseState(this),				// 0 = Chase
-			new AttackState(this),				// 2 = Attack
-			new StunState(this),				// 6 = Stun
-			new DieState(this),				    // 7 = Die
-		});
+        return Vector3.Distance(target, transform.position);
+    }
 
-        string[] playerStateNames = System.Enum.GetNames(typeof(EnemyState));
-        if (m_sM.States.Count != playerStateNames.Length)
+
+    public Vector3 FindBestSpotsInRangeOfTarget(Transform target)
+    {
+        Collider[] allColInSphere = Physics.OverlapSphere(target.position, Cara._enemyCaractéristique._attack.rangeRadius);
+        List<GameObject> allCoverInSphere = new List<GameObject>(); 
+        Vector3 newTarget;
+        for (int i = 0, l= allColInSphere.Length; i < l; ++i)
         {
-            Debug.LogError("You need to have the same number of State in PlayerController and PlayerStateEnum");
+            if (allColInSphere[i].CompareTag("Cover"))
+            {
+                allCoverInSphere.Add(allColInSphere[i].gameObject);
+            }
         }
-
-        ChangeState((int)EnemyState.Enemy_ChaseState);
+        if (allCoverInSphere.Count == 0)
+        {
+            newTarget = new Vector3(UnityEngine.Random.insideUnitCircle.x * Cara._enemyCaractéristique._attack.rangeRadius, transform.position.y, UnityEngine.Random.insideUnitCircle.y * Cara._enemyCaractéristique._attack.rangeRadius);
+            return newTarget;
+        }
+        else
+        {
+            int randomIndex = UnityEngine.Random.Range(0, allCoverInSphere.Count);
+            newTarget = allCoverInSphere[randomIndex].transform.position;
+            return newTarget;
+        }
     }
 
+    //bool LookIfCoverIsAvailable(List<Collider> colliders)
+    //{
 
-    public float GetTargetDistance(Transform target)
-    {
-        return Vector3.Distance(Target.position, transform.position);
-    }
+    //}
 
     public IEnumerator IsStun()
     {
@@ -129,13 +177,13 @@ public class EnemyController : MonoBehaviour
         ChangeState((int)EnemyState.Enemy_ChaseState);
     }
 
+
+    #region NPC is dead methods
     public void KillNPC(float time)
     {
         EnemyCantShoot = Cara.IsDead;
         StartCoroutine(OnWaitForAnimToEnd(time));
     }
-
-
     IEnumerator OnWaitForAnimToEnd(float time)
     {
         cara.enabled = false;
@@ -154,15 +202,34 @@ public class EnemyController : MonoBehaviour
         }
         ObjectPooler.Instance.ReturnEnemyToPool(EnemyType.EnemyBase, gameObject);
     }
+    #endregion
+
+    #region Instantiate and destroy object
+    public GameObject OnInstantiate(GameObject obj, Vector3 trans)
+    {
+        return Instantiate(obj, trans, Quaternion.identity);
+    }
+    public GameObject OnInstantiate(GameObject obj, Vector3 trans, Transform parent)
+    {
+        return Instantiate(obj, trans, Quaternion.identity ,parent);
+    }
+    public void DestroyObj(GameObject obj)
+    {
+        Destroy(obj);
+    }
+    #endregion
+
 
     private void OnDrawGizmosSelected()
     {
         if (_debug.useGizmos)
         { 
-            if(agent != null && weaponBehavior != null)
+            if(agent != null && weaponBehavior != null && cara != null)
             {
                 Gizmos.color = Color.red;
                 Gizmos.DrawWireSphere(transform.position, agent.stoppingDistance);
+                Gizmos.color = Color.white;
+                Gizmos.DrawWireSphere(transform.position, cara._enemyCaractéristique._attack.rangeRadius);
                 Gizmos.color = Color.green;
                 Gizmos.DrawWireSphere(new Vector3(weaponBehavior._SMG.firePoint.transform.position.x, weaponBehavior._SMG.firePoint.transform.position.y, weaponBehavior._SMG.firePoint.transform.position.z + (agent.stoppingDistance - weaponBehavior._attack.enemyAttackDispersement*2)* weaponBehavior._attack._debugGizmos), weaponBehavior._attack.enemyAttackDispersement);
             }
@@ -170,6 +237,7 @@ public class EnemyController : MonoBehaviour
             {
                 agent = GetComponent<NavMeshAgent>();
                 weaponBehavior = GetComponent<WeaponEnemyBehaviour>();
+                cara = GetComponent<EnemyCara>();
             }
         }
     }

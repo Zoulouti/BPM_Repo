@@ -42,7 +42,7 @@ public class AttackState : IState
         {
             m_enemyController.ChangeState((int)EnemyState.Enemy_ChaseState);
         }
-        m_enemyController.gameObject.transform.LookAt(m_enemyController.Target);
+        m_enemyController.gameObject.transform.LookAt(m_enemyController.Player);
     }
 
 }

@@ -18,7 +18,8 @@ public class ObjectPooler : MonoBehaviour {
 			gameObject.SetActive(false);
             Destroy(gameObject);
 		}
-	}
+        CreateAllPools();
+    }
 
 #endregion Singleton
 
@@ -72,7 +73,7 @@ public class ObjectPooler : MonoBehaviour {
 
 	Queue<PoolTracker> m_trackedObject = new Queue<PoolTracker>();
 
-	void Start(){
+	void CreateAllPools(){
 		m_enemyPoolDictionary = new Dictionary<EnemyType, Queue<GameObject>>();
 		foreach(EnemyPool pool in m_enemyPools){
 			Queue<GameObject> objectPool = new Queue<GameObject>();

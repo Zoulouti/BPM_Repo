@@ -792,18 +792,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 381679671}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &422777228
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8334a49e76cafef4da22976db1613959, type: 3}
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
 --- !u!1 &443707875
 GameObject:
   m_ObjectHideFlags: 0
@@ -1158,18 +1146,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 491738489}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &523829862
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59306422a2ca4454aabce3daa79c3334, type: 3}
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
 --- !u!1 &560203374
 GameObject:
   m_ObjectHideFlags: 0
@@ -1483,7 +1459,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3421608736393940809}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &650443732
+--- !u!114 &650443733
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1495,7 +1471,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23c1ce4fb46143f46bc5cb5224c934f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Version: 0
+  m_Version: 1
   clearColorMode: 0
   backgroundColorHDR: {r: 0.025, g: 0.07, b: 0.19, a: 0}
   clearDepth: 1
@@ -1551,18 +1527,6 @@ MonoBehaviour:
       enableFptlForForwardOpaque: 1
       enableBigTilePrepass: 1
       isFptlEnabled: 1
---- !u!114 &721318702
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59306422a2ca4454aabce3daa79c3334, type: 3}
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
 --- !u!1 &746034421
 GameObject:
   m_ObjectHideFlags: 0
@@ -1887,18 +1851,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 881591756}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &907651324
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8334a49e76cafef4da22976db1613959, type: 3}
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
 --- !u!1 &908862458
 GameObject:
   m_ObjectHideFlags: 0
@@ -4707,7 +4659,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3421608736393940809}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2080759884
+--- !u!114 &2080759887
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4719,7 +4671,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23c1ce4fb46143f46bc5cb5224c934f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Version: 0
+  m_Version: 1
   clearColorMode: 2
   backgroundColorHDR: {r: 0.025, g: 0.07, b: 0.19, a: 0}
   clearDepth: 0
@@ -5078,7 +5030,7 @@ PrefabInstance:
     - target: {fileID: 0}
       propertyPath: frustumSettings.qualitySettings
       value: 
-      objectReference: {fileID: 907651324}
+      objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_Enabled
       value: 0
@@ -5086,7 +5038,27 @@ PrefabInstance:
     - target: {fileID: 0}
       propertyPath: frustumSettings.baseSettings
       value: 
-      objectReference: {fileID: 523829862}
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: frustumSettings.qualitySettings
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: frustumSettings.baseSettings
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -5.339
+      objectReference: {fileID: 0}
     - target: {fileID: 3422587882778152750, guid: afa9eecb96c518548a307d2ca9de695b,
         type: 3}
       propertyPath: m_Name
@@ -5116,21 +5088,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3461373997355235120, guid: afa9eecb96c518548a307d2ca9de695b,
-        type: 3}
-      propertyPath: frustumSettings.qualitySettings
-      value: 
-      objectReference: {fileID: 422777228}
-    - target: {fileID: 3461373997355235120, guid: afa9eecb96c518548a307d2ca9de695b,
-        type: 3}
-      propertyPath: frustumSettings.baseSettings
-      value: 
-      objectReference: {fileID: 721318702}
-    - target: {fileID: 3461373997355235120, guid: afa9eecb96c518548a307d2ca9de695b,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3421608736393940812, guid: afa9eecb96c518548a307d2ca9de695b,
         type: 3}
@@ -5257,16 +5214,6 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 987ea9fc079a6a24597d991ade88ab35, type: 2}
-    - target: {fileID: 4410666827998708448, guid: afa9eecb96c518548a307d2ca9de695b,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4410666827998708449, guid: afa9eecb96c518548a307d2ca9de695b,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -5.339
-      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3461373997355235120, guid: afa9eecb96c518548a307d2ca9de695b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: afa9eecb96c518548a307d2ca9de695b, type: 3}
