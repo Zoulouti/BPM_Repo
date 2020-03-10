@@ -30,9 +30,6 @@ Category {
 			#pragma shader_feature VertLight_OFF VertLight4_ON
 			#pragma shader_feature FrameBlend_OFF FrameBlend_ON
 			#pragma shader_feature SoftParticles_OFF SoftParticles_ON
-			float4 _TintColor;
-			float _Cutout;
-			half _FresnelStr;
 			half _BloomThreshold;
 			
 			struct appdata_t {
@@ -156,17 +153,17 @@ Category {
 			#ifdef Clip_ON_Alpha
 				res.a = step(1-i.color.a + _Cutout, tex.a);
 				res.rgb *= i.color.rgb;
-			#endif	
+				
 
 			#if !defined(Clip_ON_Alpha)
 				res *= i.color;
-			#endif	
+				
 			
 				res.a = saturate(res.a);
 				//res *= i.color;
 			#ifdef FresnelFade_ON
 				res.a *= i.fresnel;
-			#endif
+			
 				
 
 			#ifdef BlendAdd

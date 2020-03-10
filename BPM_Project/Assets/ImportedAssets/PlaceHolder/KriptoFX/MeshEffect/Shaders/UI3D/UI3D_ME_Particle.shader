@@ -44,9 +44,6 @@ Category {
 			#pragma shader_feature VertLight_OFF VertLight4_ON
 			#pragma shader_feature FrameBlend_OFF FrameBlend_ON
 			#pragma shader_feature SoftParticles_OFF SoftParticles_ON
-			#define IS_UI_3D_RENDERER
-			#include "UnityCG.cginc"
-			#include "Assets/Plugins/UI3DSystem/Shaders/UIDepthLib.cginc"
  float4 _DepthPyramidScale;
 
 			#pragma target 3.0
@@ -184,16 +181,16 @@ Category {
 
 			#ifdef Clip_ON
 				res.a = step(_Cutout, tex.a) * res.a;
-			#endif	
+				
 
 			#ifdef Clip_ON_Alpha
 				res.a = step(1-i.color.a + _Cutout, tex.a);
 				res.rgb *= i.color.rgb;
-			#endif	
+				
 
 			#if !defined(Clip_ON_Alpha)
 				res *= i.color;
-			#endif	
+				
 			
 				res.a = saturate(res.a);
 				//res *= i.color;
