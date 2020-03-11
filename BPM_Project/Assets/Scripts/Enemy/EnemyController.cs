@@ -182,6 +182,25 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    public bool IsPlayerInShootableVision()
+    {
+        RaycastHit _hit;
+        Debug.DrawLine(weaponBehavior._SMG.firePoint.transform.position, Player.position, Color.red, 3f);
+        if (Physics.Linecast(weaponBehavior._SMG.firePoint.transform.position, Player.position, out _hit))
+        {
+            if (_hit.collider.CompareTag("Player"))
+            {
+                Debug.DrawLine(weaponBehavior._SMG.firePoint.transform.position, Player.position, Color.green, 3f);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return false;
+    }
+
     public IEnumerator IsStun()
     {
         EnemyCantShoot = true;

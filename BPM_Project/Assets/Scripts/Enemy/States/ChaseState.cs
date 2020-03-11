@@ -30,7 +30,7 @@ public class ChaseState : IState
     public void FixedUpdate()
     {
         m_enemyController.Agent.SetDestination(m_enemyController.CurrentTarget);
-        if(m_enemyController.DistanceToTarget <= m_enemyController.Agent.stoppingDistance && !m_enemyController.Cara.IsDead)
+        if(m_enemyController.DistanceToTarget <= m_enemyController.Agent.stoppingDistance && !m_enemyController.Cara.IsDead && m_enemyController.IsPlayerInShootableVision())
         {
             m_enemyController.ChangeState((int)EnemyState.Enemy_AttackState);
         }
