@@ -26,13 +26,14 @@ public class EnemyController : MonoBehaviour
 
     public virtual void OnEnable()
     {
-        if(Player != null)
-        {
-            DistanceToTarget = GetTargetDistance(currentTarget);
-        }
+        //if(Player != null)
+        //{
+        //    DistanceToTarget = GetTargetDistance(currentTarget);
+        //    currentTarget = FindBestSpotsInRangeOfTarget(Player);
+        //}
 
         EnemyCantShoot = false;
-        //ChangeState((int)EnemyState.Enemy_ChaseState);
+        ChangeState((int)EnemyState.Enemy_IdleState);
     }
 
     public void ChangeState(int i)
@@ -138,7 +139,6 @@ public class EnemyController : MonoBehaviour
         return Vector3.Distance(target, transform.position);
     }
 
-
     public Vector3 FindBestSpotsInRangeOfTarget(Transform target)
     {
         Collider[] allColInSphere = Physics.OverlapSphere(target.position, Cara._enemyCaractéristique._attack.rangeRadius);
@@ -153,21 +153,34 @@ public class EnemyController : MonoBehaviour
         }
         if (allCoverInSphere.Count == 0)
         {
-            newTarget = new Vector3(UnityEngine.Random.insideUnitCircle.x * Cara._enemyCaractéristique._attack.rangeRadius, transform.position.y, UnityEngine.Random.insideUnitCircle.y * Cara._enemyCaractéristique._attack.rangeRadius);
-            return newTarget;
+            float distance = Vector3.Distance(transform.position, Player.transform.position);
+            Vector3 lastPoint = Vector3.Lerp(Player.transform.position, transform.position, Mathf.InverseLerp(0, distance, Cara._enemyCaractéristique._attack.rangeRadius));/* Vector3.ClampMagnitude(direction, Cara._enemyCaractéristique._attack.rangeRadius);*/
+            while (true)
+            {
+                Vector2 randomPointInCircle = UnityEngine.Random.insideUnitCircle * Cara._enemyCaractéristique._attack.rangeRadius;
+                newTarget = new Vector3(randomPointInCircle.x + lastPoint.x, 0.1f + lastPoint.y, randomPointInCircle.y + lastPoint.z);
+                NavMeshPath path = new NavMeshPath();
+                agent.CalculatePath(newTarget, path);
+                if (path.status == NavMeshPathStatus.PathComplete)
+                {
+                    //Debug.Log("Found");
+                    return newTarget;
+                }
+                else
+                {
+                    //Debug.Log("NotFound");
+                }
+            }
+            //return Vector3.zero;
         }
         else
         {
             int randomIndex = UnityEngine.Random.Range(0, allCoverInSphere.Count);
             newTarget = allCoverInSphere[randomIndex].transform.position;
+
             return newTarget;
         }
     }
-
-    //bool LookIfCoverIsAvailable(List<Collider> colliders)
-    //{
-
-    //}
 
     public IEnumerator IsStun()
     {

@@ -1434,8 +1434,8 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b0ba5fcc862696042af2798f68da116c, type: 2}
-  - {fileID: 2100000, guid: d24ccb2d37570a44b9ed91bc2ff84269, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1552,7 +1552,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1518701593319102534
 Transform:
   m_ObjectHideFlags: 0
@@ -1642,11 +1642,11 @@ MonoBehaviour:
     - {fileID: 8684468554694490253}
   "_enemyCaract\xE9ristique":
     _move:
-      moveSpeed: 10
+      moveSpeed: 100
     _attack:
       rangeRadius: 15
     _health:
-      maxHealth: 1000
+      maxHealth: 10
       damageMultiplicatorOnWeakSpot: 1
       damageMultiplicatorOnNoSpot: 1
     _stunResistance:

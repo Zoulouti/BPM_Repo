@@ -42,10 +42,11 @@ public class SpawnerController : SerializedMonoBehaviour
 
     public IEnumerator WaveSpawner(int wave, WaveController controller)
     {
-        for (int a = 0, f = waveManager[wave].Length; a < f; ++a)
+        if (waveManager.ContainsKey(wave))
         {
-            if (waveManager.ContainsKey(wave))
+            for (int a = 0, f = waveManager[wave].Length; a < f; ++a)
             {
+
                 yield return new WaitForSeconds(controller.timeBetweenEachSpawn);
 
                 GameObject go = m_objectPooler.SpawnEnemyFromPool(enemy, transform.position, transform.rotation);
@@ -53,12 +54,15 @@ public class SpawnerController : SerializedMonoBehaviour
                 EnemyCara cara = go.GetComponent<EnemyCara>();
                 cara.EnemyArchetype = waveManager[wave].GetValue(a) as EnemyArchetype;
 
-                EnemyController enemyController = go.GetComponent<EnemyController>();
-                enemyController.ChangeState((int)EnemyState.Enemy_ChaseState);
-
                 Spawned_Tracker tracker = go.AddComponent<Spawned_Tracker>();
                 tracker.Controller = controller;
                 controller.NbrOfEnemy++;
+
+
+                EnemyController enemyController = go.GetComponent<EnemyController>();
+                yield return new WaitForFixedUpdate();
+                enemyController.ChangeState((int)EnemyState.Enemy_ChaseState);
+
             }
         }
     }

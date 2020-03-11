@@ -18,7 +18,7 @@ public class ChaseState : IState
         //if(m_enemyController.Agent != null && m_enemyController.CurrentTarget != Vector3.zero)
         //{
             //Vector3 stoppingDistance = new Vector3(m_enemyController.Agent.stoppingDistance, 0.1f, m_enemyController.Agent.stoppingDistance);
-            go = m_enemyController.OnInstantiate(m_enemyController._debug.m_destinationImage, m_enemyController.CurrentTarget);
+        go = m_enemyController.OnInstantiate(m_enemyController._debug.m_destinationImage, m_enemyController.CurrentTarget);
         //}
     }
 

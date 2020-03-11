@@ -518,102 +518,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f01d29d88278f45458d99e6b5199e920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  strength: 1
-  scatteringBias: 0
-  overrideColor: 0
-  overridingColor:
-    r: 1
-    g: 1
-    b: 1
-    a: 1
-  useShadow: 1
-  shadowMapRenderTexture: {fileID: 0}
-  useCookie: 1
-  cookieMapRenderTexture: {fileID: 0}
-  enableOutOfPhaseColor: 0
-  outOfPhaseColorStrength: 0.25
-  outOfPhaseColor:
-    r: 1
-    g: 0.48999998
-    b: 0.39999998
-    a: 1
-  shadowDataRenderTexture: {fileID: 0}
-  customDistanceFalloffThreshold: 0.5
-  customDistanceFalloffPower: 2
-  customCookieDistanceFalloffStartThreshold: 0.1
-  customCookieDistanceFalloffEndThreshold: 0.25
-  customCookieDistanceFalloffPower: 2
-  customAngularFalloffThreshold: 0.8
-  customAngularFalloffPower: 2
-  _storeDirectionalShadowDataShader: {fileID: 4800000, guid: fff19db2423616b4dbabe995cd97279e,
-    type: 3}
-  _storeDirectionalSpotCookieMapShader: {fileID: 4800000, guid: ffdac5434c39f7545b910c253007c8fc,
-    type: 3}
-  _storePointLightShadowMapShader: {fileID: 4800000, guid: f1531a9bd4087ff468de8de09f6ba126,
-    type: 3}
-  _storePointLightShadowMapMesh: {fileID: 4300000, guid: d68bec3f4c08e40468fad98606344ea6,
-    type: 3}
-  _storePointLightCookieMapShader: {fileID: 4800000, guid: 83815c326d7f2514884f3fc7a05b5aef,
-    type: 3}
-  _isInitialized: 0
-  _lightComponent: {fileID: 154032730}
-  _previousLightType: 1
-  _previousUseShadow: 1
-  _shadowMapIndex: -1
-  _previousUseCookie: 0
-  _cookieMapIndex: 0
-  _previousCookieTexture: {fileID: 0}
-  _storeShadowDataMaterial: {fileID: 0}
-  _storePointLightShadowMapMaterial: {fileID: 0}
-  _storeCookieMapMaterial: {fileID: 0}
 --- !u!114 &154032733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -858,92 +762,6 @@ MonoBehaviour:
       enableFptlForForwardOpaque: 1
       enableBigTilePrepass: 1
       isFptlEnabled: 1
---- !u!114 &204713577
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8334a49e76cafef4da22976db1613959, type: 3}
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  displayVolumetricLightingBuffer: 0
-  frustumGridResolution: {x: 160, y: 88, z: 128}
-  enableAutomaticStereoResizing: 1
-  farClipPlaneDistance: 128
-  depthBiasCoefficient: 0.35
-  enableVolumes: 1
-  enableVolumesTexture2DMask: 1
-  enableVolumesTexture3DMask: 1
-  enableVolumesNoiseMask: 1
-  enableAmbientLighting: 1
-  enableDirectionalLights: 1
-  enableDirectionalLightsShadows: 1
-  enableSpotLights: 1
-  enableSpotLightsShadows: 1
-  enablePointLights: 1
-  enablePointLightsShadows: 1
-  enableLightsCookies: 1
-  enableDithering: 1
-  texture3DFiltering: 1
-  enableDenoisingFilter: 0
-  denoisingFilterRange: 0
-  enableTemporalReprojection: 1
-  temporalReprojectionFactor: 0.95
-  enableOcclusionCulling: 1
-  occlusionCullingAccuracy: 2
-  enableLightProbes: 0
 --- !u!1001 &205270808
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1506,7 +1324,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 443707875}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.220001, y: 2.9, z: 2.83}
+  m_LocalPosition: {x: 9.220001, y: 2.9, z: -11.170001}
   m_LocalScale: {x: 1.0103749, y: 1.0103749, z: 1.0103749}
   m_Children: []
   m_Father: {fileID: 2100344076}
@@ -1614,7 +1432,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 459210189}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15.540001, y: 2.9, z: 9.34}
+  m_LocalPosition: {x: 16.54, y: 2.9, z: -4.660001}
   m_LocalScale: {x: 1.0103749, y: 1.0103749, z: 1.0103749}
   m_Children: []
   m_Father: {fileID: 2100344076}
@@ -1933,6 +1751,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4187508792682329747, guid: 5c1dc1d1913ea9d4f97348aa3298b540,
+        type: 3}
+      propertyPath: "_enemyCaract\xE9ristique._move.moveSpeed"
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c1dc1d1913ea9d4f97348aa3298b540, type: 3}
@@ -2302,10 +2125,7 @@ MonoBehaviour:
       Data: 2|EnemyArchetype[], Assembly-CSharp
     - Name: 
       Entry: 12
-      Data: 2
-    - Name: 
-      Entry: 10
-      Data: 0
+      Data: 1
     - Name: 
       Entry: 10
       Data: 0
@@ -2329,6 +2149,21 @@ MonoBehaviour:
       Data: 3|EnemyArchetype[], Assembly-CSharp
     - Name: 
       Entry: 12
+      Data: 6
+    - Name: 
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 10
       Data: 1
     - Name: 
       Entry: 10
@@ -2519,81 +2354,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 788365496}
   m_CullTransparentMesh: 0
---- !u!114 &850310465
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59306422a2ca4454aabce3daa79c3334, type: 3}
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  useDensity: 1
-  density: 0.25
-  useScattering: 1
-  scattering: 0.5
-  useAmbientLighting: 1
-  ambientLightingStrength: 1
-  useColor: 0
-  color:
-    r: 0
-    g: 0.5
-    b: 0.5
-    a: 0.5
-  colorStrength: 1
-  useExtinction: 0
-  extinction: 0.75
 --- !u!1 &881591756
 GameObject:
   m_ObjectHideFlags: 0
@@ -2622,7 +2382,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 881591756}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.92, y: 1.83, z: 5.1100006}
+  m_LocalPosition: {x: 12.92, y: 1.83, z: -8.89}
   m_LocalScale: {x: 1.7125, y: 1.7125, z: 1.7125}
   m_Children: []
   m_Father: {fileID: 2100344076}
@@ -3424,7 +3184,7 @@ GameObject:
   - component: {fileID: 1098252555}
   - component: {fileID: 1098252558}
   m_Layer: 11
-  m_Name: Cube (2)
+  m_Name: Cover
   m_TagString: Cover
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3438,7 +3198,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1098252553}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.38, y: 2.9, z: 9.23}
+  m_LocalPosition: {x: -12.6, y: 0, z: -9.3}
   m_LocalScale: {x: 1.0103749, y: 1.0103749, z: 1.0103749}
   m_Children: []
   m_Father: {fileID: 2100344076}
@@ -5348,6 +5108,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: frustumSettings.baseSettings
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: frustumSettings.qualitySettings
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3422587882778152750, guid: afa9eecb96c518548a307d2ca9de695b,
         type: 3}
       propertyPath: m_Name
@@ -5408,27 +5176,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3461373997355235120, guid: afa9eecb96c518548a307d2ca9de695b,
-        type: 3}
-      propertyPath: frustumSettings.baseSettings
-      value: 
-      objectReference: {fileID: 850310465}
-    - target: {fileID: 3461373997355235120, guid: afa9eecb96c518548a307d2ca9de695b,
-        type: 3}
-      propertyPath: frustumSettings.qualitySettings
-      value: 
-      objectReference: {fileID: 204713577}
     - target: {fileID: 8798216646479647648, guid: afa9eecb96c518548a307d2ca9de695b,
         type: 3}
       propertyPath: weaponStats
       value: 
       objectReference: {fileID: 11400000, guid: fb3e97c66800ad94ebde8f727819c49a,
         type: 2}
-    - target: {fileID: 3421608736393940812, guid: afa9eecb96c518548a307d2ca9de695b,
-        type: 3}
-      propertyPath: m_dash.m_timeToDash
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3401214553187041736, guid: afa9eecb96c518548a307d2ca9de695b,
         type: 3}
       propertyPath: m_AllowMSAA
@@ -5606,7 +5359,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1652572452}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.6, y: 1.83, z: -1.4}
+  m_LocalPosition: {x: 5.6, y: 1.83, z: -15.400001}
   m_LocalScale: {x: 1.7125, y: 1.7125, z: 1.7125}
   m_Children: []
   m_Father: {fileID: 2100344076}
